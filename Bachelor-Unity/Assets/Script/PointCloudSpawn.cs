@@ -39,12 +39,15 @@ public class PointCloudSpawn : MonoBehaviour
 
     void Start()
     {
-        string fileName = @"C:\Users\jacob\OneDrive - Danmarks Tekniske Universitet\6. semester\Bachelor Project\7k_data_extracted.json";
+
+        DelaunayTriangulation delaunayTriangulation = new DelaunayTriangulation();
+
+        string fileName = @"C:\Users\jacob\OneDrive\Dokumenter\GitHub\Bachelor-Project-Unity\Bachelor-Unity\Assets\Script\7k_data_test_file.json";
         string jsonString = File.ReadAllText(fileName);
         Sonar sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
 
-        print($"no_pings : {sonarData.no_pings}");
-        print($"pings: {sonarData.pings}");
+        // print($"no_pings : {sonarData.no_pings}");
+        print($"pings: {sonarData.no_counts}");
         List<Vector3[]> pings = new List<Vector3[]>();
         int no_pings = 0;
 
@@ -60,6 +63,7 @@ public class PointCloudSpawn : MonoBehaviour
             {
                 //print($"{sonarData.pings[i].coords_y[j]}");
                 Vector3 coord = new Vector3((float)sonarData.pings[i].coords_x[j] * 100, (float)sonarData.pings[i].coords_z[j], (float)sonarData.pings[i].coords_y[j]);
+                delaunayTriangulation.addVertex(new Vertex(coord));
                 points[j] = coord;
             }
             no_points_total += points.Length;
@@ -96,6 +100,8 @@ public class PointCloudSpawn : MonoBehaviour
                 batchIndexNum = 0;
             }
         }
+
+        
     }
 
     void Update()
@@ -135,6 +141,7 @@ public class PointCloudSpawn : MonoBehaviour
     public class Sonar
     {
         public int no_pings { get; set; }
+        public int no_counts { get; set; }
         public List<Ping> pings { get; set; }
     }
 }
