@@ -49,7 +49,7 @@ public class PointCloudSpawn : MonoBehaviour
         int no_pings = 0;
 
         int no_points_total = 0;
-        for (int i = 0; i < 150; i++)
+        for (int i = 0; i < sonarData.no_pings; i++)
         {
             //if (i % 10 != 0)
             //  continue;
