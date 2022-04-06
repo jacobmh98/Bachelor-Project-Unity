@@ -29,67 +29,37 @@ public class ObjData
 
 public class PointCloudSpawn : MonoBehaviour
 {
-    public int instances;
     public Vector3 maxPos;
     public Mesh objMesh;
     public Material objMat;
     public Vector3[] positions;
-
+    public DelaunayTriangulation delaunayTriangulation = new DelaunayTriangulation();
     private List<List<ObjData>> batches = new List<List<ObjData>>();
 
     void Start()
     {
-
-        DelaunayTriangulation delaunayTriangulation = new DelaunayTriangulation();
-
         string fileName = @"C:\Users\jacob\OneDrive\Dokumenter\GitHub\Bachelor-Project-Unity\Bachelor-Unity\Assets\Script\7k_data_test_file.json";
         string jsonString = File.ReadAllText(fileName);
         Sonar sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
 
-        // print($"no_pings : {sonarData.no_pings}");
-        print($"pings: {sonarData.no_counts}");
         List<Vector3[]> pings = new List<Vector3[]>();
-        int no_pings = 0;
 
-        int no_points_total = 0;
         for (int i = 0; i < sonarData.no_pings; i++)
         {
-            //if (i % 10 != 0)
-            //  continue;
-
             Vector3[] points = new Vector3[sonarData.pings[i].no_points];
-            no_points_total += sonarData.pings[i].no_points;
+
             for (int j = 0; j < sonarData.pings[i].no_points; j++)
             {
-                //print($"{sonarData.pings[i].coords_y[j]}");
                 Vector3 coord = new Vector3((float)sonarData.pings[i].coords_x[j] * 100, (float)sonarData.pings[i].coords_z[j], (float)sonarData.pings[i].coords_y[j]);
                 delaunayTriangulation.addVertex(new Vertex(coord));
                 points[j] = coord;
             }
-            no_points_total += points.Length;
             pings.Add(points);
-            no_pings++;
-        }
-
-        instances = no_points_total;
-
-        positions = new Vector3[no_points_total];
-
-        int point_i = 0;
-
-        for (int i = 0; i < no_pings; i++)
-        {
-
-            for (int j = 0; j < pings[i].Length; j++)
-            {
-                positions[point_i] = pings[i][j];
-                point_i++;
-            }
         }
 
         int batchIndexNum = 0;
         List<ObjData> currBatch = new List<ObjData>();
-        for (int i = 0; i < instances; i++)
+        for (int i = 0; i < sonarData.no_counts; i++)
         {
             AddObj(currBatch, i);
             batchIndexNum++;
@@ -100,8 +70,6 @@ public class PointCloudSpawn : MonoBehaviour
                 batchIndexNum = 0;
             }
         }
-
-        
     }
 
     void Update()
@@ -111,7 +79,7 @@ public class PointCloudSpawn : MonoBehaviour
 
     private void AddObj(List<ObjData> currBatch, int i)
     {
-        Vector3 position = (positions[i]);
+        Vector3 position = delaunayTriangulation.getProjectedVertexPos(i);
         currBatch.Add(new ObjData(position, new Vector3(1f, 1f, 1f), Quaternion.identity));
     }
 

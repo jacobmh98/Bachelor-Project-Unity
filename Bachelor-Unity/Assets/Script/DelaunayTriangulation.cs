@@ -14,4 +14,18 @@ public class DelaunayTriangulation
         Vertex projectedV = new Vertex(new Vector3(v.position[0], 0, v.position[2]));
         projectedVertices.Add(projectedV);
     }
+
+    // getter method for vertex by index
+    public Vector3 getVertexPos(int i)
+    {
+        return vertices[i].position;
+    }
+
+    // getter method for vertex by index
+    public Vector3 getProjectedVertexPos(int i)
+    {
+        return projectedVertices[i].position;
+    }
+
+
 }
