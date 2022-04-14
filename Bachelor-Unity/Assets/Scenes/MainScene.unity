@@ -152,11 +152,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a7827954bac3d04e903a0a9531a2377, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instances: 0
   maxPos: {x: 0, y: 0, z: 0}
   objMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   objMat: {fileID: 2100000, guid: 055b1d77f440324458351a100550a3c4, type: 2}
   positions: []
+  meshMaterial: {fileID: 0}
 --- !u!4 &623355965
 Transform:
   m_ObjectHideFlags: 0

@@ -1,3 +1,5 @@
+
+using DelaunatorSharp;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,14 +7,27 @@ using UnityEngine;
 public class DelaunayTriangulation
 {
     List<Vertex> projectedVertices = new List<Vertex>();
+    IPoint[] points;
+    Vector3[] verticesPos;
     List<Vertex> vertices = new List<Vertex>();
 
+    public DelaunayTriangulation(int no_points)
+    {
+        points = new IPoint[no_points];
+        verticesPos = new Vector3[no_points];
+    }
+
     // adding normal and projected vertex to class
-    public void addVertex(Vertex v)
+    public void addVertex(Vertex v, int i)
     {
         vertices.Add(v);
-        Vertex projectedV = new Vertex(new Vector3(v.position[0], 0, v.position[2]));
-        projectedVertices.Add(projectedV);
+        points[i] = new Point(v.position[0], v.position[2]);
+        verticesPos[i] = new Vector3(v.position[0], v.position[1], v.position[2]);
+    }
+
+    public Vector3[] getVertices()
+    {
+        return verticesPos;
     }
 
     // getter method for vertex by index
@@ -27,5 +42,11 @@ public class DelaunayTriangulation
         return projectedVertices[i].position;
     }
 
+    // perform delaunay triangulation
+    public int[] delaunayTriangulate()
+    {
+        var delaunay = new Delaunator(points);
 
-}
+        return delaunay.Triangles ;
+    }
+} 
