@@ -3,21 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using DelaunatorSharp;
 
-[RequireComponent(typeof(MeshFilter))]
-
 public class GenerateMesh : MonoBehaviour
 {
-    Mesh mesh;
     LoadData loadData = LoadData.getInstance();
-    Vector3[] vertices;
+    List<Vector3> vertices;
     int[] triangles;
 
     private void Start()
     {
-        mesh = new Mesh();
-        GetComponent<MeshFilter>().mesh = mesh;
+        RunnerMethod();
+    }
+
+    void RunnerMethod()
+    {
+        Mesh mesh = new Mesh();
+        GameObject gameObject = new GameObject("MeshTest", typeof(MeshFilter), typeof(MeshRenderer));
+        gameObject.transform.localScale = new Vector3(1, 1, 1);
         CreateShape();
-        UpdateMesh();
+        UpdateMesh(mesh);
+
+        gameObject.GetComponent<MeshFilter>().mesh = mesh;
     }
 
     void CreateShape()
@@ -27,11 +32,11 @@ public class GenerateMesh : MonoBehaviour
         triangles = delaunay.Triangles;
     }
 
-    void UpdateMesh()
+    void UpdateMesh(Mesh mesh)
     {
         mesh.Clear();
 
-        mesh.vertices = vertices;
+        mesh.vertices = vertices.ToArray();
         mesh.triangles = triangles;
 
         mesh.RecalculateNormals();

@@ -35,7 +35,7 @@ public class PointCloudSpawn : MonoBehaviour
 {
     public Mesh objMesh;
     public Material objMat;
-    public Vector3[] points;
+    public List<Vector3> points;
     private List<List<ObjData>> batches = new List<List<ObjData>>();
     static LoadData loadData = LoadData.getInstance();
 
@@ -50,7 +50,7 @@ public class PointCloudSpawn : MonoBehaviour
     {
         int batchIndexNum = 0;
         List<ObjData> currBatch = new List<ObjData>();
-        for (int i = 0; i < points.Length; i++)
+        for (int i = 0; i < points.Count; i++)
         {
             AddObj(currBatch, i);
             batchIndexNum++;

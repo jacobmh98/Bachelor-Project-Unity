@@ -8,8 +8,12 @@ using UnityEngine;
 public class LoadData
 {
     public static LoadData loadData = new LoadData();
-    public Vector3[] points;
-    IPoint[] pointsDelaunay;
+    private List<Vector3> points = new List<Vector3>();
+    private List<IPoint> pointsDelaunay = new List<IPoint>();
+
+    // Filtering variables based on height
+    int minHeight = -1100;
+    int maxHeight = -600;
 
     private LoadData()
     {
@@ -17,19 +21,19 @@ public class LoadData
         string jsonString = File.ReadAllText(fileName);
         Sonar sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
 
-        points = new Vector3[sonarData.no_counts];
-        pointsDelaunay = new IPoint[sonarData.no_counts];
-
-        int index = 0;
+        //points = new Vector3[sonarData.no_counts];
+        //pointsDelaunay = new IPoint[sonarData.no_counts];
 
         for (int i = 0; i < sonarData.no_pings; i++)
         {
             for (int j = 0; j < sonarData.pings[i].no_points; j++)
             {
                 Vector3 point = new Vector3((float)sonarData.pings[i].coords_x[j] * 100, (float)sonarData.pings[i].coords_z[j], (float)sonarData.pings[i].coords_y[j]);
-                points[index] = point;
-                pointsDelaunay[index] = new Point(point[0], point[2]);
-                index++;
+                if (point[1] < maxHeight && point[1] > minHeight)
+                {
+                    points.Add(point);
+                    pointsDelaunay.Add(new Point(point[0], point[2]));
+                }
             }
         }
     }
@@ -39,14 +43,14 @@ public class LoadData
         return loadData;
     }
 
-    public Vector3[] getPoints()
+    public List<Vector3> getPoints()
     {
         return points;
     }
 
     public IPoint[] getPointsDelaunay()
     {
-        return pointsDelaunay;
+        return pointsDelaunay.ToArray();
     }
 }
 
