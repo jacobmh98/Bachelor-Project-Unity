@@ -71,7 +71,7 @@ public class PointCloudSpawn : MonoBehaviour
     private void AddObj(List<ObjData> currBatch, int i)
     {
         Vector3 position = points[i];
-        currBatch.Add(new ObjData(position, new Vector3(1f, 1f, 1f), Quaternion.identity));
+        currBatch.Add(new ObjData(position, new Vector3(0.05f, 0.05f, 0.05f), Quaternion.identity));
     }
 
     private List<ObjData> BuildNewBatch()
