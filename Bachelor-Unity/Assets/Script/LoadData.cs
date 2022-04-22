@@ -16,7 +16,7 @@ public class LoadData
 
     // Filtering variables based on height
     int minHeight = -22;
-    int maxHeight = -15;
+    int maxHeight = -10;
 
     private LoadData()
     {
