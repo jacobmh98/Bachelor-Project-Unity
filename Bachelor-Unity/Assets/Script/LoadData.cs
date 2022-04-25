@@ -10,13 +10,15 @@ public class LoadData
     public static LoadData loadData = new LoadData();
     private List<Vector3> points = new List<Vector3>();
     private List<IPoint> pointsDelaunay = new List<IPoint>();
-
     private List<List<Vector3>> pings = new List<List<Vector3>>();
     private List<List<IPoint>> pingsDelaunay = new List<List<IPoint>>();
 
     // Filtering variables based on height
-    int minHeight = -22;
-    int maxHeight = -10;
+    int minFilteringHeight = -22;
+    int maxFilteringHeight = -15;
+
+    float minHeight;
+    float maxHeight;
 
     private LoadData()
     {
@@ -26,6 +28,10 @@ public class LoadData
 
         //points = new Vector3[sonarData.no_counts];
         //pointsDelaunay = new IPoint[sonarData.no_counts];
+
+        // setting temporary min and max height in pointcloud
+        minHeight = (float)sonarData.pings[0].coords_z[0];
+        maxHeight = (float)sonarData.pings[0].coords_z[0];
 
         for (int i = 0; i < sonarData.no_pings; i++)
         {
@@ -37,7 +43,7 @@ public class LoadData
                 // getting coordinates for single point
                 Vector3 point = new Vector3((float)sonarData.pings[i].coords_x[j], (float)sonarData.pings[i].coords_z[j], (float)sonarData.pings[i].coords_y[j]);
 
-                if (point[1] < maxHeight && point[1] > minHeight)
+                if (point[1] < maxFilteringHeight && point[1] > minFilteringHeight)
                 {
                     // adding point to pointcloud
                     points.Add(point);
@@ -46,9 +52,14 @@ public class LoadData
                     // adding point to individual ping
                     ping.Add(point);
                     pingDelaunay.Add(new Point(point[0], point[2]));
-                }
 
-                
+                    // updating min and max height in pointcloud
+                    if (point[1] < minHeight)
+                        minHeight = point[1];
+
+                    if (point[1] > maxHeight)
+                        maxHeight = point[1];
+                }
             }
 
             // adding individual pings to group pings
@@ -60,6 +71,16 @@ public class LoadData
     public static LoadData getInstance()
     {
         return loadData;
+    }
+
+    public float getMinHeight()
+    {
+        return minHeight;
+    }
+
+    public float getMaxHeight()
+    {
+        return maxHeight;
     }
 
     public List<Vector3> getPoints()
@@ -81,21 +102,4 @@ public class LoadData
     {
         return pingsDelaunay;
     }
-}
-
-public class Ping
-{
-    public int pingID { get; set; }
-    public int no_points { get; set; }
-    public List<double> ping_coord { get; set; }
-    public List<double> coords_x { get; set; }
-    public List<double> coords_y { get; set; }
-    public List<double> coords_z { get; set; }
-}
-
-public class Sonar
-{
-    public int no_pings { get; set; }
-    public int no_counts { get; set; }
-    public List<Ping> pings { get; set; }
 }

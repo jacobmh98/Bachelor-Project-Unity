@@ -8,10 +8,15 @@ public class GenerateMesh : MonoBehaviour
     LoadData loadData = LoadData.getInstance();
     public Material material;
     Hashtable map;
-    List<Vector3> vertices = new List<Vector3>();
+    List<Vector3> vertices;
     List<int> triangles;
+    List<Color> colors;
+    List<int> sideLengths = new List<int>();
     bool removeEdges = true;
     int medianLength = 4;
+    int removedTriangles = -1;
+    int removedTriIterations = 0;
+    public Gradient gradient;
 
     private void Start()
     {
@@ -23,27 +28,32 @@ public class GenerateMesh : MonoBehaviour
         int start = 0;
         int maxPings = loadData.getPings().Count;
         int meshIndex = 0;
-        
+        int noPingsTri = 100;
+
         while(start < maxPings)
         {
             Mesh mesh = new Mesh();
             GameObject gameObject = new GameObject("Mesh" + meshIndex, typeof(MeshFilter), typeof(MeshRenderer));
             gameObject.transform.localScale = new Vector3(1, 1, 1);
 
-            CreateShape(mesh, start - 1 < 0 ? 0 : start - 1, (start + 100) > maxPings ? maxPings : start + 100 );
+            CreateShape(mesh, start - 1 < 0 ? 0 : start - 1, (start + noPingsTri) > maxPings ? maxPings : start + noPingsTri);
 
             gameObject.GetComponent<MeshFilter>().mesh = mesh;
             gameObject.GetComponent<MeshRenderer>().materials[0] = material;
-
             
-            start += 100;
+            start += noPingsTri;
             meshIndex++;
-        }  
+            //break;
+        }
     }
 
     void CreateShape(Mesh mesh, int start, int end)
     {
+        removedTriangles = -1;
+        removedTriIterations = 0;
+
         vertices = new List<Vector3>();
+        colors = new List<Color>();
         List<IPoint> delaunayPoints = new List<IPoint>();
 
         for(int i = start; i < end; i++)
@@ -54,6 +64,8 @@ public class GenerateMesh : MonoBehaviour
             foreach(Vector3 p in ping)
             {
                 vertices.Add(p);
+                float height = Mathf.InverseLerp(loadData.getMinHeight(), loadData.getMaxHeight(), p[1]);
+                colors.Add(gradient.Evaluate(height));
             }
 
             foreach (IPoint p in pingDelaunay)
@@ -66,70 +78,67 @@ public class GenerateMesh : MonoBehaviour
         var delaunay = new Delaunator(delaunayPoints.ToArray());
         triangles = new List<int>(delaunay.Triangles);
 
-        // fix error triangles by looking at boundary edges
-        // TODO HERE
-        /**
-         * FIX MEDIAN LENGTHS
-         * SET STOP KRITERIA FOR RemoveEdgeTriangles
-         * USE ANGLE + LENGTH TO FILTRATE EDGES
-         * LOOK INTO TRIANGULATE ONLY ONCE
-         * DO DIS MAN LAZY BUGGER
-         */
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
-        RemoveEdgeTriangles();
+        // Generating median length
+        GenerateMedianLength();
+        
 
+        // Remove edge borders with edge length greater than median length
+        while (removedTriangles != 0 || removedTriIterations < 20)
+        {
+            RemoveEdgeTriangles();
+        }
 
+        // Generate uvs for mesh
+        /*Vector2[] uvs = new Vector2[vertices.Count];
+
+        for (int i = 0; i < vertices.Count; i++) {
+            uvs[i] = vertices[i];
+        }*/
+
+        // Code for measuring time consumption of block
+        /*var watch = System.Diagnostics.Stopwatch.StartNew();
+        watch.Stop();
+        var elapsedTime = watch.ElapsedMilliseconds;
+        print("time = " + elapsedTime);*/
 
         // Set the mesh variables for unity mesh
         mesh.Clear();
 
         mesh.vertices = vertices.ToArray();
         mesh.triangles = triangles.ToArray();
+        mesh.colors = colors.ToArray();
 
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
+    }
+
+    /**
+     * Compute median length of triangle side
+     */
+     public void GenerateMedianLength()
+    {
+        for(int i = 0; i < triangles.Count; i+=3)
+        {
+            int length1 = (int) Norm(vertices[triangles[i]], vertices[triangles[i + 1]]);
+            int length2 = (int) Norm(vertices[triangles[i + 1]], vertices[triangles[i + 2]]);
+            int length3 = (int) Norm(vertices[triangles[i + 2]], vertices[triangles[i]]);
+
+            if (length1 != 0)
+                sideLengths.Add(length1);
+            if(length2 != 0)
+                sideLengths.Add(length2);
+            if(length3 != 0)
+                sideLengths.Add(length3);
+        }
+
+        sideLengths.Sort();
+
+        
+
+        int n = sideLengths.Count;
+        print("l(s) = " + n);
+        int m = n % 2 == 0 ? (sideLengths[n / 2 - 1] + sideLengths[n / 2]) / 2 : sideLengths[n - 1];
+        print("m = " + m);
     }
 
     /**
@@ -147,6 +156,7 @@ public class GenerateMesh : MonoBehaviour
     {
         CreateMap();
         ICollection keys = map.Keys;
+        removedTriangles = 0;
 
         // Loop through all vertices
         foreach (int v0 in keys)
@@ -169,6 +179,7 @@ public class GenerateMesh : MonoBehaviour
                 // Removing triangle where edge v0-v1 appears and length greater than median
                 if (borderEdge && Norm(vertices[v0], vertices[v1]) > medianLength)
                 {
+                    removedTriangles++;
                     foreach (int v2 in (List<int>)map[v1])
                     {
 
@@ -180,8 +191,8 @@ public class GenerateMesh : MonoBehaviour
                                 for (int i = 0; i < triangles.Count; i += 3)
                                 {
                                     if (triangles[i] == v0 && triangles[i + 1] == v1 && triangles[i + 2] == v2 ||
-                                       triangles[i] == v2 && triangles[i + 1] == v0 && triangles[i + 2] == v1 ||
-                                       triangles[i] == v1 && triangles[i + 1] == v2 && triangles[i + 2] == v0)
+                                        triangles[i] == v2 && triangles[i + 1] == v0 && triangles[i + 2] == v1 ||
+                                        triangles[i] == v1 && triangles[i + 1] == v2 && triangles[i + 2] == v0)
                                     {
                                         triangles.RemoveAt(i);
                                         triangles.RemoveAt(i);
@@ -195,10 +206,12 @@ public class GenerateMesh : MonoBehaviour
                 }
             }
         }
+        removedTriIterations++;
+        print("removed " + removedTriangles + " triangles");
     }
 
     /**
-     * Function to create new map from current triangles
+     * Function to create new map of edges from current triangles
      */
     void CreateMap()
     {
