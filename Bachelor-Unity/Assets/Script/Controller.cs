@@ -30,6 +30,8 @@ public class Controller
 
     public bool heightMap = true;
 
+    public bool triangulate = false;
+
     public GameObject toggleGroup;
 
     private Controller()
@@ -44,7 +46,7 @@ public class Controller
 
         //points = new Vector3[sonarData.no_counts];
         //pointsDelaunay = new IPoint[sonarData.no_counts];
-
+        
         // setting temporary min and max height in pointcloud
         minDepth = sonarData.minimum_depth;
         maxDepth = sonarData.maximum_depth;

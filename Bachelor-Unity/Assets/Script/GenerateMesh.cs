@@ -5,7 +5,7 @@ using DelaunatorSharp;
 
 public class GenerateMesh : MonoBehaviour
 {
-    Controller loadData = Controller.getInstance();
+    Controller controller = Controller.getInstance();
     public Material material;
     Hashtable map;
     List<Vector3> vertices;
@@ -20,13 +20,21 @@ public class GenerateMesh : MonoBehaviour
 
     private void Start()
     {
-        RunnerMethod();
+        //RunnerMethod();
     }
+    /*private void Update()
+    {
+        if (controller.triangulate)
+        {
+            RunnerMethod();
+            controller.triangulate = false;
+        }
+    }*/
 
     void RunnerMethod()
     {
         int start = 0;
-        int maxPings = loadData.getPings().Count;
+        int maxPings = controller.getPings().Count;
         int meshIndex = 0;
         int noPingsTri = 100;
 
@@ -58,13 +66,13 @@ public class GenerateMesh : MonoBehaviour
 
         for(int i = start; i < end; i++)
         {
-            List<Vector3> ping = loadData.getPings()[i];
-            List<IPoint> pingDelaunay = loadData.getPingsDelaunay()[i];
+            List<Vector3> ping = controller.getPings()[i];
+            List<IPoint> pingDelaunay = controller.getPingsDelaunay()[i];
 
             foreach(Vector3 p in ping)
             {
                 vertices.Add(p);
-                float height = Mathf.InverseLerp(loadData.getMaxDepth(), loadData.getMinDepth(), p[1]);
+                float height = Mathf.InverseLerp(controller.getMaxDepth(), controller.getMinDepth(), p[1]);
                 colors.Add(gradient.Evaluate(height));
             }
 
