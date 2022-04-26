@@ -22,7 +22,7 @@ public class LoadData
 
     private LoadData()
     {
-        string fileName = @"C:\Users\jacob\OneDrive - Danmarks Tekniske Universitet\6. semester\Bachelor Project\7k_data_extracted_rotated.json";
+        string fileName = @"C:\Users\Max\Desktop\DTU_Softwareteknologi\6.Semester2021\Bachelorprojekt\bachelor_project_teledyne\7k_data_extracted.json";
         string jsonString = File.ReadAllText(fileName);
         Sonar sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
 
