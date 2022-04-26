@@ -5,9 +5,11 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class LoadData
+public class Controller
 {
-    public static LoadData loadData = new LoadData();
+    public static Controller loadData = new Controller();
+
+    // List variables for point coordinates
     private List<Vector3> points = new List<Vector3>();
     private List<IPoint> pointsDelaunay = new List<IPoint>();
     private List<List<Vector3>> pings = new List<List<Vector3>>();
@@ -20,9 +22,9 @@ public class LoadData
     float minHeight;
     float maxHeight;
 
-    private LoadData()
+    private Controller()
     {
-        string fileName = @"C:\Users\Max\Desktop\DTU_Softwareteknologi\6.Semester2021\Bachelorprojekt\bachelor_project_teledyne\7k_data_extracted.json";
+        string fileName = @"C:\Users\jacob\OneDrive - Danmarks Tekniske Universitet\6. semester\Bachelor Project\7k_data_extracted_rotated.json";
         string jsonString = File.ReadAllText(fileName);
         Sonar sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
 
@@ -68,7 +70,7 @@ public class LoadData
         }
     }
 
-    public static LoadData getInstance()
+    public static Controller getInstance()
     {
         return loadData;
     }
