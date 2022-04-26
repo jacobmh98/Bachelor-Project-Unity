@@ -5,7 +5,7 @@ using DelaunatorSharp;
 
 public class GenerateMesh : MonoBehaviour
 {
-    LoadData loadData = LoadData.getInstance();
+    Controller loadData = Controller.getInstance();
     public Material material;
     Hashtable map;
     List<Vector3> vertices;
@@ -64,7 +64,7 @@ public class GenerateMesh : MonoBehaviour
             foreach(Vector3 p in ping)
             {
                 vertices.Add(p);
-                float height = Mathf.InverseLerp(loadData.getMinHeight(), loadData.getMaxHeight(), p[1]);
+                float height = Mathf.InverseLerp(loadData.getMaxDepth(), loadData.getMinDepth(), p[1]);
                 colors.Add(gradient.Evaluate(height));
             }
 

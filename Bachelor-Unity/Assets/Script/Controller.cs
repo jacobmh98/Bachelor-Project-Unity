@@ -3,11 +3,12 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System;
 using UnityEngine;
 
 public class Controller
 {
-    public static Controller loadData = new Controller();
+    public static Controller controller = new Controller();
 
     // List variables for point coordinates
     private List<Vector3> points = new List<Vector3>();
@@ -15,37 +16,54 @@ public class Controller
     private List<List<Vector3>> pings = new List<List<Vector3>>();
     private List<List<IPoint>> pingsDelaunay = new List<List<IPoint>>();
 
-    // Filtering variables based on height
-    int minFilteringHeight = -22;
-    int maxFilteringHeight = -15;
+    private int minDepth;
+    private int maxDepth;
 
-    float minHeight;
-    float maxHeight;
+    string fileName;
+    Sonar sonarData;
+
+
+    public bool depthFilter = false;
+    public bool axisFilter = false;
+    public bool nearestNeighbour = false;
+    public bool outlierHeight = false;
+
+    public bool heightMap = true;
+
+    public GameObject toggleGroup;
 
     private Controller()
     {
-        string fileName = @"C:\Users\jacob\OneDrive - Danmarks Tekniske Universitet\6. semester\Bachelor Project\7k_data_extracted_rotated.json";
+
+        if (String.IsNullOrEmpty(fileName))
+        {
+            fileName = @"C:\Users\Max\Desktop\7k_data_extracted_rotated.json";
+        }
         string jsonString = File.ReadAllText(fileName);
-        Sonar sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
+        sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
 
         //points = new Vector3[sonarData.no_counts];
         //pointsDelaunay = new IPoint[sonarData.no_counts];
 
         // setting temporary min and max height in pointcloud
-        minHeight = (float)sonarData.pings[0].coords_z[0];
-        maxHeight = (float)sonarData.pings[0].coords_z[0];
+        minDepth = sonarData.minimum_depth;
+        maxDepth = sonarData.maximum_depth;
 
+        
+    }
+    public void PointLoader()
+    {
         for (int i = 0; i < sonarData.no_pings; i++)
         {
             List<Vector3> ping = new List<Vector3>();
             List<IPoint> pingDelaunay = new List<IPoint>();
-            
+
             for (int j = 0; j < sonarData.pings[i].no_points; j++)
             {
                 // getting coordinates for single point
                 Vector3 point = new Vector3((float)sonarData.pings[i].coords_x[j], (float)sonarData.pings[i].coords_z[j], (float)sonarData.pings[i].coords_y[j]);
 
-                if (point[1] < maxFilteringHeight && point[1] > minFilteringHeight)
+                if (point[1] < minDepth && point[1] > maxDepth)
                 {
                     // adding point to pointcloud
                     points.Add(point);
@@ -55,12 +73,6 @@ public class Controller
                     ping.Add(point);
                     pingDelaunay.Add(new Point(point[0], point[2]));
 
-                    // updating min and max height in pointcloud
-                    if (point[1] < minHeight)
-                        minHeight = point[1];
-
-                    if (point[1] > maxHeight)
-                        maxHeight = point[1];
                 }
             }
 
@@ -72,17 +84,27 @@ public class Controller
 
     public static Controller getInstance()
     {
-        return loadData;
+        return controller;
     }
 
-    public float getMinHeight()
+    public int getMinDepth()
     {
-        return minHeight;
+        return minDepth;
     }
 
-    public float getMaxHeight()
+    public int getMaxDepth()
     {
-        return maxHeight;
+        return maxDepth;
+    }
+
+    public void setMinDepth(int newMin)
+    {
+        minDepth = newMin;
+    }
+
+    public void setMaxDepth(int newMax)
+    {
+        maxDepth = newMax;
     }
 
     public List<Vector3> getPoints()
@@ -104,4 +126,37 @@ public class Controller
     {
         return pingsDelaunay;
     }
+
+    public void setPath(string newPath)
+    {
+        fileName = newPath;
+    }
+
+    public bool getDepthFilter()
+    {
+        return depthFilter;
+    }
+
+    public bool getAxisFilter()
+    {
+        return axisFilter;
+    }
+
+    public bool getNearestNeighbour()
+    {
+        return nearestNeighbour;
+    }
+
+    public bool getOutlierHeight()
+    {
+        return outlierHeight;
+    }
+
+    public bool getHeightMap()
+    {
+        return heightMap;
+    }
+
+   
+
 }
