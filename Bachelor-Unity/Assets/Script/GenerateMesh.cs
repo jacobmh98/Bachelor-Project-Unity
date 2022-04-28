@@ -3,83 +3,77 @@ using System.Collections.Generic;
 using UnityEngine;
 using DelaunatorSharp;
 
+[RequireComponent(typeof(MeshFilter))]
+[RequireComponent(typeof(MeshRenderer))]
+
 public class GenerateMesh : MonoBehaviour
 {
     Controller controller = Controller.getInstance();
-    public Material material;
     Hashtable map;
-    List<Vector3> vertices;
-    List<int> triangles;
+    Material heightmapMaterial;
+    Material oceanfloorMaterial;
+    List<Vector3> vertices = new List<Vector3>();
+    List<int> triangles = new List<int>();
     List<Color> colors;
     List<int> sideLengths = new List<int>();
-    bool removeEdges = true;
     int medianLength = 4;
     int removedTriangles = -1;
     int removedTriIterations = 0;
     public Gradient gradient;
+    Mesh mesh;
 
     private void Start()
     {
-        //RunnerMethod();
+        // save the materials for oceanfloor and heightmap
+        
+
+
     }
-    /*private void Update()
+   private void Update()
     {
+
         if (controller.triangulate)
         {
             RunnerMethod();
-            controller.triangulate = false;
-        }
-    }*/
 
-    void RunnerMethod()
-    {
-        int start = 0;
-        int maxPings = controller.getPings().Count;
-        int meshIndex = 0;
-        int noPingsTri = 100;
-
-        while(start < maxPings)
-        {
-            Mesh mesh = new Mesh();
-            GameObject gameObject = new GameObject("Mesh" + meshIndex, typeof(MeshFilter), typeof(MeshRenderer));
-            gameObject.transform.localScale = new Vector3(1, 1, 1);
-
-            CreateShape(mesh, start - 1 < 0 ? 0 : start - 1, (start + noPingsTri) > maxPings ? maxPings : start + noPingsTri);
-
-            gameObject.GetComponent<MeshFilter>().mesh = mesh;
-            gameObject.GetComponent<MeshRenderer>().materials[0] = material;
             
-            start += noPingsTri;
-            meshIndex++;
-            //break;
+
+            controller.triangulate = false;
         }
     }
 
-    void CreateShape(Mesh mesh, int start, int end)
+    void RunnerMethod()
+    {
+        mesh = new Mesh();
+        GetComponent<MeshFilter>().mesh = mesh;
+        
+        // Set the material depending on selection
+        // GetComponent<MeshRenderer>().materials[0] = null;
+        /**
+         * TODO create if statement and select either heightmap or oceanfloor material
+         * depending on boolean in controller that is set from options menu
+         */
+                 
+        CreateShape();
+    }
+
+    /**
+     * Function that computes the delaunay triangulation and generates the mesh from these.
+     */
+    void CreateShape()
     {
         removedTriangles = -1;
         removedTriIterations = 0;
 
-        vertices = new List<Vector3>();
+        vertices = controller.getPoints();
         colors = new List<Color>();
-        List<IPoint> delaunayPoints = new List<IPoint>();
+        List<IPoint> delaunayPoints = controller.getPointsDelaunay();
 
-        for(int i = start; i < end; i++)
+        // Define the colors of mesh
+        foreach (Vector3 p in vertices)
         {
-            List<Vector3> ping = controller.getPings()[i];
-            List<IPoint> pingDelaunay = controller.getPingsDelaunay()[i];
-
-            foreach(Vector3 p in ping)
-            {
-                vertices.Add(p);
-                float height = Mathf.InverseLerp(controller.getMaxDepth(), controller.getMinDepth(), p[1]);
-                colors.Add(gradient.Evaluate(height));
-            }
-
-            foreach (IPoint p in pingDelaunay)
-            {
-                delaunayPoints.Add(p);
-            }
+            float height = Mathf.InverseLerp(controller.getMaxDepth(), controller.getMinDepth(), p[1]);
+            colors.Add(gradient.Evaluate(height));
         }
 
         // Delaunay triangulate points
@@ -87,14 +81,12 @@ public class GenerateMesh : MonoBehaviour
         triangles = new List<int>(delaunay.Triangles);
 
         // Generating median length
-        GenerateMedianLength();
-        
+        // GenerateMedianLength();
 
         // Remove edge borders with edge length greater than median length
         while (removedTriangles != 0 || removedTriIterations < 20)
-        {
             RemoveEdgeTriangles();
-        }
+        
 
         // Generate uvs for mesh
         /*Vector2[] uvs = new Vector2[vertices.Count];
@@ -111,6 +103,17 @@ public class GenerateMesh : MonoBehaviour
 
         // Set the mesh variables for unity mesh
         mesh.Clear();
+
+        /*
+        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+        oceanfloorMaterial = meshRenderer.materials[0];
+        heightmapMaterial = meshRenderer.materials[1];
+
+        meshRenderer.materials[0] = heightmapMaterial;
+        meshRenderer.materials[1] = heightmapMaterial;
+        */
+
+        mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
 
         mesh.vertices = vertices.ToArray();
         mesh.triangles = triangles.ToArray();

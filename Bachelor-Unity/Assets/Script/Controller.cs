@@ -13,15 +13,12 @@ public class Controller
     // List variables for point coordinates
     private List<Vector3> points = new List<Vector3>();
     private List<IPoint> pointsDelaunay = new List<IPoint>();
-    private List<List<Vector3>> pings = new List<List<Vector3>>();
-    private List<List<IPoint>> pingsDelaunay = new List<List<IPoint>>();
 
     private int minDepth;
     private int maxDepth;
 
     string fileName;
     Sonar sonarData;
-
 
     public bool depthFilter = false;
     public bool axisFilter = false;
@@ -39,17 +36,21 @@ public class Controller
 
         if (String.IsNullOrEmpty(fileName))
         {
-            fileName = @"C:\Users\Max\Desktop\7k_data_extracted_rotated.json";
+            //fileName = @"C:\Users\Max\Desktop\7k_data_extracted_rotated.json";
+            fileName = @"C:\Users\jacob\OneDrive\Dokumenter\GitHub\bachelor_project_teledyne\7k_data_extracted_rotated.json";
         }
         string jsonString = File.ReadAllText(fileName);
         sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
-
-        //points = new Vector3[sonarData.no_counts];
-        //pointsDelaunay = new IPoint[sonarData.no_counts];
         
-        // setting temporary min and max height in pointcloud
+        // Setting temporary min and max height in pointcloud
         minDepth = sonarData.minimum_depth;
         maxDepth = sonarData.maximum_depth;
+
+        // tmp call to PointLoader remove dis later bitches
+        minDepth = -12;
+        maxDepth = -21;
+        triangulate = true;
+        PointLoader();
 
         
     }
@@ -57,8 +58,6 @@ public class Controller
     {
         for (int i = 0; i < sonarData.no_pings; i++)
         {
-            List<Vector3> ping = new List<Vector3>();
-            List<IPoint> pingDelaunay = new List<IPoint>();
 
             for (int j = 0; j < sonarData.pings[i].no_points; j++)
             {
@@ -69,18 +68,11 @@ public class Controller
                 {
                     // adding point to pointcloud
                     points.Add(point);
-                    pointsDelaunay.Add(new Point(point[0], point[2]));
-
-                    // adding point to individual ping
-                    ping.Add(point);
-                    pingDelaunay.Add(new Point(point[0], point[2]));
+                    pointsDelaunay.Add(new DelaunatorSharp.Point(point[0], point[2]));
 
                 }
+               
             }
-
-            // adding individual pings to group pings
-            pings.Add(ping);
-            pingsDelaunay.Add(pingDelaunay);
         }
     }
 
@@ -114,19 +106,9 @@ public class Controller
         return points;
     }
 
-    public IPoint[] getPointsDelaunay()
+    public List<IPoint> getPointsDelaunay()
     {
-        return pointsDelaunay.ToArray();
-    }
-
-    public List<List<Vector3>> getPings()
-    {
-        return pings;
-    }
-
-    public List<List<IPoint>> getPingsDelaunay()
-    {
-        return pingsDelaunay;
+        return pointsDelaunay;
     }
 
     public void setPath(string newPath)
@@ -158,7 +140,4 @@ public class Controller
     {
         return heightMap;
     }
-
-   
-
 }

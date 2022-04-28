@@ -4,7 +4,8 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - material: {fileID: 2100000, guid: 23f633b8134f47741b89e7f3d114c996, type: 2}
+  - heightmapMaterial: {fileID: 2100000, guid: 38a672682554e7b47bcf73e0dd1839ae, type: 2}
+  - oceanfloorMaterial: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
