@@ -27,7 +27,9 @@ public class Controller
 
     public bool heightMap = true;
 
-    public bool triangulate = false;
+    public bool generateHeightmap = false;
+    public bool generateMesh = false;
+    public bool triangulate;
 
     public GameObject toggleGroup;
 
@@ -41,15 +43,16 @@ public class Controller
         }
         string jsonString = File.ReadAllText(fileName);
         sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
-        
-        // Setting temporary min and max height in pointcloud
+
+        // setting temporary min and max height in pointcloud
         minDepth = sonarData.minimum_depth;
         maxDepth = sonarData.maximum_depth;
+        PointLoader();
 
         // tmp call to PointLoader remove dis later bitches
         minDepth = -12;
         maxDepth = -21;
-        triangulate = true;
+        generateHeightmap = true;
         PointLoader();
 
         

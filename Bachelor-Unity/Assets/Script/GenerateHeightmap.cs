@@ -6,7 +6,7 @@ using DelaunatorSharp;
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
 
-public class GenerateMesh : MonoBehaviour
+public class GenerateHeightmap : MonoBehaviour
 {
     Controller controller = Controller.getInstance();
     Hashtable map;
@@ -17,25 +17,26 @@ public class GenerateMesh : MonoBehaviour
     int medianLength = 4;
     int removedTriangles = -1;
     int removedTriIterations = 0;
+    public Gradient gradient;
     Mesh mesh;
 
     private void Start()
     {
         // save the materials for oceanfloor and heightmap
-        
+
 
 
     }
-   private void Update()
+    private void Update()
     {
 
-        if (controller.generateMesh)
+        if (controller.generateHeightmap)
         {
             RunnerMethod();
 
-            
 
-            controller.generateMesh = false;
+
+            controller.generateHeightmap = false;
         }
     }
 
@@ -43,14 +44,14 @@ public class GenerateMesh : MonoBehaviour
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
-        
+
         // Set the material depending on selection
         // GetComponent<MeshRenderer>().materials[0] = null;
         /**
          * TODO create if statement and select either heightmap or oceanfloor material
          * depending on boolean in controller that is set from options menu
          */
-                 
+
         CreateShape();
     }
 
@@ -66,6 +67,13 @@ public class GenerateMesh : MonoBehaviour
         colors = new List<Color>();
         List<IPoint> delaunayPoints = controller.getPointsDelaunay();
 
+        // Define the colors of mesh
+        foreach (Vector3 p in vertices)
+        {
+            float height = Mathf.InverseLerp(controller.getMaxDepth(), controller.getMinDepth(), p[1]);
+            colors.Add(gradient.Evaluate(height));
+        }
+
         // Delaunay triangulate points
         var delaunay = new Delaunator(delaunayPoints.ToArray());
         triangles = new List<int>(delaunay.Triangles);
@@ -76,7 +84,7 @@ public class GenerateMesh : MonoBehaviour
         // Remove edge borders with edge length greater than median length
         while (removedTriangles != 0 || removedTriIterations < 20)
             RemoveEdgeTriangles();
-        
+
 
         // Generate uvs for mesh
         /*Vector2[] uvs = new Vector2[vertices.Count];
@@ -116,25 +124,25 @@ public class GenerateMesh : MonoBehaviour
     /**
      * Compute median length of triangle side
      */
-     public void GenerateMedianLength()
+    public void GenerateMedianLength()
     {
-        for(int i = 0; i < triangles.Count; i+=3)
+        for (int i = 0; i < triangles.Count; i += 3)
         {
-            int length1 = (int) Norm(vertices[triangles[i]], vertices[triangles[i + 1]]);
-            int length2 = (int) Norm(vertices[triangles[i + 1]], vertices[triangles[i + 2]]);
-            int length3 = (int) Norm(vertices[triangles[i + 2]], vertices[triangles[i]]);
+            int length1 = (int)Norm(vertices[triangles[i]], vertices[triangles[i + 1]]);
+            int length2 = (int)Norm(vertices[triangles[i + 1]], vertices[triangles[i + 2]]);
+            int length3 = (int)Norm(vertices[triangles[i + 2]], vertices[triangles[i]]);
 
             if (length1 != 0)
                 sideLengths.Add(length1);
-            if(length2 != 0)
+            if (length2 != 0)
                 sideLengths.Add(length2);
-            if(length3 != 0)
+            if (length3 != 0)
                 sideLengths.Add(length3);
         }
 
         sideLengths.Sort();
 
-        
+
 
         int n = sideLengths.Count;
         print("l(s) = " + n);
