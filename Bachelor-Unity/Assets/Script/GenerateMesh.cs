@@ -59,7 +59,17 @@ public class GenerateMesh : MonoBehaviour
         }
 
         var delaunay = new Delaunator(delaunayPoints.ToArray());
-        int[] triangles = delaunay.Triangles;
+        triangles = new List<int>(delaunay.Triangles);
+
+        // Generating median length
+        //GenerateMedianLength();
+        
+
+        // Remove edge borders with edge length greater than median length
+        while (removedTriangles != 0 || removedTriIterations < 20)
+        {
+            RemoveEdgeTriangles();
+        }
 
         mesh.Clear();
 

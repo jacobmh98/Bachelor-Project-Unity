@@ -14,9 +14,31 @@ public class LoadData
     private List<List<Vector3>> pings = new List<List<Vector3>>();
     private List<List<IPoint>> pingsDelaunay = new List<List<IPoint>>();
 
-    // Filtering variables based on height
-    int minHeight = -22;
-    int maxHeight = -15;
+    private int minDepth = 0;
+    private int maxDepth = 100;
+    private int minLengthAxis = 0;
+    private int maxLengthAxis = 100;
+    private int minWidthAxis = 0;
+    private int maxWidthAxis = 100;
+
+    private bool depth_filter_passed;
+    private bool axis_filter_passed;
+
+    public bool nearestNeighbour = false;
+    public bool z_score_outlier_detection = false;
+
+    public int n_neighbours;
+    public float neighbour_distance;
+
+    public double z_score_threshold;
+
+
+    string fileName;
+    Sonar sonarData;
+
+    public bool heightMap = true;
+
+    public bool triangulate = false;
 
     private LoadData()
     {
@@ -26,6 +48,27 @@ public class LoadData
 
         //points = new Vector3[sonarData.no_counts];
         //pointsDelaunay = new IPoint[sonarData.no_counts];
+
+        minLengthAxis = sonarData.min_length_axis;
+        maxLengthAxis = sonarData.max_length_axis;
+        minWidthAxis = sonarData.min_width_axis;
+        maxWidthAxis = sonarData.max_width_axis;
+    }
+    public void PointLoader()
+    {
+        List<float> y = new List<float>();
+        List<Vector3> new_points = new List<Vector3>();
+
+        //Test values, needs to get the values from the slider here
+        minDepth = minDepth;
+        maxDepth = maxDepth;
+        minLengthAxis = minLengthAxis;
+        maxLengthAxis = maxLengthAxis;
+        minWidthAxis = minWidthAxis;
+        maxWidthAxis = maxWidthAxis;
+
+        nearestNeighbour = false;
+        z_score_outlier_detection = false;
 
         for (int i = 0; i < sonarData.no_pings; i++)
         {
@@ -37,7 +80,20 @@ public class LoadData
                 // getting coordinates for single point
                 Vector3 point = new Vector3((float)sonarData.pings[i].coords_x[j], (float)sonarData.pings[i].coords_z[j], (float)sonarData.pings[i].coords_y[j]);
 
-                if (point[1] < maxHeight && point[1] > minHeight)
+                depth_filter_passed = false;
+                axis_filter_passed = false;
+
+                if (point[1] < minDepth && point[1] > maxDepth)
+                {
+                    depth_filter_passed = true;
+                }
+
+                if ((point[0] > minLengthAxis && point[0] < maxLengthAxis) && (point[2] > minWidthAxis && point[2] < maxWidthAxis))
+                {
+                    axis_filter_passed = true;
+                }
+
+                if (depth_filter_passed && axis_filter_passed)
                 {
                     // adding point to pointcloud
                     points.Add(point);
@@ -46,15 +102,88 @@ public class LoadData
                     // adding point to individual ping
                     ping.Add(point);
                     pingDelaunay.Add(new Point(point[0], point[2]));
+
+                    y.Add(point[1]);
                 }
 
-                
             }
-
             // adding individual pings to group pings
             pings.Add(ping);
             pingsDelaunay.Add(pingDelaunay);
         }
+        if (z_score_outlier_detection)
+        {
+            z_score_threshold = 0.1;
+            float delta = 0;
+            float mean = 0;
+            float sum = 0;
+            double standardDeviation = 0;
+            int n = 0;
+
+            for (int i = 0; i < y.Count; i++)
+            {
+                n++;
+                delta = y[i] - mean;
+                mean += delta / n;
+                sum += delta * (y[i] - mean);
+            }
+
+            if (n > 1)
+            {
+                standardDeviation = Math.Sqrt(sum - (n - 1));
+            }
+
+            for (int i = 0; i < y.Count; i++)
+            {
+
+                if (Math.Abs((y[i] - mean) / standardDeviation) < z_score_threshold)
+                {
+                    new_points.Add(points[i]);
+                }
+
+            }
+
+            points = new_points;
+        }
+        if (nearestNeighbour)
+        {
+            n_neighbours = 20; //Get value from options
+            neighbour_distance = 2; //Get value from options
+            new_points = new List<Vector3>();
+            int neighbours;
+            Debug.Log(points.Count);
+
+
+            for (int i = 0; i < points.Count; i++)
+            {
+                neighbours = 0;
+
+                for (int j = 0; j < points.Count; j++)
+                {
+                    if (EuclideanDistance(points[i], points[j]) <= neighbour_distance)
+                    {
+                        neighbours += 1;
+                    }
+
+                }
+
+                if (neighbours - 1 >= n_neighbours) //Subtract 1 since the point itself will be included in the list
+                {
+                    new_points.Add(points[i]);
+                }
+
+            }
+
+            points = new_points;
+
+        }
+    }
+
+    public static double EuclideanDistance(Vector3 current_point, Vector3 neighbour)
+    {
+        return Math.Sqrt(Math.Pow(neighbour[0] - current_point[0], 2)
+            + Math.Pow(neighbour[1] - current_point[1], 2)
+            + Math.Pow(neighbour[2] - current_point[2], 2));
     }
 
     public static LoadData getInstance()
@@ -83,19 +212,46 @@ public class LoadData
     }
 }
 
-public class Ping
-{
-    public int pingID { get; set; }
-    public int no_points { get; set; }
-    public List<double> ping_coord { get; set; }
-    public List<double> coords_x { get; set; }
-    public List<double> coords_y { get; set; }
-    public List<double> coords_z { get; set; }
-}
+    public void setPath(string newPath)
+    {
+        fileName = newPath;
+    }
 
-public class Sonar
-{
-    public int no_pings { get; set; }
-    public int no_counts { get; set; }
-    public List<Ping> pings { get; set; }
+    public bool getNearestNeighbour()
+    {
+        return nearestNeighbour;
+    }
+
+    public bool getOutlierHeight()
+    {
+        return z_score_outlier_detection;
+    }
+
+    public bool getHeightMap()
+    {
+        return heightMap;
+    }
+
+    public int getMinLengthAxis()
+    {
+        return minLengthAxis;
+    }
+
+    public int getMaxLengthAxis()
+    {
+        return maxLengthAxis;
+    }
+
+    public int getMinWidthAxis()
+    {
+        return minWidthAxis;
+    }
+
+    public int getMaxWidthAxis()
+    {
+        return maxWidthAxis;
+    }
+
+
+
 }
