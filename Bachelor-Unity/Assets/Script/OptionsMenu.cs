@@ -15,6 +15,7 @@ public class OptionsMenu : MonoBehaviour
     public static int maxDepth = 10;
 
     public Toggle toggle;
+    public Toggle toggle2;
     public GameObject inputNeighbours;
     public GameObject inputDistance;
     Controller controller = Controller.getInstance();
@@ -36,6 +37,21 @@ public class OptionsMenu : MonoBehaviour
     {
         controller.triangulate = toggle.isOn;
         dropdown.interactable = toggle.isOn;
+        if (toggle.isOn)
+        {
+            if(dropdown.value == 1)
+            {
+                toggle2.interactable = true;
+            }
+            else
+            {
+                toggle2.interactable = false;
+            }
+        }
+        else
+        {
+            toggle2.interactable = false;
+        }
     }
 
     public void dropDownDelaunay()

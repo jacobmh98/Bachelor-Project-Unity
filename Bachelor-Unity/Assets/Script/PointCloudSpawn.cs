@@ -37,11 +37,11 @@ public class PointCloudSpawn : MonoBehaviour
     public Material objMat;
     public List<Vector3> points;
     private List<List<ObjData>> batches = new List<List<ObjData>>();
-    static LoadData loadData = LoadData.getInstance();
+    static Controller cont = Controller.getInstance();
 
     void Start()
     {
-        points = loadData.getPoints();
+        points = cont.getPoints();
 
         createPointCloud();
     }

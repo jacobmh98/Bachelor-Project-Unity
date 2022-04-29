@@ -1,18 +1,16 @@
 using DelaunatorSharp;
 using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class LoadData
+public class Controller
 {
-    public static LoadData loadData = new LoadData();
+    public static Controller controller = new Controller();
     private List<Vector3> points = new List<Vector3>();
     private List<IPoint> pointsDelaunay = new List<IPoint>();
-
-    private List<List<Vector3>> pings = new List<List<Vector3>>();
-    private List<List<IPoint>> pingsDelaunay = new List<List<IPoint>>();
 
     private int minDepth = 0;
     private int maxDepth = 100;
@@ -38,17 +36,21 @@ public class LoadData
 
     public bool heightMap = true;
 
+    public bool generateHeightmap = false;
+    public bool generateMesh = false;
     public bool triangulate = false;
 
-    private LoadData()
+    private Controller()
     {
-        string fileName = @"C:\Users\Max\Desktop\DTU_Softwareteknologi\6.Semester2021\Bachelorprojekt\bachelor_project_teledyne\7k_data_extracted.json";
+        string fileName = @"C:\Users\Max\Desktop\7k_data_extracted_rotated.json";
         string jsonString = File.ReadAllText(fileName);
-        Sonar sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
+        sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
 
         //points = new Vector3[sonarData.no_counts];
         //pointsDelaunay = new IPoint[sonarData.no_counts];
 
+        minDepth = sonarData.minimum_depth;
+        maxDepth = sonarData.maximum_depth;
         minLengthAxis = sonarData.min_length_axis;
         maxLengthAxis = sonarData.max_length_axis;
         minWidthAxis = sonarData.min_width_axis;
@@ -99,17 +101,12 @@ public class LoadData
                     points.Add(point);
                     pointsDelaunay.Add(new Point(point[0], point[2]));
 
-                    // adding point to individual ping
-                    ping.Add(point);
-                    pingDelaunay.Add(new Point(point[0], point[2]));
 
                     y.Add(point[1]);
                 }
 
             }
-            // adding individual pings to group pings
-            pings.Add(ping);
-            pingsDelaunay.Add(pingDelaunay);
+            
         }
         if (z_score_outlier_detection)
         {
@@ -186,9 +183,9 @@ public class LoadData
             + Math.Pow(neighbour[2] - current_point[2], 2));
     }
 
-    public static LoadData getInstance()
+    public static Controller getInstance()
     {
-        return loadData;
+        return controller;
     }
 
     public List<Vector3> getPoints()
@@ -196,27 +193,34 @@ public class LoadData
         return points;
     }
 
-    public IPoint[] getPointsDelaunay()
+    public List<IPoint> getPointsDelaunay()
     {
-        return pointsDelaunay.ToArray();
+        return pointsDelaunay;
     }
-
-    public List<List<Vector3>> getPings()
-    {
-        return pings;
-    }
-
-    public List<List<IPoint>> getPingsDelaunay()
-    {
-        return pingsDelaunay;
-    }
-}
 
     public void setPath(string newPath)
     {
         fileName = newPath;
     }
+    public int getMinDepth()
+    {
+        return minDepth;
+    }
 
+    public int getMaxDepth()
+    {
+        return maxDepth;
+    }
+
+    public void setMinDepth(int newMin)
+    {
+        minDepth = newMin;
+    }
+
+    public void setMaxDepth(int newMax)
+    {
+        maxDepth = newMax;
+    }
     public bool getNearestNeighbour()
     {
         return nearestNeighbour;
