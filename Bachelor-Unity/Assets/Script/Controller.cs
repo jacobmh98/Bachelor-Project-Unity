@@ -45,13 +45,13 @@ public class Controller
         sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
 
         // setting temporary min and max height in pointcloud
-        minDepth = sonarData.minimum_depth;
+       minDepth = sonarData.minimum_depth;
         maxDepth = sonarData.maximum_depth;
-        PointLoader();
+       //PointLoader();
 
-        // tmp call to PointLoader remove dis later bitches
-        minDepth = -12;
-        maxDepth = -21;
+        // tmp call to PointLoader remove this
+       // minDepth = -14;
+        //maxDepth = -21;
         generateHeightmap = true;
         PointLoader();
 
