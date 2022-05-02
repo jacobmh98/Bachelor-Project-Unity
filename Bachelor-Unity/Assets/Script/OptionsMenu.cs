@@ -65,9 +65,15 @@ public class OptionsMenu : MonoBehaviour
         }
     }
 
-    
+    public void toggleHeightMap()
+    {
+        controller.heightMap = toggle.isOn;
+        if(toggle.interactable == false)
+        {
+            controller.heightMap = false;
+        }
+    }
 
-    
 
-    
+
 }

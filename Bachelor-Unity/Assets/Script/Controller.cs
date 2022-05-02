@@ -39,10 +39,18 @@ public class Controller
     public bool generateHeightmap = false;
     public bool generateMesh = false;
     public bool triangulate = false;
+    //0 = no triangulation, 1 = delaunay, 2 = grid
+    public int triangulation = 0;
 
     private Controller()
     {
-        string fileName = @"C:\Users\Max\Desktop\7k_data_extracted_rotated.json";
+        fileName = @"C:\Users\Max\Desktop\7k_data_extracted_rotated.json";
+        LoadController();
+
+    }
+
+    public void LoadController()
+    {
         string jsonString = File.ReadAllText(fileName);
         sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
 
@@ -200,7 +208,16 @@ public class Controller
 
     public void setPath(string newPath)
     {
-        fileName = newPath;
+        if (String.IsNullOrEmpty(fileName))
+        {
+            Debug.Log("fileName is null or empty!");
+            fileName = @"C:/Users/Max/Desktop/7k_data_extracted.json";
+
+        }
+        else
+        {
+            fileName = newPath;
+        }
     }
     public int getMinDepth()
     {
@@ -254,6 +271,36 @@ public class Controller
     public int getMaxWidthAxis()
     {
         return maxWidthAxis;
+    }
+
+    public void setMinLengthAxis(int minLength)
+    {
+        minLengthAxis = minLength;
+    }
+
+    public void setMaxLengthAxis(int maxLength)
+    {
+        maxLengthAxis = maxLength;
+    }
+
+    public void setMinWidthAxis(int minWidth)
+    {
+        minWidthAxis = minWidth;
+    }
+
+    public void setMaxWidthAxis(int maxWidth)
+    {
+        maxWidthAxis = maxWidth;
+    }
+    
+    public int getTriangulationType()
+    {
+        return triangulation;
+    }
+
+    public void setTriangulationType(int newTriang)
+    {
+        triangulation = newTriang;
     }
 
 
