@@ -51,11 +51,12 @@ public class Controller
 
     private Controller()
     {
-
+        /*
         if (String.IsNullOrEmpty(fileName))
         {
             //fileName = @"C:\Users\kanne\Desktop\7k_data_extracted_rotated.json";
-            fileName = @"C:\Users\jacob\OneDrive\Dokumenter\GitHub\bachelor_project_teledyne\7k_data_extracted_rotated.json";
+            fileName = @"C:\Users\Max\Desktop\7k_data_extracted_rotated.json";
+            //fileName = @"C:\Users\jacob\OneDrive\Dokumenter\GitHub\bachelor_project_teledyne\7k_data_extracted_rotated.json";
         }
         string jsonString = File.ReadAllText(fileName);
         sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
@@ -71,8 +72,40 @@ public class Controller
         // tmp line calls remove this remove dis later bitches
         PointLoader();
         triangulate = true;
+
         //showMesh = true;
         //showHeightmap = true;
+
+        showHeightmap = true;
+    }
+
+        */
+    }
+
+    public void LoadController()
+    {
+        Debug.Log(fileName);
+        if (String.IsNullOrEmpty(fileName))
+        {
+            //fileName = @"C:\Users\kanne\Desktop\7k_data_extracted_rotated.json";
+            fileName = @"C:\Users\Max\Desktop\7k_data_extracted_rotated.json";
+            //fileName = @"C:\Users\jacob\OneDrive\Dokumenter\GitHub\bachelor_project_teledyne\7k_data_extracted_rotated.json";
+        }
+        string jsonString = File.ReadAllText(fileName);
+        sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
+
+        // setting temporary min and max height in pointcloud
+        minDepth = sonarData.minimum_depth;
+        maxDepth = sonarData.maximum_depth;
+        minLengthAxis = sonarData.min_length_axis;
+        maxLengthAxis = sonarData.max_length_axis;
+        minWidthAxis = sonarData.min_width_axis;
+        maxWidthAxis = sonarData.max_width_axis;
+
+        // tmp line calls remove this remove dis later bitches
+
+        PointLoader();
+
     }
 
 
@@ -214,10 +247,11 @@ public class Controller
 
     public void setPath(string newPath)
     {
-        if (String.IsNullOrEmpty(fileName))
+        if (String.IsNullOrEmpty(newPath))
         {
-            Debug.Log("fileName is null or empty!");
-            fileName = @"C:/Users/Max/Desktop/7k_data_extracted.json";
+            Debug.Log("newPath is null or empty!");
+            Debug.Log(newPath);
+            fileName = @"C:/Users/Max/Desktop/7k_data_extracted_rotated.json";
 
         }
         else
