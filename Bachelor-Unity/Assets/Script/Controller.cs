@@ -12,9 +12,11 @@ public class Controller
 {
     public static Controller controller = new Controller();
     Sonar sonarData;
+    Ping pingData;
 
     // List variables for point coordinates
     private List<Vector3> points = new List<Vector3>();
+    private List<Vector3> boatPathPoints = new List<Vector3>();
     private List<IPoint> pointsDelaunay = new List<IPoint>();
 
     private int minDepth = 0;
@@ -23,10 +25,6 @@ public class Controller
     private int maxLengthAxis = 100;
     private int minWidthAxis = 0;
     private int maxWidthAxis = 100;
-
-    private bool depthFilterPassed;
-    private bool lengthFilterPassed;
-    private bool widthFilterPassed;
 
     string fileName;
 
@@ -71,14 +69,16 @@ public class Controller
         //maxDepth = -21;
         generateHeightmap = true;
         PointLoader();
-
         
     }
+
     public void PointLoader()
     {
         List<float> heightOutlierDetectionList = new List<float>();
         List<double[]> kDTreeSetupList = new List<double[]>();
         List<Vector3> new_points = new List<Vector3>();
+        Vector3 point;
+        Vector3 boatPoint;
 
         //Test values, needs to get the values from the slider here
         minDepth = minDepth;
@@ -89,41 +89,29 @@ public class Controller
         maxWidthAxis = maxWidthAxis;
 
         outlierHeightEnabled = false;
-        nearestNeighbourEnabled = true;
+        nearestNeighbourEnabled = false;
 
         for (int i = 0; i < sonarData.no_pings; i++)
         {
 
+            //Not quite working
+            //boatPoint = new Vector3((float)pingData.ping_boat_coord[0], (float)pingData.ping_boat_coord[2], (float)pingData.ping_boat_coord[1]);
+            //boatPathPoints.Add(boatPoint);
+
             for (int j = 0; j < sonarData.pings[i].no_points; j++)
             {
                 // getting coordinates for single point
-                Vector3 point = new Vector3((float)sonarData.pings[i].coords_x[j], (float)sonarData.pings[i].coords_z[j], (float)sonarData.pings[i].coords_y[j]);
+                point = new Vector3((float)sonarData.pings[i].coords_x[j], (float)sonarData.pings[i].coords_z[j], (float)sonarData.pings[i].coords_y[j]);
 
-                depthFilterPassed = false;
-                lengthFilterPassed = false;
-                widthFilterPassed = false;
-
-                if (point[1] < minDepth && point[1] > maxDepth)
-                {
-                    depthFilterPassed = true;
-                }
-
-                if (point[0] > minLengthAxis && point[0] < maxLengthAxis)
-                {
-                    lengthFilterPassed = true;
-                }
-
-                if (point[2] > minWidthAxis && point[2] < maxWidthAxis)
-                {
-                    widthFilterPassed = true;
-                }
-
-                if (depthFilterPassed && lengthFilterPassed && widthFilterPassed)
+                if ((point[1] < minDepth && point[1] > maxDepth)
+                    && (point[0] > minLengthAxis && point[0] < maxLengthAxis)
+                    && (point[2] > minWidthAxis && point[2] < maxWidthAxis))
                 {
                     // adding point to pointcloud
                     points.Add(point);
                     pointsDelaunay.Add(new DelaunatorSharp.Point(point[0], point[2]));
 
+                    // Adding point to other lists for outlier removal functions to safe running over all points multiple times
                     heightOutlierDetectionList.Add(point[1]);
                     double[] toKDTreePoint = new double[] { point[0], point[1], point[2] };
                     kDTreeSetupList.Add(toKDTreePoint);
