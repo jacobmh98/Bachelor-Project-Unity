@@ -18,6 +18,7 @@ public class OptionsButtons : MonoBehaviour
     public Toggle heightMap;
     public TMP_InputField neighbourField;
     public TMP_InputField distanceField;
+    public TMP_InputField thresholdField;
 
 
     public void saveButton()
@@ -46,6 +47,11 @@ public class OptionsButtons : MonoBehaviour
         }
         print("Distance: " + floatResult);
 
+        if(double.TryParse(thresholdField.text, out double doubleResult))
+        {
+            //something like:
+            //cont.threshold_value = doubleResult;
+        }
 
         print("Saved settings!");
     }

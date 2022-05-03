@@ -16,21 +16,22 @@ public class OptionsMenu : MonoBehaviour
 
     public Toggle toggle;
     public Toggle toggle2;
-    public GameObject inputNeighbours;
-    public GameObject inputDistance;
+    public GameObject input1;
+    public GameObject input2;
     Controller controller = Controller.getInstance();
     public TMP_Dropdown dropdown;
 
     public void toggleNN(bool newBool)
     {
         controller.nearestNeighbour = toggle.isOn;
-        inputNeighbours.SetActive(toggle.isOn);
-        inputDistance.SetActive(toggle.isOn);
+        input1.SetActive(toggle.isOn);
+        input2.SetActive(toggle.isOn);
     }
 
     public void toggleOD(bool newBool)
     {
         controller.z_score_outlier_detection = toggle.isOn;
+        input1.SetActive(toggle.isOn);
     }
 
     public void toggleTriangle(bool newBool)
