@@ -5,25 +5,38 @@ using System.Collections.Generic;
 using System.IO;
 using System;
 using UnityEngine;
+using Accord.Collections;
+using Accord.MachineLearning;
 
 public class Controller
 {
     public static Controller controller = new Controller();
+    Sonar sonarData;
 
     // List variables for point coordinates
     private List<Vector3> points = new List<Vector3>();
     private List<IPoint> pointsDelaunay = new List<IPoint>();
 
-    private int minDepth;
-    private int maxDepth;
+    private int minDepth = 0;
+    private int maxDepth = 100;
+    private int minLengthAxis = 0;
+    private int maxLengthAxis = 100;
+    private int minWidthAxis = 0;
+    private int maxWidthAxis = 100;
+
+    private bool depthFilterPassed;
+    private bool lengthFilterPassed;
+    private bool widthFilterPassed;
 
     string fileName;
-    Sonar sonarData;
 
-    public bool depthFilter = false;
-    public bool axisFilter = false;
-    public bool nearestNeighbour = false;
-    public bool outlierHeight = false;
+    public int n_neighbours;
+    public double neighbourDistance;
+
+    public double Z_scoreThreshold;
+
+    public bool nearestNeighbourEnabled = false;
+    public bool outlierHeightEnabled = false;
 
     public bool heightMap = true;
 
@@ -38,19 +51,23 @@ public class Controller
 
         if (String.IsNullOrEmpty(fileName))
         {
-            //fileName = @"C:\Users\Max\Desktop\7k_data_extracted_rotated.json";
-            fileName = @"C:\Users\jacob\OneDrive\Dokumenter\GitHub\bachelor_project_teledyne\7k_data_extracted_rotated.json";
+            fileName = @"C:\Users\kanne\Desktop\7k_data_extracted_rotated.json";
+            //fileName = @"C:\Users\jacob\OneDrive\Dokumenter\GitHub\bachelor_project_teledyne\7k_data_extracted_rotated.json";
         }
         string jsonString = File.ReadAllText(fileName);
         sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
 
         // setting temporary min and max height in pointcloud
-       minDepth = sonarData.minimum_depth;
+        minDepth = sonarData.minimum_depth;
         maxDepth = sonarData.maximum_depth;
-       //PointLoader();
+        minLengthAxis = sonarData.min_length_axis;
+        maxLengthAxis = sonarData.max_length_axis;
+        minWidthAxis = sonarData.min_width_axis;
+        maxWidthAxis = sonarData.max_width_axis;
+        //PointLoader();
 
         // tmp call to PointLoader remove this
-       // minDepth = -14;
+        // minDepth = -14;
         //maxDepth = -21;
         generateHeightmap = true;
         PointLoader();
@@ -59,6 +76,21 @@ public class Controller
     }
     public void PointLoader()
     {
+        List<float> heightOutlierDetectionList = new List<float>();
+        List<double[]> kDTreeSetupList = new List<double[]>();
+        List<Vector3> new_points = new List<Vector3>();
+
+        //Test values, needs to get the values from the slider here
+        minDepth = minDepth;
+        maxDepth = maxDepth;
+        minLengthAxis = minLengthAxis;
+        maxLengthAxis = maxLengthAxis;
+        minWidthAxis = minWidthAxis;
+        maxWidthAxis = maxWidthAxis;
+
+        outlierHeightEnabled = false;
+        nearestNeighbourEnabled = true;
+
         for (int i = 0; i < sonarData.no_pings; i++)
         {
 
@@ -67,16 +99,110 @@ public class Controller
                 // getting coordinates for single point
                 Vector3 point = new Vector3((float)sonarData.pings[i].coords_x[j], (float)sonarData.pings[i].coords_z[j], (float)sonarData.pings[i].coords_y[j]);
 
+                depthFilterPassed = false;
+                lengthFilterPassed = false;
+                widthFilterPassed = false;
+
                 if (point[1] < minDepth && point[1] > maxDepth)
+                {
+                    depthFilterPassed = true;
+                }
+
+                if (point[0] > minLengthAxis && point[0] < maxLengthAxis)
+                {
+                    lengthFilterPassed = true;
+                }
+
+                if (point[2] > minWidthAxis && point[2] < maxWidthAxis)
+                {
+                    widthFilterPassed = true;
+                }
+
+                if (depthFilterPassed && lengthFilterPassed && widthFilterPassed)
                 {
                     // adding point to pointcloud
                     points.Add(point);
                     pointsDelaunay.Add(new DelaunatorSharp.Point(point[0], point[2]));
 
+                    heightOutlierDetectionList.Add(point[1]);
+                    double[] toKDTreePoint = new double[] { point[0], point[1], point[2] };
+                    kDTreeSetupList.Add(toKDTreePoint);
                 }
-               
+
             }
+
         }
+
+        if (outlierHeightEnabled)
+        {
+            Z_scoreThreshold = 1;
+            float sumMean = 0;
+            double sumStd = 0;
+            float mean = 0;
+            double standardDeviation = 0;
+            int n = heightOutlierDetectionList.Count;
+
+            //Summin over all height values to calculate the mean height
+            for (int i = 0; i < n; i++)
+            {
+                sumMean += heightOutlierDetectionList[i];
+            }
+
+            //If there exists more than 1 element in the height list, then the mean and standard deviation can be calculated
+            if (n > 0)
+            {
+                mean = sumMean / n;
+
+                for (int i = 0; i < n; i++)
+                {
+                    sumStd += Math.Pow(Math.Abs(heightOutlierDetectionList[i] - mean), 2);
+                }
+
+                standardDeviation = sumStd / n;
+            }
+
+            //Checking all points in the height list
+            for (int i = 0; i < n; i++)
+            {
+
+                //Points with a z score higher than the defined threshold will not be added to the new point list
+                if (Math.Abs((heightOutlierDetectionList[i] - mean) / standardDeviation) < Z_scoreThreshold)
+                {
+                    new_points.Add(points[i]);
+                }
+
+            }
+
+            //The pointloader will set the points as the new found points that satisfy the z score threshold
+            points = new_points;
+        }
+
+        if (nearestNeighbourEnabled)
+        {
+            n_neighbours = 20; //Get value from options
+            neighbourDistance = 1; //Get value from options
+            new_points = new List<Vector3>();
+
+            double[][] kDTreeSetupArray = kDTreeSetupList.ToArray();
+
+            KDTree<int> kDTree = KDTree.FromData<int>(kDTreeSetupArray);
+
+            for (int i = 0; i < points.Count; i++)
+            {
+
+                double[] currPoint = new double[] { points[i].x, points[i].y, points[i].z };
+                List<NodeDistance<KDTreeNode<int>>> neighbours = kDTree.Nearest(currPoint, radius: neighbourDistance);
+
+                if (neighbours.Count > n_neighbours)
+                {
+                    new_points.Add(points[i]);
+                }
+
+            }
+
+            points = new_points;
+        }
+
     }
 
     public static Controller getInstance()
@@ -119,24 +245,14 @@ public class Controller
         fileName = newPath;
     }
 
-    public bool getDepthFilter()
-    {
-        return depthFilter;
-    }
-
-    public bool getAxisFilter()
-    {
-        return axisFilter;
-    }
-
     public bool getNearestNeighbour()
     {
-        return nearestNeighbour;
+        return nearestNeighbourEnabled;
     }
 
     public bool getOutlierHeight()
     {
-        return outlierHeight;
+        return outlierHeightEnabled;
     }
 
     public bool getHeightMap()
