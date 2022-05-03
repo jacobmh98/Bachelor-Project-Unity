@@ -11,42 +11,42 @@ public class GenerateMesh : MonoBehaviour
     Controller controller = Controller.getInstance();
     Hashtable map;
     List<Color> colors = new List<Color>();
-    List<int> sideLengths = new List<int>();
-    int medianLength = 4;
-    int removedTriangles = -1;
-    int removedTriIterations = 0;
-    Mesh mesh;
+    Triangulate t = null;
 
     private void Start()
     {
         if (controller.triangulate)
         {
-            mesh = new Mesh();
-            
+            Mesh mesh = new Mesh();
+
             controller.mesh = mesh;
-            controller.Triangulate();
-            controller.triangulate = false;
-        }
-    }
 
-    private void Update()
-    {
+            Triangulate();
 
-        if (controller.showMesh && controller.mesh != null)
-        {
-            mesh = controller.mesh;
-            
             mesh.Clear();
             mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
 
             mesh.vertices = controller.getPoints().ToArray();
-            mesh.triangles = controller.getTriangles().ToArray();
+            mesh.triangles = t.getTriangles().ToArray();
             mesh.colors = colors.ToArray();
 
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
+            //controller.triangulate = false;
+        }
+    }
 
-            controller.showMesh = false;
+    public void Triangulate()
+    {
+        if (t == null)
+            t = new Triangulate(controller.getPoints(), controller.getPointsDelaunay());
+    }
+
+    private void Update()
+    {
+        if (controller.triangulate && controller.showMesh && !controller.showHeightmap) {
+            GetComponent<MeshFilter>().mesh = controller.mesh;
+            controller.triangulate = false;
         }
     }
 }

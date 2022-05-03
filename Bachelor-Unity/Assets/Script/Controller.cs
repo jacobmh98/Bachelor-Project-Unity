@@ -20,7 +20,6 @@ public class Controller
     private List<Vector3> boatPathPoints = new List<Vector3>();
     private List<IPoint> pointsDelaunay = new List<IPoint>();
 
-    Triangulate t = null;
     public Mesh mesh = null;
 
     private int minDepth = 0;
@@ -70,17 +69,10 @@ public class Controller
         maxWidthAxis = sonarData.max_width_axis;
 
         // tmp line calls remove this remove dis later bitches
-        
         PointLoader();
         triangulate = true;
-        showHeightmap = true;
-    }
-
-    public void Triangulate()
-    {
-        if(t == null)
-            t = new Triangulate(points, pointsDelaunay);
-        triangles = t.getTriangles();
+        //showMesh = true;
+        //showHeightmap = true;
     }
 
 
