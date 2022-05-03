@@ -27,7 +27,7 @@ public class ChooseMenu : MonoBehaviour
         var parentPath = Directory.GetParent(Application.dataPath);
         
         cont.setPath(Application.dataPath + "/../7k_data_extracted.json");
-        cont.LoadController();
+        //cont.LoadController();
     
     }
 

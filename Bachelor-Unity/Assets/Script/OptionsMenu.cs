@@ -17,14 +17,14 @@ public class OptionsMenu : MonoBehaviour
 
     public void toggleNN(bool newBool)
     {
-        controller.nearestNeighbour = toggle.isOn;
+        controller.nearestNeighbourEnabled = toggle.isOn;
         input1.SetActive(toggle.isOn);
         input2.SetActive(toggle.isOn);
     }
 
     public void toggleOD(bool newBool)
     {
-        controller.z_score_outlier_detection = toggle.isOn;
+        controller.outlierHeightEnabled = toggle.isOn;
         input1.SetActive(toggle.isOn);
     }
 

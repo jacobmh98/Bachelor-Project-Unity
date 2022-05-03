@@ -43,7 +43,7 @@ public class OptionsButtons : MonoBehaviour
 
         if (float.TryParse(distanceField.text, out float floatResult))
         {
-            cont.neighbour_distance = floatResult;
+            cont.neighbourDistance = floatResult;
         }
         print("Distance: " + floatResult);
 

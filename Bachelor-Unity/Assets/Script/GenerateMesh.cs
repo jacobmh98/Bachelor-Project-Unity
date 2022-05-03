@@ -19,21 +19,12 @@ public class GenerateMesh : MonoBehaviour
     int removedTriIterations = 0;
     Mesh mesh;
 
-    private void Start()
-    {
-        // save the materials for oceanfloor and heightmap
-
-
-
-    }
     private void Update()
     {
 
         if (controller.generateMesh)
         {
             RunnerMethod();
-
-
             controller.generateMesh = false;
         }
     }
