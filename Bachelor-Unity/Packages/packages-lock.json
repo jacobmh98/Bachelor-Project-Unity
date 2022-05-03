@@ -1,5 +1,14 @@
 {
   "dependencies": {
+    "com.brogan89.minmaxslider": {
+      "version": "https://github.com/brogan89/MinMaxSlider.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.textmeshpro": "2.0.1"
+      },
+      "hash": "ccd930e8f0328aa5c54920a512db1704d03984ed"
+    },
     "com.nol1fe.delaunator": {
       "version": "https://github.com/nol1fe/delaunator-sharp.git?path=DelaunatorSharp.Unity",
       "depth": 0,
@@ -33,7 +42,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.14",
+      "version": "2.0.15",
       "depth": 0,
       "source": "registry",
       "dependencies": {

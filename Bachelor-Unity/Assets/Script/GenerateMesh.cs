@@ -22,18 +22,17 @@ public class GenerateMesh : MonoBehaviour
     private void Start()
     {
         // save the materials for oceanfloor and heightmap
-        
+
 
 
     }
-   private void Update()
+    private void Update()
     {
 
         if (controller.generateMesh)
         {
             RunnerMethod();
 
-            
 
             controller.generateMesh = false;
         }
@@ -43,14 +42,12 @@ public class GenerateMesh : MonoBehaviour
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
-        
         // Set the material depending on selection
         // GetComponent<MeshRenderer>().materials[0] = null;
         /**
          * TODO create if statement and select either heightmap or oceanfloor material
          * depending on boolean in controller that is set from options menu
          */
-                 
         CreateShape();
     }
 
@@ -76,7 +73,6 @@ public class GenerateMesh : MonoBehaviour
         // Remove edge borders with edge length greater than median length
         while (removedTriangles != 0 || removedTriIterations < 20)
             RemoveEdgeTriangles();
-        
 
         // Generate uvs for mesh
         /*Vector2[] uvs = new Vector2[vertices.Count];
@@ -134,7 +130,6 @@ public class GenerateMesh : MonoBehaviour
 
         sideLengths.Sort();
 
-        
 
         int n = sideLengths.Count;
         print("l(s) = " + n);
