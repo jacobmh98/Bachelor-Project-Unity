@@ -16,8 +16,12 @@ public class Controller
 
     // List variables for point coordinates
     private List<Vector3> points = new List<Vector3>();
+    private List<int> triangles = new List<int>();
     private List<Vector3> boatPathPoints = new List<Vector3>();
     private List<IPoint> pointsDelaunay = new List<IPoint>();
+
+    Triangulate t = null;
+    public Mesh mesh = null;
 
     private int minDepth = 0;
     private int maxDepth = 100;
@@ -39,8 +43,8 @@ public class Controller
     public bool showHeightmap = false;
     public bool showPointCloud = true;
     public bool showMesh = false;
+    public bool triangulate = false;
     public int triangulation;
-    public bool triangulate;
     public bool generateHeightmap;
     public bool generateMesh;
 
@@ -68,8 +72,15 @@ public class Controller
         // tmp line calls remove this remove dis later bitches
         
         PointLoader();
+        triangulate = true;
+        showHeightmap = true;
+    }
 
-        
+    public void Triangulate()
+    {
+        if(t == null)
+            t = new Triangulate(points, pointsDelaunay);
+        triangles = t.getTriangles();
     }
 
 
@@ -307,5 +318,9 @@ public class Controller
     }
 
 
+    public List<int> getTriangles()
+    {
+        return triangles;
+    }
 
 }
