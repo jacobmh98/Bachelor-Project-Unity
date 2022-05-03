@@ -37,12 +37,10 @@ public class Controller
 
     public bool nearestNeighbourEnabled = false;
     public bool outlierHeightEnabled = false;
-
-    public bool heightMap = true;
-
+    public bool heightMap = false;
     public bool generateHeightmap = false;
     public bool generateMesh = false;
-    public bool triangulate;
+    public bool triangulate = false;
 
     public GameObject toggleGroup;
 
@@ -51,8 +49,8 @@ public class Controller
 
         if (String.IsNullOrEmpty(fileName))
         {
-            fileName = @"C:\Users\kanne\Desktop\7k_data_extracted_rotated.json";
-            //fileName = @"C:\Users\jacob\OneDrive\Dokumenter\GitHub\bachelor_project_teledyne\7k_data_extracted_rotated.json";
+            //fileName = @"C:\Users\kanne\Desktop\7k_data_extracted_rotated.json";
+            fileName = @"C:\Users\jacob\OneDrive\Dokumenter\GitHub\bachelor_project_teledyne\7k_data_extracted_rotated.json";
         }
         string jsonString = File.ReadAllText(fileName);
         sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
@@ -69,7 +67,7 @@ public class Controller
         // tmp call to PointLoader remove this
         // minDepth = -14;
         //maxDepth = -21;
-        generateHeightmap = true;
+        
         PointLoader();
 
         
@@ -89,7 +87,8 @@ public class Controller
         maxWidthAxis = maxWidthAxis;
 
         outlierHeightEnabled = false;
-        nearestNeighbourEnabled = true;
+        nearestNeighbourEnabled = false;
+        generateHeightmap = false;
 
         for (int i = 0; i < sonarData.no_pings; i++)
         {
@@ -179,8 +178,8 @@ public class Controller
 
         if (nearestNeighbourEnabled)
         {
-            n_neighbours = 20; //Get value from options
-            neighbourDistance = 1; //Get value from options
+            n_neighbours = 30; //Get value from options
+            neighbourDistance = 0.5; //Get value from options
             new_points = new List<Vector3>();
 
             double[][] kDTreeSetupArray = kDTreeSetupList.ToArray();
