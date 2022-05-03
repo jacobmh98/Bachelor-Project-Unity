@@ -5,6 +5,7 @@ using TMPro;
 
 public class SliderChanges : MonoBehaviour
 {
+
     public Slider sliderUI;
     private TMP_Text textSliderValue;
 
@@ -12,6 +13,7 @@ public class SliderChanges : MonoBehaviour
     {
         textSliderValue = GetComponent<TMP_Text>();
         ShowSliderValue();
+
     }
 
     public void ShowSliderValue()
@@ -19,4 +21,7 @@ public class SliderChanges : MonoBehaviour
         string sliderMessage = "" + sliderUI.value;
         textSliderValue.text = sliderMessage;
     }
+
+    
+
 }

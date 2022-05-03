@@ -198,6 +198,29 @@ public class Controller
         return controller;
     }
 
+    public List<Vector3> getPoints()
+    {
+        return points;
+    }
+
+    public List<IPoint> getPointsDelaunay()
+    {
+        return pointsDelaunay;
+    }
+
+    public void setPath(string newPath)
+    {
+        if (String.IsNullOrEmpty(fileName))
+        {
+            Debug.Log("fileName is null or empty!");
+            fileName = @"C:/Users/Max/Desktop/7k_data_extracted.json";
+
+        }
+        else
+        {
+            fileName = newPath;
+        }
+    }
     public int getMinDepth()
     {
         return minDepth;
@@ -217,25 +240,9 @@ public class Controller
     {
         maxDepth = newMax;
     }
-
-    public List<Vector3> getPoints()
-    {
-        return points;
-    }
-
-    public List<IPoint> getPointsDelaunay()
-    {
-        return pointsDelaunay;
-    }
-
-    public void setPath(string newPath)
-    {
-        fileName = newPath;
-    }
-
     public bool getNearestNeighbour()
     {
-        return nearestNeighbourEnabled;
+        return nearestNeighbour;
     }
 
     public bool getOutlierHeight()
@@ -247,4 +254,57 @@ public class Controller
     {
         return heightMap;
     }
+
+    public int getMinLengthAxis()
+    {
+        return minLengthAxis;
+    }
+
+    public int getMaxLengthAxis()
+    {
+        return maxLengthAxis;
+    }
+
+    public int getMinWidthAxis()
+    {
+        return minWidthAxis;
+    }
+
+    public int getMaxWidthAxis()
+    {
+        return maxWidthAxis;
+    }
+
+    public void setMinLengthAxis(int minLength)
+    {
+        minLengthAxis = minLength;
+    }
+
+    public void setMaxLengthAxis(int maxLength)
+    {
+        maxLengthAxis = maxLength;
+    }
+
+    public void setMinWidthAxis(int minWidth)
+    {
+        minWidthAxis = minWidth;
+    }
+
+    public void setMaxWidthAxis(int maxWidth)
+    {
+        maxWidthAxis = maxWidth;
+    }
+    
+    public int getTriangulationType()
+    {
+        return triangulation;
+    }
+
+    public void setTriangulationType(int newTriang)
+    {
+        triangulation = newTriang;
+    }
+
+
+
 }

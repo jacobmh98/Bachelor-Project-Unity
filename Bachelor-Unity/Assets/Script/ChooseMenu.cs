@@ -10,6 +10,7 @@ using System.IO;
 public class ChooseMenu : MonoBehaviour
 {
     public GameObject inputField;
+    Controller cont = Controller.getInstance();
 
     public void RunVisualsWithPath()
     {
@@ -24,8 +25,11 @@ public class ChooseMenu : MonoBehaviour
         p.Start();
         p.WaitForExit();
         var parentPath = Directory.GetParent(Application.dataPath);
-
-        StateNameController.JsonPath = Application.dataPath + "/../7k_data_extracted.json";
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        
+        cont.setPath(Application.dataPath + "/../7k_data_extracted.json");
+        cont.LoadController();
+    
     }
+
+
 }
