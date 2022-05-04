@@ -33,6 +33,10 @@ public class OptionsButtons : MonoBehaviour
         cont.setMaxWidthAxis((int) WidthSlider.Values.maxLimit);
 
         cont.triangulation = triangulation.value;
+        if (cont.triangulate)
+            cont.showMesh = true;
+        cont.outlierHeightEnabled = odFilter.isOn;
+        cont.nearestNeighbourEnabled = nnFilter.isOn;
 
         if(int.TryParse(neighbourField.text,out int intResult))
         {
@@ -61,6 +65,5 @@ public class OptionsButtons : MonoBehaviour
         cont.PointLoader();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
-
 
 }

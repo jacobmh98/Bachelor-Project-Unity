@@ -31,10 +31,10 @@ public class Controller
 
     string fileName;
 
-    public int n_neighbours;
-    public double neighbourDistance;
+    public int n_neighbours = 5;
+    public double neighbourDistance = 3;
 
-    public double Z_scoreThreshold;
+    public double Z_scoreThreshold = 3.0;
 
     public bool nearestNeighbourEnabled = false;
     public bool outlierHeightEnabled = false;
@@ -87,8 +87,8 @@ public class Controller
         Debug.Log(fileName);
         if (String.IsNullOrEmpty(fileName))
         {
-            //fileName = @"C:\Users\kanne\Desktop\7k_data_extracted_rotated.json";
-            fileName = @"C:\Users\Max\Desktop\7k_data_extracted_rotated.json";
+            fileName = @"C:\Users\kanne\Desktop\7k_data_extracted_rotated.json";
+            //fileName = @"C:\Users\Max\Desktop\7k_data_extracted_rotated.json";
             //fileName = @"C:\Users\jacob\OneDrive\Dokumenter\GitHub\bachelor_project_teledyne\7k_data_extracted_rotated.json";
         }
         string jsonString = File.ReadAllText(fileName);
@@ -104,7 +104,7 @@ public class Controller
 
         // tmp line calls remove this remove dis later bitches
 
-        PointLoader();
+        //PointLoader();
 
     }
 
@@ -118,15 +118,15 @@ public class Controller
         Vector3 boatPoint;
 
         //Test values, needs to get the values from the slider here
-        minDepth = minDepth;
-        maxDepth = maxDepth;
-        minLengthAxis = minLengthAxis;
-        maxLengthAxis = maxLengthAxis;
-        minWidthAxis = minWidthAxis;
-        maxWidthAxis = maxWidthAxis;
+        minDepth = getMinDepth();
+        maxDepth = getMaxDepth();
+        minLengthAxis = getMinLengthAxis();
+        maxLengthAxis = getMaxLengthAxis();
+        minWidthAxis = getMinWidthAxis();
+        maxWidthAxis = getMaxWidthAxis();
 
-        outlierHeightEnabled = false;
-        nearestNeighbourEnabled = false;
+        outlierHeightEnabled = getOutlierHeight();
+        nearestNeighbourEnabled = getNearestNeighbour();
 
         for (int i = 0; i < sonarData.no_pings; i++)
         {
@@ -146,12 +146,22 @@ public class Controller
                 {
                     // adding point to pointcloud
                     points.Add(point);
-                    pointsDelaunay.Add(new DelaunatorSharp.Point(point[0], point[2]));
+
+                    if(!outlierHeightEnabled && !nearestNeighbourEnabled)
+                        pointsDelaunay.Add(new DelaunatorSharp.Point(point[0], point[2]));
 
                     // Adding point to other lists for outlier removal functions to safe running over all points multiple times
-                    heightOutlierDetectionList.Add(point[1]);
-                    double[] toKDTreePoint = new double[] { point[0], point[1], point[2] };
-                    kDTreeSetupList.Add(toKDTreePoint);
+                    if (outlierHeightEnabled)
+                    {
+                        heightOutlierDetectionList.Add(point[1]);
+                    }
+
+                    if (nearestNeighbourEnabled)
+                    {
+                        double[] toKDTreePoint = new double[] { point[0], point[1], point[2] };
+                        kDTreeSetupList.Add(toKDTreePoint);
+                    }
+                    
                 }
 
             }
@@ -160,7 +170,6 @@ public class Controller
 
         if (outlierHeightEnabled)
         {
-            Z_scoreThreshold = 1;
             float sumMean = 0;
             double sumStd = 0;
             float mean = 0;
@@ -194,6 +203,9 @@ public class Controller
                 if (Math.Abs((heightOutlierDetectionList[i] - mean) / standardDeviation) < Z_scoreThreshold)
                 {
                     new_points.Add(points[i]);
+
+                    if(!nearestNeighbourEnabled)
+                        pointsDelaunay.Add(new DelaunatorSharp.Point(points[i].x, points[i].z));
                 }
 
             }
@@ -204,8 +216,6 @@ public class Controller
 
         if (nearestNeighbourEnabled)
         {
-            n_neighbours = 30; //Get value from options
-            neighbourDistance = 0.5; //Get value from options
             new_points = new List<Vector3>();
 
             double[][] kDTreeSetupArray = kDTreeSetupList.ToArray();
@@ -221,6 +231,7 @@ public class Controller
                 if (neighbours.Count > n_neighbours)
                 {
                     new_points.Add(points[i]);
+                    pointsDelaunay.Add(new DelaunatorSharp.Point(points[i].x, points[i].z));
                 }
 
             }

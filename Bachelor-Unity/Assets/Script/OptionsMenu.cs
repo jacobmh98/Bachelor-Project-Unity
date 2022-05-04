@@ -14,7 +14,7 @@ public class OptionsMenu : MonoBehaviour
     public GameObject input2;
     Controller controller = Controller.getInstance();
     public TMP_Dropdown dropdown;
-
+    
     public void toggleNN(bool newBool)
     {
         controller.nearestNeighbourEnabled = toggle.isOn;
