@@ -276,7 +276,7 @@ public class Controller
         {
             Debug.Log("newPath is null or empty!");
             Debug.Log(newPath);
-            fileName = @"C:/Users/Max/Desktop/7k_data_extracted_rotated.json";
+            fileName = @"C:\Users\jacob\OneDrive\Dokumenter\GitHub\bachelor_project_teledyne\7k_data_extracted_rotated.json";
 
         }
         else

@@ -7,7 +7,7 @@ public class LoadingScreen : MonoBehaviour
 {
     public void loadingScene(int sceneIndex)
     {
-        StartCoroutine(LoadAsynchronously(sceneIndex));
+        //StartCoroutine(LoadAsynchronously(sceneIndex));
     }
 
     IEnumerator LoadAsynchronously (int sceneIndex)

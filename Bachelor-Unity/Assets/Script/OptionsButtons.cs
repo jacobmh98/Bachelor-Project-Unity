@@ -72,7 +72,7 @@ public class OptionsButtons : MonoBehaviour
     public void runButton()
     {
         cont.PointLoader();
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
 }
