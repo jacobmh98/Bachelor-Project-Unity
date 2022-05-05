@@ -22,12 +22,12 @@ public class Controller
 
     public Mesh mesh = null;
 
-    private int minDepth = 0;
-    private int maxDepth = 100;
-    private int minLengthAxis = 0;
-    private int maxLengthAxis = 100;
-    private int minWidthAxis = 0;
-    private int maxWidthAxis = 100;
+    public int minDepth = 0;
+    public int maxDepth = 100;
+    public int minLengthAxis = 0;
+    public int maxLengthAxis = 100;
+    public int minWidthAxis = 0;
+    public int maxWidthAxis = 100;
 
     string fileName;
 
@@ -118,12 +118,16 @@ public class Controller
         Vector3 boatPoint;
 
         //Test values, needs to get the values from the slider here
+        /*
         minDepth = getMinDepth();
         maxDepth = getMaxDepth();
         minLengthAxis = getMinLengthAxis();
         maxLengthAxis = getMaxLengthAxis();
         minWidthAxis = getMinWidthAxis();
         maxWidthAxis = getMaxWidthAxis();
+        */
+
+        Debug.Log(minLengthAxis);
 
         outlierHeightEnabled = getOutlierHeight();
         nearestNeighbourEnabled = getNearestNeighbour();
@@ -217,6 +221,8 @@ public class Controller
         if (nearestNeighbourEnabled)
         {
             new_points = new List<Vector3>();
+
+            Debug.Log(neighbourDistance);
 
             double[][] kDTreeSetupArray = kDTreeSetupList.ToArray();
 

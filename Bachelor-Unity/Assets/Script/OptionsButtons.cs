@@ -23,6 +23,7 @@ public class OptionsButtons : MonoBehaviour
 
     public void saveButton()
     {
+        /* Need fix with database
         cont.setMaxDepth((int) DepthSlider.Values.minValue);
         cont.setMinDepth((int) DepthSlider.Values.maxValue);
 
@@ -31,6 +32,14 @@ public class OptionsButtons : MonoBehaviour
 
         cont.setMinWidthAxis((int) WidthSlider.Values.minLimit);
         cont.setMaxWidthAxis((int) WidthSlider.Values.maxLimit);
+        */
+
+        cont.minDepth = (int)DepthSlider.Values.maxValue;
+        cont.maxDepth = (int)DepthSlider.Values.minValue;
+        cont.minLengthAxis =  (int)LengthSlider.Values.minValue;
+        cont.maxLengthAxis = (int)LengthSlider.Values.maxValue;
+        cont.minWidthAxis = (int)WidthSlider.Values.minValue;
+        cont.maxWidthAxis = (int)WidthSlider.Values.maxValue;
 
         cont.triangulation = triangulation.value;
         if (cont.triangulate)
@@ -53,11 +62,11 @@ public class OptionsButtons : MonoBehaviour
 
         if(double.TryParse(thresholdField.text, out double doubleResult))
         {
-            //something like:
-            //cont.threshold_value = doubleResult;
+            cont.Z_scoreThreshold = doubleResult;
         }
 
         print("Saved settings!");
+
     }
 
     public void runButton()
