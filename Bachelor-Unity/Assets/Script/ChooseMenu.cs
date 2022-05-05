@@ -10,7 +10,10 @@ using System.IO;
 public class ChooseMenu : MonoBehaviour
 {
     public GameObject inputField;
+    public Image panel;
     Controller cont = Controller.getInstance();
+
+    public Sprite sprite;
 
     public void RunVisualsWithPath()
     {
@@ -35,5 +38,15 @@ public class ChooseMenu : MonoBehaviour
     
     }
 
+    public void changeBackground()
+    {
+        panel.sprite = sprite;
+    }
+
+    public void quitButton()
+    {
+        print("QUIT PROGRAM!");
+        Application.Quit();
+    }
 
 }
