@@ -47,6 +47,14 @@ public class Controller
     public bool generateHeightmap;
     public bool generateMesh;
 
+    // Variables set if game object should update
+    public bool updateHeightmap = false;
+    public bool updateOceanfloor = false;
+    public bool updatePointCloud = false;
+    public bool updatePointSize = false;
+
+    public float particleSize = 0.05f;
+
     public GameObject toggleGroup;
 
     private Controller()
@@ -87,9 +95,9 @@ public class Controller
         Debug.Log(fileName);
         if (String.IsNullOrEmpty(fileName))
         {
-            fileName = @"C:\Users\kanne\Desktop\7k_data_extracted_rotated.json";
+            //fileName = @"C:\Users\kanne\Desktop\7k_data_extracted_rotated.json";
             //fileName = @"C:\Users\Max\Desktop\7k_data_extracted_rotated.json";
-            //fileName = @"C:\Users\jacob\OneDrive\Dokumenter\GitHub\bachelor_project_teledyne\7k_data_extracted_rotated.json";
+            fileName = @"C:\Users\jacob\OneDrive\Dokumenter\GitHub\bachelor_project_teledyne\7k_data_extracted_rotated.json";
         }
         string jsonString = File.ReadAllText(fileName);
         sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);

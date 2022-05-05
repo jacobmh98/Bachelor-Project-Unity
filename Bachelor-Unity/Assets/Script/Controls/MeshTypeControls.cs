@@ -7,6 +7,7 @@ using System.Linq;
 public class MeshTypeControls : MonoBehaviour
 {
     ToggleGroup toggleGroup;
+    Controller controller = Controller.getInstance();
 
     private void Start()
     {
@@ -16,7 +17,28 @@ public class MeshTypeControls : MonoBehaviour
     void Update()
     {
         Toggle toggle = toggleGroup.ActiveToggles().FirstOrDefault();
-        
 
+        if(Equals(toggle.name, "oceanfloor"))
+        {
+            controller.showHeightmap = false;
+            controller.showMesh = true;
+
+            controller.updateHeightmap = true;
+            controller.updateOceanfloor = true;
+        } else if(Equals(toggle.name, "heightmap"))
+        {
+            controller.showHeightmap = true;
+            controller.showMesh = false;
+
+            controller.updateHeightmap = true;
+            controller.updateOceanfloor = true;
+        } else
+        {
+            controller.showHeightmap = false;
+            controller.showMesh = false;
+
+            controller.updateHeightmap = true;
+            controller.updateOceanfloor = true;
+        }
     }
 }

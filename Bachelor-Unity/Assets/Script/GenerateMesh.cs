@@ -32,7 +32,7 @@ public class GenerateMesh : MonoBehaviour
 
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
-            //controller.triangulate = false;
+            GetComponent<MeshFilter>().mesh = controller.mesh;
         }
     }
 
@@ -44,9 +44,12 @@ public class GenerateMesh : MonoBehaviour
 
     private void Update()
     {
-        if (controller.triangulate && controller.showMesh && !controller.showHeightmap) {
-            GetComponent<MeshFilter>().mesh = controller.mesh;
-            controller.triangulate = false;
+        if (controller.updateOceanfloor && controller.showMesh) {
+            this.gameObject.GetComponent<Renderer>().enabled = true;
+            controller.updateOceanfloor = false;
+        } else if (controller.updateOceanfloor && !controller.showMesh) {
+            this.gameObject.GetComponent<Renderer>().enabled = false;
+            controller.updateOceanfloor = false;
         }
     }
 }
