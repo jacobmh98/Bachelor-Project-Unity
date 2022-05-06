@@ -41,6 +41,7 @@ public class Controller
     public bool heightMap = false;
     public bool showHeightmap = false;
     public bool showPointCloud = true;
+    public bool pointCloudGradient = false;
     public bool showMesh = false;
     public bool triangulate = false;
     public int triangulation;
@@ -52,6 +53,7 @@ public class Controller
     public bool updateOceanfloor = false;
     public bool updatePointCloud = false;
     public bool updatePointSize = false;
+    public bool updatePointColor = false;
 
     public float particleSize = 0.05f;
 
