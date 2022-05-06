@@ -6,8 +6,9 @@ using UnityEngine.UI;
 
 public class PointCloudControls : MonoBehaviour
 {
-    Toggle toggle;
+    DataBase db = DataBase.getInstance();
     Controller controller = Controller.getInstance();
+    Toggle toggle;
 
     void Start()
     {
@@ -17,8 +18,8 @@ public class PointCloudControls : MonoBehaviour
 
     private void valueChangeCheck()
     {
-        controller.showPointCloud = toggle.isOn;
-        controller.updatePointCloud = true;
+        db.setShowPointCloud(toggle.isOn);
+        db.setUpdatePointCloud(true);
     }
 
     void Update()

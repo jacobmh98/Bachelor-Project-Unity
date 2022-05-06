@@ -7,6 +7,7 @@ using TMPro;
 
 public class OptionsMenu : MonoBehaviour
 {
+    DataBase db = DataBase.getInstance();
 
     public Toggle toggle;
     public Toggle toggle2;
@@ -15,12 +16,11 @@ public class OptionsMenu : MonoBehaviour
     public GameObject text1;
     public GameObject text2;
 
-    Controller controller = Controller.getInstance();
     public TMP_Dropdown dropdown;
     
     public void toggleNN(bool newBool)
     {
-        controller.nearestNeighbourEnabled = toggle.isOn;
+        db.setNearestNeighbourEnabled(toggle.isOn);
         input1.interactable = toggle.isOn;
         input2.interactable = toggle.isOn;
         //text1.SetActive(toggle.isOn);
@@ -29,14 +29,14 @@ public class OptionsMenu : MonoBehaviour
 
     public void toggleOD(bool newBool)
     {
-        controller.outlierHeightEnabled = toggle.isOn;
+        db.setOutlierHeightEnabled(toggle.isOn);
         input1.interactable = (toggle.isOn);
         //text1.SetActive(toggle.isOn);
     }
 
     public void toggleTriangle(bool newBool)
     {
-        controller.triangulate = toggle.isOn;
+        db.setTriangulationEnabled(toggle.isOn);
         dropdown.interactable = toggle.isOn;
     }
 

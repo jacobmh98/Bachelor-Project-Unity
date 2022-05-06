@@ -7,10 +7,10 @@ using UnityEngine.UI;
 
 public class PointSizeControls : MonoBehaviour, IPointerUpHandler
 {
+    DataBase db = DataBase.getInstance();
     Slider slider;
     Text pointSizeText;
     float prevVal = 0;
-    Controller controller = Controller.getInstance();
 
     void Start()
     {
@@ -31,8 +31,8 @@ public class PointSizeControls : MonoBehaviour, IPointerUpHandler
         if (slider.value != prevVal)
         {
             prevVal = slider.value;
-            controller.updatePointSize = true;
-            controller.particleSize = prevVal;
+            db.setUpdatePointSize(true);
+            db.setParticleSize(prevVal);
 
         }
     }

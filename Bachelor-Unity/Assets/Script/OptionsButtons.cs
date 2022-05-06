@@ -8,7 +8,9 @@ using UnityEngine.SceneManagement;
 
 public class OptionsButtons : MonoBehaviour
 {
+    DataBase db = DataBase.getInstance();
     Controller cont = Controller.getInstance();
+
     public MinMaxSlider DepthSlider;
     public MinMaxSlider LengthSlider;
     public MinMaxSlider WidthSlider;
@@ -20,51 +22,40 @@ public class OptionsButtons : MonoBehaviour
     public TMP_InputField distanceField;
     public TMP_InputField thresholdField;
 
-
     public void saveButton()
     {
-        /* Need fix with database
-        cont.setMaxDepth((int) DepthSlider.Values.minValue);
-        cont.setMinDepth((int) DepthSlider.Values.maxValue);
+        //Setting the values in the database to the values set in options
+        db.setMinDepth((int)DepthSlider.Values.maxValue);
+        db.setMaxDepth((int)DepthSlider.Values.minValue);
+        db.setMinLengthAxis((int)LengthSlider.Values.minValue);
+        db.setMaxLengthAxis((int)LengthSlider.Values.maxValue);
+        db.setMinWidthAxis((int)WidthSlider.Values.minValue);
+        db.setMaxWidthAxis((int)WidthSlider.Values.maxValue);
 
-        cont.setMinLengthAxis((int) LengthSlider.Values.minLimit);
-        cont.setMaxLengthAxis((int) LengthSlider.Values.maxLimit);
+        db.setOutlierHeightEnabled(odFilter.isOn);
+        db.setNearestNeighbourEnabled(nnFilter.isOn);
 
-        cont.setMinWidthAxis((int) WidthSlider.Values.minLimit);
-        cont.setMaxWidthAxis((int) WidthSlider.Values.maxLimit);
-        */
+        db.setTriangulationType(triangulation.value);
 
-        cont.minDepth = (int)DepthSlider.Values.maxValue;
-        cont.maxDepth = (int)DepthSlider.Values.minValue;
-        cont.minLengthAxis =  (int)LengthSlider.Values.minValue;
-        cont.maxLengthAxis = (int)LengthSlider.Values.maxValue;
-        cont.minWidthAxis = (int)WidthSlider.Values.minValue;
-        cont.maxWidthAxis = (int)WidthSlider.Values.maxValue;
-
-        cont.triangulation = triangulation.value;
-        if (cont.triangulate)
-            cont.showMesh = true;
-        cont.outlierHeightEnabled = odFilter.isOn;
-        cont.nearestNeighbourEnabled = nnFilter.isOn;
-
-        if(int.TryParse(neighbourField.text,out int intResult))
+        if (int.TryParse(neighbourField.text,out int intResult))
         {
-            cont.n_neighbours = intResult;
+            db.setNumberOfNeighbours(intResult);
         }
 
-        print("Neighbours: " + intResult);
-
-        if (float.TryParse(distanceField.text, out float floatResult))
+        if (float.TryParse(distanceField.text, out float neighbourDistance))
         {
-            cont.neighbourDistance = floatResult;
-        }
-        print("Distance: " + floatResult);
-
-        if(double.TryParse(thresholdField.text, out double doubleResult))
-        {
-            cont.Z_scoreThreshold = doubleResult;
+            db.setNeighbourDistance(neighbourDistance);
         }
 
+        if(double.TryParse(thresholdField.text, out double outlierHeightThreshold))
+        {
+            db.setOutlierHeightThreshold(outlierHeightThreshold);
+        }
+
+        if (db.getTriangulationEnabled())
+            db.setShowMesh(true);
+
+        print(db.getOutlierHeightThreshold());
         print("Saved settings!");
 
     }

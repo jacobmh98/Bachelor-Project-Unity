@@ -5,11 +5,13 @@ using UnityEngine.VFX;
 
 public class PointCloudRenderer : MonoBehaviour
 {
+    DataBase db = DataBase.getInstance();
+    Controller controller = Controller.getInstance();
+
     Texture2D texColor;
     Texture2D texPosScale;
     VisualEffect vfx;
     uint resolution = 2048;
-    Controller controller = Controller.getInstance();
 
     public float particleSize;
     public int update = 0;
@@ -38,10 +40,10 @@ public class PointCloudRenderer : MonoBehaviour
 
     private void Update()
     {
-        if(controller.updatePointSize)
+        if(db.getUpdatePointSize())
         {
             SetParticles(positions, colors);
-            controller.updatePointSize = false;
+            db.setUpdatePointSize(false);
         }
         if (toUpdate)
         {
@@ -54,21 +56,21 @@ public class PointCloudRenderer : MonoBehaviour
             vfx.SetUInt(Shader.PropertyToID("Resolution"), resolution);
         }
 
-        if (controller.updatePointCloud && controller.showPointCloud)
+        if (db.getUpdatePointCloud() && db.getShowPointCloud())
         {
             this.gameObject.GetComponent<Renderer>().enabled = true;
-            controller.updatePointCloud = false;
+            db.setUpdatePointCloud(false);
         }
-        else if (controller.updatePointCloud && !controller.showPointCloud) {
+        else if (db.getUpdatePointCloud() && !db.getShowPointCloud()) {
             this.gameObject.GetComponent<Renderer>().enabled = false;
-            controller.updatePointCloud = false;
+            db.setUpdatePointCloud(false);
         }
 
     }
 
     public void SetParticles(Vector3[] positions, Color[] colors)
     {
-        particleSize = controller.particleSize;
+        particleSize = db.getParticleSize();
         texColor = new Texture2D(positions.Length > (int)resolution ? (int)resolution : positions.Length, Mathf.Clamp(positions.Length / (int)resolution, 1, (int)resolution), TextureFormat.RGBAFloat, false);
         texPosScale = new Texture2D(positions.Length > (int)resolution ? (int)resolution : positions.Length, Mathf.Clamp(positions.Length / (int)resolution, 1, (int)resolution), TextureFormat.RGBAFloat, false);
         int texWidth = texColor.width;
