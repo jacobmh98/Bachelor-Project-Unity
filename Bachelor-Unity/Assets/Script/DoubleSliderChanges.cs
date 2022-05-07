@@ -15,12 +15,15 @@ public class DoubleSliderChanges : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        print("Slider start");
+
         depthSlider.SetLimits(db.getSliderShallowDepth(), db.getSliderDeepDepth());
         depthSlider.SetValues(db.getSliderShallowDepth(), db.getSliderDeepDepth());
         lengthSlider.SetLimits(db.getSliderMinLengthAxis(), db.getSliderMaxLengthAxis());
         lengthSlider.SetValues(db.getSliderMinLengthAxis(), db.getSliderMaxLengthAxis());
         widthSlider.SetLimits(db.getMinWidthAxis(), db.getMaxWidthAxis());
         widthSlider.SetValues(db.getMinWidthAxis(), db.getMaxWidthAxis());
+
     }
 
     public void depthSliderChange()
@@ -37,4 +40,5 @@ public class DoubleSliderChanges : MonoBehaviour
     {
         print(widthSlider.Values);
     }
+
 }

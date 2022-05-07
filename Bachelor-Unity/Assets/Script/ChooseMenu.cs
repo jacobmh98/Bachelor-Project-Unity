@@ -9,9 +9,10 @@ using System.IO;
 
 public class ChooseMenu : MonoBehaviour
 {
+    Controller controller = Controller.getInstance();
+
     public GameObject inputField;
     public Image panel;
-    Controller cont = Controller.getInstance();
 
     public Sprite sprite;
 
@@ -32,9 +33,8 @@ public class ChooseMenu : MonoBehaviour
         p.WaitForExit();
         print(parentPath + "\\7k_data_extracted_rotated.json");
 
-        cont.setPath(parentPath + "\\7k_data_extracted_rotated.json");
-
-        cont.LoadController();
+        controller.setPath(parentPath + "\\7k_data_extracted_rotated.json");
+        controller.LoadController();
     
     }
 

@@ -33,6 +33,7 @@ public class Controller
 
     private Controller()
     {
+        Debug.Log("controller");
         /*
         if (String.IsNullOrEmpty(fileName))
         {
@@ -66,7 +67,7 @@ public class Controller
 
     public void LoadController()
     {
-        Debug.Log(fileName);
+        Debug.Log("In load controller");
         if (String.IsNullOrEmpty(fileName))
         {
             fileName = @"C:\Users\kanne\Desktop\7k_data_extracted_rotated.json";
@@ -88,6 +89,7 @@ public class Controller
         db.setSliderShallowDepth(Math.Abs(db.getShallowDepth()));
         db.setSliderDeepDepth(Math.Abs(db.getDeepDepth()));
         db.setSliderMinLengthAxis(0);
+
         if (db.getMinLengthAxis() < 0)
         {
             db.setSliderMaxLengthAxis(db.getMaxLengthAxis() + Math.Abs(db.getMinLengthAxis()));
@@ -295,7 +297,14 @@ public class Controller
         return controller;
     }
 
-    public List<Vector3> getPoints()
+    public static Controller getNewInstance()
+    {
+        Debug.Log("New controller");
+        Controller controller = new Controller();
+        return controller;
+    }
+
+public List<Vector3> getPoints()
     {
         return points;
     }
