@@ -7,12 +7,16 @@ public class DataBase
     public static DataBase db = new DataBase();
 
     //Setting initial variables 
-    private int shallowDepth = 0;
-    private int deepDepth = 100;
+    private int shallowDepth;
+    private int deepDepth;
     private int newShallowDepth;
     private int newDeepDepth;
-    private int minLengthAxis = 0;
-    private int maxLengthAxis = 100;
+    private int sliderShallowDepth = 0;
+    private int sliderDeepDepth = 100;
+    private int minLengthAxis;
+    private int maxLengthAxis;
+    private int sliderMinLengthAxis = 0;
+    private int sliderMaxLengthAxis = 100;
     private int minWidthAxis = 0;
     private int maxWidthAxis = 100;
 
@@ -61,6 +65,14 @@ public class DataBase
     {
         newDeepDepth = newNewDeepDepth;
     }
+    public void setSliderShallowDepth(int newSliderShallowDepth)
+    {
+        sliderShallowDepth = newSliderShallowDepth;
+    }
+    public void setSliderDeepDepth(int newSliderDeepDepth)
+    {
+        sliderDeepDepth = newSliderDeepDepth;
+    }
     public void setMinLengthAxis(int newMinLength)
     {
         minLengthAxis = newMinLength;
@@ -68,6 +80,14 @@ public class DataBase
     public void setMaxLengthAxis(int newMaxLength)
     {
         maxLengthAxis = newMaxLength;
+    }
+    public void setSliderMinLengthAxis(int newSliderMinLength)
+    {
+        sliderMinLengthAxis = newSliderMinLength;
+    }
+    public void setSliderMaxLengthAxis(int newSliderMaxLength)
+    {
+        sliderMaxLengthAxis = newSliderMaxLength;
     }
     public void setMinWidthAxis(int newMinWidth)
     {
@@ -161,6 +181,14 @@ public class DataBase
     {
         return newDeepDepth;
     }
+    public int getSliderShallowDepth()
+    {
+        return sliderShallowDepth;
+    }
+    public int getSliderDeepDepth()
+    {
+        return sliderDeepDepth;
+    }
     public int getMinLengthAxis()
     {
         return minLengthAxis;
@@ -168,6 +196,14 @@ public class DataBase
     public int getMaxLengthAxis()
     {
         return maxLengthAxis;
+    }
+    public int getSliderMinLengthAxis()
+    {
+        return sliderMinLengthAxis;
+    }
+    public int getSliderMaxLengthAxis()
+    {
+        return sliderMaxLengthAxis;
     }
     public int getMinWidthAxis()
     {

@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 public class OptionsButtons : MonoBehaviour
 {
     DataBase db = DataBase.getInstance();
-    Controller cont = Controller.getInstance();
+    Controller controller = Controller.getInstance();
 
     public MinMaxSlider DepthSlider;
     public MinMaxSlider LengthSlider;
@@ -25,10 +25,10 @@ public class OptionsButtons : MonoBehaviour
     public void saveButton()
     {
         //Setting the values in the database to the values set in options
-        db.setShallowDepth((int)DepthSlider.Values.maxValue);
-        db.setDeepDepth((int)DepthSlider.Values.minValue);
-        db.setMinLengthAxis((int)LengthSlider.Values.minValue);
-        db.setMaxLengthAxis((int)LengthSlider.Values.maxValue);
+        db.setSliderShallowDepth((int)DepthSlider.Values.minValue);
+        db.setSliderDeepDepth((int)DepthSlider.Values.maxValue);
+        db.setSliderMinLengthAxis((int)LengthSlider.Values.minValue);
+        db.setSliderMaxLengthAxis((int)LengthSlider.Values.maxValue);
         db.setMinWidthAxis((int)WidthSlider.Values.minValue);
         db.setMaxWidthAxis((int)WidthSlider.Values.maxValue);
 
@@ -55,14 +55,13 @@ public class OptionsButtons : MonoBehaviour
         if (db.getTriangulationEnabled())
             db.setShowMesh(true);
 
-        print(db.getOutlierHeightThreshold());
         print("Saved settings!");
 
     }
 
     public void runButton()
     {
-        cont.PointLoader();
+        controller.PointLoader();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 

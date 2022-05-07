@@ -76,13 +76,25 @@ public class Controller
         string jsonString = File.ReadAllText(fileName);
         sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
 
-        // setting min and max values from pointcloud in database for sliders in options
+        //setting min and max values from pointcloud in database
         db.setShallowDepth(sonarData.minimum_depth);
         db.setDeepDepth(sonarData.maximum_depth);
         db.setMinLengthAxis(sonarData.min_length_axis);
         db.setMaxLengthAxis(sonarData.max_length_axis);
         db.setMinWidthAxis(sonarData.min_width_axis);
         db.setMaxWidthAxis(sonarData.max_width_axis);
+
+        //Changing values for sliders to be more user friendly
+        db.setSliderShallowDepth(Math.Abs(db.getShallowDepth()));
+        db.setSliderDeepDepth(Math.Abs(db.getDeepDepth()));
+        db.setSliderMinLengthAxis(0);
+        if (db.getMinLengthAxis() < 0)
+        {
+            db.setSliderMaxLengthAxis(db.getMaxLengthAxis() + Math.Abs(db.getMinLengthAxis()));
+        } else
+        {
+            db.setSliderMaxLengthAxis(db.getMaxLengthAxis() - db.getMinLengthAxis());
+        }
 
     }
 
@@ -95,10 +107,10 @@ public class Controller
         Vector3 boatPoint;
 
         //Getting values for pointloader into variables, to avoid excessive calls to the database class
-        int finalShallowDepth = db.getShallowDepth();
-        int finalDeepDepth = db.getDeepDepth();
-        int finalMinLengthAxis = db.getMinLengthAxis();
-        int finalMaxLengthAxis = db.getMaxLengthAxis();
+        int finalShallowDepth = -db.getSliderShallowDepth();
+        int finalDeepDepth = -db.getSliderDeepDepth();
+        int finalMinLengthAxis = db.getSliderMinLengthAxis() + db.getMinLengthAxis();
+        int finalMaxLengthAxis = db.getSliderMaxLengthAxis() + db.getMinLengthAxis();
         int finalMinWidthAxis = db.getMinWidthAxis();
         int finalMaxWidthAxis = db.getMaxWidthAxis();
 
