@@ -25,8 +25,8 @@ public class OptionsButtons : MonoBehaviour
     public void saveButton()
     {
         //Setting the values in the database to the values set in options
-        db.setMinDepth((int)DepthSlider.Values.maxValue);
-        db.setMaxDepth((int)DepthSlider.Values.minValue);
+        db.setShallowDepth((int)DepthSlider.Values.maxValue);
+        db.setDeepDepth((int)DepthSlider.Values.minValue);
         db.setMinLengthAxis((int)LengthSlider.Values.minValue);
         db.setMaxLengthAxis((int)LengthSlider.Values.maxValue);
         db.setMinWidthAxis((int)WidthSlider.Values.minValue);

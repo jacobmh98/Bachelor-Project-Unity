@@ -5,13 +5,12 @@ using UnityEngine;
 public class DataBase
 {
     public static DataBase db = new DataBase();
-    Sonar sonarData;
-    Ping pingData;
-
 
     //Setting initial variables 
-    private int minDepth = 0;
-    private int maxDepth = 100;
+    private int shallowDepth = 0;
+    private int deepDepth = 100;
+    private int newShallowDepth;
+    private int newDeepDepth;
     private int minLengthAxis = 0;
     private int maxLengthAxis = 100;
     private int minWidthAxis = 0;
@@ -46,13 +45,21 @@ public class DataBase
         return db;
     }
     //Set variables methods
-    public void setMinDepth(int newMinDepth)
+    public void setShallowDepth(int newMinDepth)
     {
-        minDepth = newMinDepth;
+        shallowDepth = newMinDepth;
     }
-    public void setMaxDepth(int newMaxDepth)
+    public void setDeepDepth(int newMaxDepth)
     {
-        maxDepth = newMaxDepth;
+        deepDepth = newMaxDepth;
+    }
+    public void setNewShallowDepth(int newNewShallowDepth)
+    {
+        newShallowDepth = newNewShallowDepth;
+    }
+    public void setNewDeepDepth(int newNewDeepDepth)
+    {
+        newDeepDepth = newNewDeepDepth;
     }
     public void setMinLengthAxis(int newMinLength)
     {
@@ -138,13 +145,21 @@ public class DataBase
 
 
     //Get variables methods
-    public int getMinDepth()
+    public int getShallowDepth()
     {
-        return minDepth;
+        return shallowDepth;
     }
-    public int getMaxDepth()
+    public int getDeepDepth()
     {
-        return maxDepth;
+        return deepDepth;
+    }
+    public int getNewShallowDepth()
+    {
+        return newShallowDepth;
+    }
+    public int getNewDeepDepth()
+    {
+        return newDeepDepth;
     }
     public int getMinLengthAxis()
     {

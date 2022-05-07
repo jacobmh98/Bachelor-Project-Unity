@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class PointCloudControls : MonoBehaviour
 {
     DataBase db = DataBase.getInstance();
-    Controller controller = Controller.getInstance();
     Toggle toggle;
 
     void Start()

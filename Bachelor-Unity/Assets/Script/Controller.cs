@@ -44,8 +44,8 @@ public class Controller
         sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
 
         // setting temporary min and max height in pointcloud
-        minDepth = sonarData.minimum_depth;
-        maxDepth = sonarData.maximum_depth;
+        shallowDepth = sonarData.minimum_depth;
+        deepDepth = sonarData.maximum_depth;
         minLengthAxis = sonarData.min_length_axis;
         maxLengthAxis = sonarData.max_length_axis;
         minWidthAxis = sonarData.min_width_axis;
@@ -77,8 +77,8 @@ public class Controller
         sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
 
         // setting min and max values from pointcloud in database for sliders in options
-        db.setMinDepth(sonarData.minimum_depth);
-        db.setMaxDepth(sonarData.maximum_depth);
+        db.setShallowDepth(sonarData.minimum_depth);
+        db.setDeepDepth(sonarData.maximum_depth);
         db.setMinLengthAxis(sonarData.min_length_axis);
         db.setMaxLengthAxis(sonarData.max_length_axis);
         db.setMinWidthAxis(sonarData.min_width_axis);
@@ -95,12 +95,16 @@ public class Controller
         Vector3 boatPoint;
 
         //Getting values for pointloader into variables, to avoid excessive calls to the database class
-        int finalMinDepth = db.getMinDepth();
-        int finalMaxDepth = db.getMaxDepth();
+        int finalShallowDepth = db.getShallowDepth();
+        int finalDeepDepth = db.getDeepDepth();
         int finalMinLengthAxis = db.getMinLengthAxis();
         int finalMaxLengthAxis = db.getMaxLengthAxis();
         int finalMinWidthAxis = db.getMinWidthAxis();
         int finalMaxWidthAxis = db.getMaxWidthAxis();
+
+        //Storing new min and max depth for correct colours in the color height map mesh
+        int newShallowDepth = int.MinValue;
+        int newDeepDepth = int.MaxValue;
 
         bool outlierHeightEnabled = db.getOutlierHeightEnabled();
         bool nearestNeighbourEnabled = db.getNearestNeighbourEnabled();
@@ -117,16 +121,28 @@ public class Controller
                 // getting coordinates for single point
                 point = new Vector3((float)sonarData.pings[i].coords_x[j], (float)sonarData.pings[i].coords_z[j], (float)sonarData.pings[i].coords_y[j]);
 
-                if ((point[1] < finalMinDepth && point[1] > finalMaxDepth)
+                if ((point[1] < finalShallowDepth && point[1] > finalDeepDepth)
                     && (point[0] > finalMinLengthAxis && point[0] < finalMaxLengthAxis)
                     && (point[2] > finalMinWidthAxis && point[2] < finalMaxWidthAxis))
                 {
                     // adding point to pointcloud
                     points.Add(point);
-
-                    if(!outlierHeightEnabled && !nearestNeighbourEnabled)
+                    
+                    if (!outlierHeightEnabled && !nearestNeighbourEnabled)
+                    {
                         pointsDelaunay.Add(new DelaunatorSharp.Point(point[0], point[2]));
 
+                        //Finding the new shallow and deep depth values for color height map
+                        if (newShallowDepth < point[1])
+                        {
+                            newShallowDepth = (int)Math.Ceiling(point[1]);
+
+                        }
+                        else if (newDeepDepth > point[1])
+                        {
+                            newDeepDepth = (int)Math.Floor(point[1]);
+                        }
+                    }
                     // Adding point to other lists for outlier removal functions to safe running over all points multiple times
                     if (outlierHeightEnabled)
                     {
@@ -143,6 +159,12 @@ public class Controller
 
             }
 
+        }
+
+        if (!outlierHeightEnabled && !nearestNeighbourEnabled)
+        {
+            db.setNewShallowDepth(newShallowDepth);
+            db.setNewDeepDepth(newDeepDepth);
         }
 
         if (outlierHeightEnabled)
@@ -182,14 +204,36 @@ public class Controller
                 {
                     new_points.Add(points[i]);
 
-                    if(!nearestNeighbourEnabled)
+                    if (!nearestNeighbourEnabled)
+                    {
                         pointsDelaunay.Add(new DelaunatorSharp.Point(points[i].x, points[i].z));
+
+                        //Finding the new shallow and deep depth values for color height map
+                        if (newShallowDepth < points[i].y)
+                        {
+                            newShallowDepth = (int)Math.Ceiling(points[i].y);
+
+                        }
+                        else if (newDeepDepth > points[i].y)
+                        {
+                            newDeepDepth = (int)Math.Floor(points[i].y);
+                        }
+
+                    }
+
                 }
 
             }
 
             //The pointloader will set the points as the new found points that satisfy the z score threshold
             points = new_points;
+
+            if (!nearestNeighbourEnabled)
+            {
+                db.setNewShallowDepth(newShallowDepth);
+                db.setNewDeepDepth(newDeepDepth);
+            }
+
         }
 
         if (nearestNeighbourEnabled)
@@ -210,11 +254,26 @@ public class Controller
                 {
                     new_points.Add(points[i]);
                     pointsDelaunay.Add(new DelaunatorSharp.Point(points[i].x, points[i].z));
+
+                    //Finding the new shallow and deep depth values for color height map
+                    if (newShallowDepth < points[i].y)
+                    {
+                        newShallowDepth = (int)Math.Ceiling(points[i].y);
+
+                    }
+                    else if (newDeepDepth > points[i].y)
+                    {
+                        newDeepDepth = (int)Math.Floor(points[i].y);
+                    }
+
                 }
 
             }
 
             points = new_points;
+            db.setNewShallowDepth(newShallowDepth);
+            db.setNewDeepDepth(newDeepDepth);
+
         }
 
     }

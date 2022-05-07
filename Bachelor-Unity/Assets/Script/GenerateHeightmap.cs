@@ -25,8 +25,8 @@ public class GenerateHeightmap : MonoBehaviour
     private void Update()
     {
 
-        int finalMinDepth = db.getMinDepth();
-        int finalMaxDepth = db.getMaxDepth();
+        int finalShallowDepth = db.getNewShallowDepth();
+        int finalDeepDepth = db.getNewDeepDepth();
 
         if (db.getTriangulationEnabled() && !hasRun)
         {
@@ -36,7 +36,7 @@ public class GenerateHeightmap : MonoBehaviour
                 // Define the colors of mesh
                 foreach (Vector3 p in controller.getPoints())
                 {
-                    float height = Mathf.InverseLerp(finalMaxDepth, finalMinDepth, p[1]);
+                    float height = Mathf.InverseLerp(finalDeepDepth, finalShallowDepth, p[1]);
                     colors.Add(gradient.Evaluate(height));
 
                 }
