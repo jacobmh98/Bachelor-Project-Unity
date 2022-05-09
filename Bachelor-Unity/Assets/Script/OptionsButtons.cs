@@ -16,6 +16,7 @@ public class OptionsButtons : MonoBehaviour
     public MinMaxSlider WidthSlider;
     public Toggle nnFilter;
     public Toggle odFilter;
+    public Toggle tgFilter;
     public TMP_Dropdown triangulation;
     public Toggle heightMap;
     public TMP_InputField neighbourField;
@@ -36,6 +37,7 @@ public class OptionsButtons : MonoBehaviour
         db.setNearestNeighbourEnabled(nnFilter.isOn);
 
         db.setTriangulationType(triangulation.value);
+        db.setTriangulationEnabled(tgFilter.isOn);
 
         if (int.TryParse(neighbourField.text,out int intResult))
         {
@@ -56,7 +58,6 @@ public class OptionsButtons : MonoBehaviour
             db.setShowMesh(true);
 
         print("Saved settings!");
-        controller.PointLoader();
 
     }
 

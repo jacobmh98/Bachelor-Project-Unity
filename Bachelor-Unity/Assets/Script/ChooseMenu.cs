@@ -10,12 +10,17 @@ using System.IO;
 public class ChooseMenu : MonoBehaviour
 {
     Controller controller = Controller.getInstance();
+    DataBase db = DataBase.getInstance();
 
     public GameObject inputField;
     public Image panel;
     public GameObject chooseMenu;
     public GameObject optionsMenu;
     public Sprite sprite;
+
+    Toggle tgToggle;
+    Toggle nnToggle;
+    Toggle odToggle;
 
     private void Start()
     {
@@ -24,6 +29,12 @@ public class ChooseMenu : MonoBehaviour
             controller.backFromPoints = false;
             chooseMenu.SetActive(false);
             optionsMenu.SetActive(true);
+            tgToggle = GameObject.Find("TriangulationToggle").GetComponent<Toggle>();
+            nnToggle = GameObject.Find("NNToggle").GetComponent<Toggle>();
+            odToggle = GameObject.Find("ODToggle").GetComponent<Toggle>();
+            tgToggle.isOn = db.getTriangulationEnabled();
+            nnToggle.isOn = db.getNearestNeighbourEnabled();
+            odToggle.isOn = db.getOutlierHeightEnabled();
         }
     }
 
