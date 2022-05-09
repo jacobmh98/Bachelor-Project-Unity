@@ -36,6 +36,7 @@ public class Controller
 
     public double Z_scoreThreshold = 3.0;
 
+    //bools from options
     public bool nearestNeighbourEnabled = false;
     public bool outlierHeightEnabled = false;
     public bool heightMap = false;
@@ -52,6 +53,9 @@ public class Controller
     public bool updateOceanfloor = false;
     public bool updatePointCloud = false;
     public bool updatePointSize = false;
+
+    //Check if we're coming from pointcloud
+    public bool backFromPoints = false;
 
     public float particleSize = 0.05f;
 

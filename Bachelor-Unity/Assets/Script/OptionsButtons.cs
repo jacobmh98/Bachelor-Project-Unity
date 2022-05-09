@@ -66,13 +66,14 @@ public class OptionsButtons : MonoBehaviour
         }
 
         print("Saved settings!");
+        cont.PointLoader();
 
     }
 
     public void runButton()
     {
         cont.PointLoader();
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
 }
