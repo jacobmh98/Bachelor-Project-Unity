@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class TemplateMenu : MonoBehaviour
 {
-    Controller controller = Controller.getNewInstance();
+    Controller controller = Controller.getInstance();
 
     public TMP_Dropdown dropdown;
     public Image panel;

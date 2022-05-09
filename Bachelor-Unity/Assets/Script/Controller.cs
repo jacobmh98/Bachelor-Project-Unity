@@ -33,41 +33,12 @@ public class Controller
 
     private Controller()
     {
-        Debug.Log("controller");
-        /*
-        if (String.IsNullOrEmpty(fileName))
-        {
-            //fileName = @"C:\Users\kanne\Desktop\7k_data_extracted_rotated.json";
-            fileName = @"C:\Users\Max\Desktop\7k_data_extracted_rotated.json";
-            //fileName = @"C:\Users\jacob\OneDrive\Dokumenter\GitHub\bachelor_project_teledyne\7k_data_extracted_rotated.json";
-        }
-        string jsonString = File.ReadAllText(fileName);
-        sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
-
-        // setting temporary min and max height in pointcloud
-        shallowDepth = sonarData.minimum_depth;
-        deepDepth = sonarData.maximum_depth;
-        minLengthAxis = sonarData.min_length_axis;
-        maxLengthAxis = sonarData.max_length_axis;
-        minWidthAxis = sonarData.min_width_axis;
-        maxWidthAxis = sonarData.max_width_axis;
-
-        // tmp line calls remove this remove dis later bitches
-        PointLoader();
-        triangulate = true;
-
-        //showMesh = true;
-        //showHeightmap = true;
-
-        showHeightmap = true;
-    }
-
-        */
+        Debug.Log("Controller");
     }
 
     public void LoadController()
     {
-        Debug.Log("In load controller");
+        Debug.Log("Load controller");
         if (String.IsNullOrEmpty(fileName))
         {
             fileName = @"C:\Users\kanne\Desktop\7k_data_extracted_rotated.json";
@@ -102,6 +73,7 @@ public class Controller
 
     public void PointLoader()
     {
+        Debug.Log("Pointloader");
         List<float> heightOutlierDetectionList = new List<float>();
         List<double[]> kDTreeSetupList = new List<double[]>();
         List<Vector3> new_points = new List<Vector3>();
@@ -294,13 +266,6 @@ public class Controller
 
     public static Controller getInstance()
     {
-        return controller;
-    }
-
-    public static Controller getNewInstance()
-    {
-        Debug.Log("New controller");
-        Controller controller = new Controller();
         return controller;
     }
 

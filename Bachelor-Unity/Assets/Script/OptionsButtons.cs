@@ -61,6 +61,7 @@ public class OptionsButtons : MonoBehaviour
 
     public void runButton()
     {
+        Debug.Log("OptionsButtons run calls controller.pointloader");
         controller.PointLoader();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }

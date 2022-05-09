@@ -34,6 +34,8 @@ public class ChooseMenu : MonoBehaviour
         print(parentPath + "\\7k_data_extracted_rotated.json");
 
         controller.setPath(parentPath + "\\7k_data_extracted_rotated.json");
+
+        print("ChooseMenu calls controller.LoadController");
         controller.LoadController();
     
     }
