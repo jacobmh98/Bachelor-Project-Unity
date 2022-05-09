@@ -13,8 +13,19 @@ public class ChooseMenu : MonoBehaviour
 
     public GameObject inputField;
     public Image panel;
-
+    public GameObject chooseMenu;
+    public GameObject optionsMenu;
     public Sprite sprite;
+
+    private void Start()
+    {
+        if (cont.backFromPoints)
+        {
+            cont.backFromPoints = false;
+            chooseMenu.SetActive(false);
+            optionsMenu.SetActive(true);
+        }
+    }
 
     public void RunVisualsWithPath()
     {

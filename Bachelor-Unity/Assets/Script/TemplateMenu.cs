@@ -18,14 +18,12 @@ public class TemplateMenu : MonoBehaviour
         if (dropdown.value == 0)
         {
             controller.setPath(Application.streamingAssetsPath + @"/NBS-Snippets-Sensor-WC+-+1_JSON.json");
-
         }
         else if (dropdown.value == 1)
         {
             controller.setPath(Application.streamingAssetsPath + @"/NBS-Snippets-Sensor-WC_JSON.json");
         }
 
-        Debug.Log("Call Load controller");
         controller.LoadController();
     }
 

@@ -56,12 +56,12 @@ public class OptionsButtons : MonoBehaviour
             db.setShowMesh(true);
 
         print("Saved settings!");
+        controller.PointLoader();
 
     }
 
     public void runButton()
     {
-        Debug.Log("OptionsButtons run calls controller.pointloader");
         controller.PointLoader();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
