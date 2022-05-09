@@ -21,7 +21,7 @@ public class MeshTypeControls : MonoBehaviour
 
         var gameObject = GameObject.Find("MeshType");
 
-        if (!controller.triangulate)
+        if (!db.getTriangulationEnabled())
             gameObject.SetActive(false);
 
         if(Equals(toggle.name, "oceanfloor"))

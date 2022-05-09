@@ -6,10 +6,10 @@ using UnityEngine.UI;
 
 public class SetScale : MonoBehaviour
 {
+    DataBase db = DataBase.getInstance();
 
     public TMP_Text textShallow;
     public TMP_Text textDeep;
-    Controller cont = Controller.getInstance();
     public GameObject scale;
     public Toggle toggleHeightMap;
     public Toggle toggleGradient;
@@ -17,8 +17,8 @@ public class SetScale : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        textShallow.text = cont.getMinDepth().ToString();
-        textDeep.text = cont.getMaxDepth().ToString();
+        textShallow.text = db.getNewShallowDepth().ToString();
+        textDeep.text = db.getNewDeepDepth().ToString();
         scale.SetActive(toggleHeightMap.isOn);
     }
 

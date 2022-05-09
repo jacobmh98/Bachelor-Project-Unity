@@ -25,14 +25,14 @@ public class GenerateHeightmap : MonoBehaviour
     private void Update()
     {
 
-        int finalShallowDepth = db.getNewShallowDepth();
-        int finalDeepDepth = db.getNewDeepDepth();
-
         if (db.getTriangulationEnabled() && !hasRun)
         {
             Mesh mesh = controller.mesh;
             if (colors.Count == 0)
             {
+                int finalShallowDepth = db.getNewShallowDepth();
+                int finalDeepDepth = db.getNewDeepDepth();
+
                 // Define the colors of mesh
                 foreach (Vector3 p in controller.getPoints())
                 {

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Min_Max_Slider;
 
-public class DoubleSliderChanges : MonoBehaviour
+public class SliderValuesUpdater : MonoBehaviour
 {
     DataBase db = DataBase.getInstance();
 
@@ -12,7 +12,7 @@ public class DoubleSliderChanges : MonoBehaviour
     public MinMaxSlider lengthSlider;
     public MinMaxSlider widthSlider;
 
-    void Start()
+    public void updateSliderValues()
     {
         depthSlider.SetLimits(db.getSliderLimitShallowDepth(), db.getSliderLimitDeepDepth());
         depthSlider.SetValues(db.getSliderValueShallowDepth(), db.getSliderValueDeepDepth());

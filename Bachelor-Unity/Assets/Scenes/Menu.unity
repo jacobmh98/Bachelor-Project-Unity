@@ -7173,6 +7173,7 @@ GameObject:
   - component: {fileID: 1299846681}
   - component: {fileID: 1299846680}
   - component: {fileID: 1299846679}
+  - component: {fileID: 1299846682}
   m_Layer: 5
   m_Name: RunButton
   m_TagString: Untagged
@@ -7244,9 +7245,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 747076874}
+      - m_Target: {fileID: 1299846682}
         m_TargetAssemblyTypeName: OptionsButtons, Assembly-CSharp
-        m_MethodName: saveButton
+        m_MethodName: runButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7330,6 +7331,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1299846677}
   m_CullTransparentMesh: 1
+--- !u!114 &1299846682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1299846677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d25810eca38c8614798b4d98d0cf3a97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DepthSlider: {fileID: 1394166217}
+  LengthSlider: {fileID: 1378041167}
+  WidthSlider: {fileID: 1897476785}
+  nnFilter: {fileID: 407334928}
+  odFilter: {fileID: 211051332}
+  triangulation: {fileID: 1446205921}
+  heightMap: {fileID: 0}
+  neighbourField: {fileID: 1177683129}
+  distanceField: {fileID: 1833532498}
+  thresholdField: {fileID: 792783576}
 --- !u!1 &1337944027
 GameObject:
   m_ObjectHideFlags: 0
@@ -8286,6 +8309,7 @@ GameObject:
   - component: {fileID: 1538146011}
   - component: {fileID: 1538146010}
   - component: {fileID: 1538146009}
+  - component: {fileID: 1538146012}
   m_Layer: 5
   m_Name: LoadButton
   m_TagString: Untagged
@@ -8405,10 +8429,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 11500000, guid: 9a531c80e0044f7488ccb7d53169658d, type: 3}
-        m_TargetAssemblyTypeName: UnityEngine.Object, UnityEngine
-        m_MethodName: set_name
-        m_Mode: 5
+      - m_Target: {fileID: 1538146012}
+        m_TargetAssemblyTypeName: SliderValuesUpdater, Assembly-CSharp
+        m_MethodName: updateSliderValues
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -8455,6 +8479,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1538146007}
   m_CullTransparentMesh: 1
+--- !u!114 &1538146012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1538146007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e749440e3b1d72468d50f20018c4eab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  depthSlider: {fileID: 1394166217}
+  lengthSlider: {fileID: 1378041167}
+  widthSlider: {fileID: 1897476785}
 --- !u!1 &1553549546
 GameObject:
   m_ObjectHideFlags: 0
@@ -9852,7 +9891,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1432c783beda952418b84602f9a6e02c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadingScreen: {fileID: 0}
+  loadingScreen: {fileID: 1823774580}
   slider: {fileID: 355581721}
   panel: {fileID: 1992668977}
   sprite: {fileID: 21300000, guid: fd8685f9f4af8c545a4cf7d9712d2a9a, type: 3}

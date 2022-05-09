@@ -25,7 +25,10 @@ public class PointCloudRenderer : MonoBehaviour
 
     private void Start()
     {
-        
+
+        int finalShallowDepth = db.getNewShallowDepth();
+        int finalDeepDepth = db.getNewDeepDepth();
+
         vfx = GetComponent<VisualEffect>();
 
         positions = controller.getPoints().ToArray();
@@ -34,7 +37,7 @@ public class PointCloudRenderer : MonoBehaviour
 
         for (int x = 0; x < positions.Length; x++)
         {
-            float height = Mathf.InverseLerp(controller.getMaxDepth(), controller.getMinDepth(), positions[x].y);
+            float height = Mathf.InverseLerp(finalDeepDepth, finalShallowDepth, positions[x].y);
             colorsGradient[x] = gradient.Evaluate(height);
             colors[x] = new Color(0, 0, 0);
         }

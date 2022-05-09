@@ -25,6 +25,7 @@ public class TemplateMenu : MonoBehaviour
         }
 
         controller.LoadController();
+
     }
 
     public void changeBackground()

@@ -22,6 +22,11 @@ public class Controller
     private List<Vector3> boatPathPoints = new List<Vector3>();
     private List<IPoint> pointsDelaunay = new List<IPoint>();
 
+    public bool backFromPoints = false;
+
+    public bool pointCloudGradient = false;
+    public bool updatePointColor = false;
+
     string fileName;
 
     public bool generateHeightmap;
@@ -51,23 +56,33 @@ public class Controller
         //setting min and max values from pointcloud in database
         db.setShallowDepth(sonarData.minimum_depth);
         db.setDeepDepth(sonarData.maximum_depth);
-        db.setMinLengthAxis(sonarData.min_length_axis);
-        db.setMaxLengthAxis(sonarData.max_length_axis);
-        db.setMinWidthAxis(sonarData.min_width_axis);
-        db.setMaxWidthAxis(sonarData.max_width_axis);
+        db.setMinLength(sonarData.min_length_axis);
+        db.setMaxLength(sonarData.max_length_axis);
+        db.setMinWidth(sonarData.min_width_axis);
+        db.setMaxWidth(sonarData.max_width_axis);
 
         //Changing values for sliders to be more user friendly
-        db.setSliderShallowDepth(Math.Abs(db.getShallowDepth()));
-        db.setSliderDeepDepth(Math.Abs(db.getDeepDepth()));
-        db.setSliderMinLengthAxis(0);
+        db.setSliderValueShallowDepth(Math.Abs(db.getShallowDepth()));
+        db.setSliderLimitShallowDepth(Math.Abs(db.getShallowDepth()));
+        db.setSliderValueDeepDepth(Math.Abs(db.getDeepDepth()));
+        db.setSliderLimitDeepDepth(Math.Abs(db.getDeepDepth()));
+        db.setSliderValueMinLength(0);
+        db.setSliderLimitMinLength(0);
 
-        if (db.getMinLengthAxis() < 0)
+        if (db.getMinLength() < 0)
         {
-            db.setSliderMaxLengthAxis(db.getMaxLengthAxis() + Math.Abs(db.getMinLengthAxis()));
-        } else
-        {
-            db.setSliderMaxLengthAxis(db.getMaxLengthAxis() - db.getMinLengthAxis());
+            db.setSliderValueMaxLength(db.getMaxLength() + Math.Abs(db.getMinLength()));
+            db.setSliderLimitMaxLength(db.getMaxLength() + Math.Abs(db.getMinLength()));
         }
+        else
+        {
+            db.setSliderValueMaxLength(db.getMaxLength() - db.getMinLength());
+            db.setSliderLimitMaxLength(db.getMaxLength() - db.getMinLength());
+        }
+        db.setSliderValueMinWidth(db.getMinWidth());
+        db.setSliderValueMaxWidth(db.getMaxWidth());
+        db.setSliderLimitMinWidth(db.getMinWidth());
+        db.setSliderLimitMaxWidth(db.getMaxWidth());
 
     }
 
@@ -81,12 +96,14 @@ public class Controller
         Vector3 boatPoint;
 
         //Getting values for pointloader into variables, to avoid excessive calls to the database class
-        int finalShallowDepth = -db.getSliderShallowDepth();
-        int finalDeepDepth = -db.getSliderDeepDepth();
-        int finalMinLengthAxis = db.getSliderMinLengthAxis() + db.getMinLengthAxis();
-        int finalMaxLengthAxis = db.getSliderMaxLengthAxis() + db.getMinLengthAxis();
-        int finalMinWidthAxis = db.getMinWidthAxis();
-        int finalMaxWidthAxis = db.getMaxWidthAxis();
+        int finalShallowDepth = -db.getSliderValueShallowDepth();
+        int finalDeepDepth = -db.getSliderValueDeepDepth();
+        int finalMinLengthAxis = db.getSliderValueMinLength() + db.getMinLength();
+        int finalMaxLengthAxis = db.getSliderValueMaxLength() + db.getMinLength();
+        int finalMinWidthAxis = db.getSliderValueMinWidth();
+        int finalMaxWidthAxis = db.getSliderValueMaxWidth();
+        Debug.Log(finalMaxWidthAxis);
+        Debug.Log(finalMinWidthAxis);
 
         //Storing new min and max depth for correct colours in the color height map mesh
         int newShallowDepth = int.MinValue;

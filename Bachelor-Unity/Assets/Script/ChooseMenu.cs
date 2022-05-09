@@ -19,9 +19,9 @@ public class ChooseMenu : MonoBehaviour
 
     private void Start()
     {
-        if (cont.backFromPoints)
+        if (controller.backFromPoints)
         {
-            cont.backFromPoints = false;
+            controller.backFromPoints = false;
             chooseMenu.SetActive(false);
             optionsMenu.SetActive(true);
         }

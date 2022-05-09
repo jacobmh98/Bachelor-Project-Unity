@@ -22,15 +22,15 @@ public class OptionsButtons : MonoBehaviour
     public TMP_InputField distanceField;
     public TMP_InputField thresholdField;
 
-    public void saveButton()
+    public void runButton()
     {
         //Setting the values in the database to the values set in options
-        db.setSliderShallowDepth((int)DepthSlider.Values.minValue);
-        db.setSliderDeepDepth((int)DepthSlider.Values.maxValue);
-        db.setSliderMinLengthAxis((int)LengthSlider.Values.minValue);
-        db.setSliderMaxLengthAxis((int)LengthSlider.Values.maxValue);
-        db.setMinWidthAxis((int)WidthSlider.Values.minValue);
-        db.setMaxWidthAxis((int)WidthSlider.Values.maxValue);
+        db.setSliderValueShallowDepth((int)DepthSlider.Values.minValue);
+        db.setSliderValueDeepDepth((int)DepthSlider.Values.maxValue);
+        db.setSliderValueMinLength((int)LengthSlider.Values.minValue);
+        db.setSliderValueMaxLength((int)LengthSlider.Values.maxValue);
+        db.setSliderValueMinWidth((int)WidthSlider.Values.minValue);
+        db.setSliderValueMaxWidth((int)WidthSlider.Values.maxValue);
 
         db.setOutlierHeightEnabled(odFilter.isOn);
         db.setNearestNeighbourEnabled(nnFilter.isOn);
@@ -58,12 +58,6 @@ public class OptionsButtons : MonoBehaviour
         print("Saved settings!");
         controller.PointLoader();
 
-    }
-
-    public void runButton()
-    {
-        controller.PointLoader();
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
 }

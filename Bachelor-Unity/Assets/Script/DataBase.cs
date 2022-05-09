@@ -11,14 +11,22 @@ public class DataBase
     private int deepDepth;
     private int newShallowDepth;
     private int newDeepDepth;
-    private int sliderShallowDepth = 0;
-    private int sliderDeepDepth = 100;
-    private int minLengthAxis;
-    private int maxLengthAxis;
-    private int sliderMinLengthAxis = 0;
-    private int sliderMaxLengthAxis = 100;
-    private int minWidthAxis = 0;
-    private int maxWidthAxis = 100;
+    private int sliderValueShallowDepth = 0;
+    private int sliderValueDeepDepth = 100;
+    private int sliderLimitShallowDepth = 0;
+    private int sliderLimitDeepDepth = 100;
+    private int minLength;
+    private int maxLength;
+    private int sliderValueMinLength = 0;
+    private int sliderValueMaxLength = 100;
+    private int sliderLimitMinLength = 0;
+    private int sliderLimitMaxLength = 100;
+    private int minWidth = 0;
+    private int maxWidth = 100;
+    private int sliderValueMinWidth = 0;
+    private int sliderValueMaxWidth = 100;
+    private int sliderLimitMinWidth = 0;
+    private int sliderLimitMaxWidth = 100;
 
     private int numberOfNeighbours = 20;
     private double neighbourDistance = 1.5;
@@ -65,37 +73,69 @@ public class DataBase
     {
         newDeepDepth = newNewDeepDepth;
     }
-    public void setSliderShallowDepth(int newSliderShallowDepth)
+    public void setSliderValueShallowDepth(int newSliderValueShallowDepth)
     {
-        sliderShallowDepth = newSliderShallowDepth;
+        sliderValueShallowDepth = newSliderValueShallowDepth;
     }
-    public void setSliderDeepDepth(int newSliderDeepDepth)
+    public void setSliderValueDeepDepth(int newSliderValueDeepDepth)
     {
-        sliderDeepDepth = newSliderDeepDepth;
+        sliderValueDeepDepth = newSliderValueDeepDepth;
     }
-    public void setMinLengthAxis(int newMinLength)
+    public void setSliderLimitShallowDepth(int newSliderShallowDepth)
     {
-        minLengthAxis = newMinLength;
+        sliderLimitShallowDepth = newSliderShallowDepth;
     }
-    public void setMaxLengthAxis(int newMaxLength)
+    public void setSliderLimitDeepDepth(int newSliderLimitDeepDepth)
     {
-        maxLengthAxis = newMaxLength;
+        sliderLimitDeepDepth = newSliderLimitDeepDepth;
     }
-    public void setSliderMinLengthAxis(int newSliderMinLength)
+    public void setMinLength(int newMinLength)
     {
-        sliderMinLengthAxis = newSliderMinLength;
+        minLength = newMinLength;
     }
-    public void setSliderMaxLengthAxis(int newSliderMaxLength)
+    public void setMaxLength(int newMaxLength)
     {
-        sliderMaxLengthAxis = newSliderMaxLength;
+        maxLength = newMaxLength;
     }
-    public void setMinWidthAxis(int newMinWidth)
+    public void setSliderValueMinLength(int newSliderValueMinLength)
     {
-        minWidthAxis = newMinWidth;
+        sliderValueMinLength = newSliderValueMinLength;
     }
-    public void setMaxWidthAxis(int newMaxWidth)
+    public void setSliderValueMaxLength(int newSliderValueMaxLength)
     {
-        maxWidthAxis = newMaxWidth;
+        sliderValueMaxLength = newSliderValueMaxLength;
+    }
+    public void setSliderLimitMinLength(int newSliderLimitMinLength)
+    {
+        sliderLimitMinLength = newSliderLimitMinLength;
+    }
+    public void setSliderLimitMaxLength(int newSliderLimitMaxLength)
+    {
+        sliderLimitMaxLength = newSliderLimitMaxLength;
+    }
+    public void setMinWidth(int newMinWidth)
+    {
+        minWidth = newMinWidth;
+    }
+    public void setMaxWidth(int newMaxWidth)
+    {
+        maxWidth = newMaxWidth;
+    }
+    public void setSliderValueMinWidth(int newSliderValueMinWidth)
+    {
+        sliderValueMinWidth = newSliderValueMinWidth;
+    }
+    public void setSliderValueMaxWidth(int newSliderValueMaxWidth)
+    {
+        sliderValueMaxWidth = newSliderValueMaxWidth;
+    }
+    public void setSliderLimitMinWidth(int newSliderLimitMinWidth)
+    {
+        sliderLimitMinWidth = newSliderLimitMinWidth;
+    }
+    public void setSliderLimitMaxWidth(int newSliderLimitMaxLength)
+    {
+        sliderLimitMaxWidth = newSliderLimitMaxLength;
     }
     public void setNearestNeighbourEnabled(bool newNearestNeighbour)
     {
@@ -181,37 +221,69 @@ public class DataBase
     {
         return newDeepDepth;
     }
-    public int getSliderShallowDepth()
+    public int getSliderValueShallowDepth()
     {
-        return sliderShallowDepth;
+        return sliderValueShallowDepth;
     }
-    public int getSliderDeepDepth()
+    public int getSliderValueDeepDepth()
     {
-        return sliderDeepDepth;
+        return sliderValueDeepDepth;
     }
-    public int getMinLengthAxis()
+    public int getSliderLimitShallowDepth()
     {
-        return minLengthAxis;
+        return sliderLimitShallowDepth;
     }
-    public int getMaxLengthAxis()
+    public int getSliderLimitDeepDepth()
     {
-        return maxLengthAxis;
+        return sliderLimitDeepDepth;
     }
-    public int getSliderMinLengthAxis()
+    public int getMinLength()
     {
-        return sliderMinLengthAxis;
+        return minLength;
     }
-    public int getSliderMaxLengthAxis()
+    public int getMaxLength()
     {
-        return sliderMaxLengthAxis;
+        return maxLength;
     }
-    public int getMinWidthAxis()
+    public int getSliderValueMinLength()
     {
-        return minWidthAxis;
+        return sliderValueMinLength;
     }
-    public int getMaxWidthAxis()
+    public int getSliderValueMaxLength()
     {
-        return maxWidthAxis;
+        return sliderValueMaxLength;
+    }
+    public int getSliderLimitMinLength()
+    {
+        return sliderLimitMinLength;
+    }
+    public int getSliderLimitMaxLength()
+    {
+        return sliderLimitMaxLength;
+    }
+    public int getMinWidth()
+    {
+        return minWidth;
+    }
+    public int getMaxWidth()
+    {
+        return maxWidth;
+    }
+    public int getSliderValueMinWidth()
+    {
+        return sliderValueMinWidth;
+    }
+    public int getSliderValueMaxWidth()
+    {
+        return sliderValueMaxWidth;
+    }
+    public int getSliderLimitMinWidth()
+    {
+        return sliderLimitMinWidth;
+    }
+    public int getSliderLimitMaxWidth()
+    {
+        return sliderLimitMaxWidth;
     }
     public bool getNearestNeighbourEnabled()
     {
