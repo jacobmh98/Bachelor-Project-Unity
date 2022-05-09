@@ -10,6 +10,7 @@ public class PointCloudRenderer : MonoBehaviour
     VisualEffect vfx;
     uint resolution = 2048;
     Controller controller = Controller.getInstance();
+    public Gradient gradient;
 
     public float particleSize;
     public int update = 0;
@@ -18,7 +19,7 @@ public class PointCloudRenderer : MonoBehaviour
     
     Vector3[] positions;
     Color[] colors;
-
+    Color[] colorsGradient;
 
     private void Start()
     {
@@ -27,9 +28,12 @@ public class PointCloudRenderer : MonoBehaviour
 
         positions = controller.getPoints().ToArray();
         colors = new Color[positions.Length];
+        colorsGradient = new Color[positions.Length];
 
         for (int x = 0; x < positions.Length; x++)
         {
+            float height = Mathf.InverseLerp(controller.getMaxDepth(), controller.getMinDepth(), positions[x].y);
+            colorsGradient[x] = gradient.Evaluate(height);
             colors[x] = new Color(0, 0, 0);
         }
 
@@ -40,8 +44,13 @@ public class PointCloudRenderer : MonoBehaviour
     {
         if(controller.updatePointSize)
         {
-            SetParticles(positions, colors);
+            SetParticles(positions, controller.pointCloudGradient ? colorsGradient : colors);
             controller.updatePointSize = false;
+        }
+        if(controller.updatePointColor)
+        {
+            SetParticles(positions, controller.pointCloudGradient ? colorsGradient : colors);
+            controller.updatePointColor = false;
         }
         if (toUpdate)
         {

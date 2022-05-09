@@ -18,6 +18,11 @@ public class MeshTypeControls : MonoBehaviour
     {
         Toggle toggle = toggleGroup.ActiveToggles().FirstOrDefault();
 
+        var gameObject = GameObject.Find("MeshType");
+
+        if (!controller.triangulate)
+            gameObject.SetActive(false);
+
         if(Equals(toggle.name, "oceanfloor"))
         {
             controller.showHeightmap = false;
