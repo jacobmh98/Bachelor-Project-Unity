@@ -11,6 +11,8 @@ using Accord.MachineLearning;
 public class Controller
 {
     public static Controller controller = new Controller();
+    DataBase db = DataBase.getInstance();
+
     Sonar sonarData;
     Ping pingData;
 
@@ -20,127 +22,78 @@ public class Controller
     private List<Vector3> boatPathPoints = new List<Vector3>();
     private List<IPoint> pointsDelaunay = new List<IPoint>();
 
-    public Mesh mesh = null;
-
-    public int minDepth = 0;
-    public int maxDepth = 100;
-    public int minLengthAxis = 0;
-    public int maxLengthAxis = 100;
-    public int minWidthAxis = 0;
-    public int maxWidthAxis = 100;
-
     string fileName;
 
-    public int n_neighbours = 5;
-    public double neighbourDistance = 3;
-
-    public double Z_scoreThreshold = 3.0;
-
-    public bool nearestNeighbourEnabled = false;
-    public bool outlierHeightEnabled = false;
-    public bool heightMap = false;
-    public bool showHeightmap = false;
-    public bool showPointCloud = true;
-    public bool pointCloudGradient = false;
-    public bool showMesh = false;
-    public bool triangulate = false;
-    public int triangulation;
     public bool generateHeightmap;
     public bool generateMesh;
 
-    // Variables set if game object should update
-    public bool updateHeightmap = false;
-    public bool updateOceanfloor = false;
-    public bool updatePointCloud = false;
-    public bool updatePointSize = false;
-    public bool updatePointColor = false;
-
-    public float particleSize = 0.05f;
+    public Mesh mesh = null; //Skal denne variabel i databasen? Bliver kaldt i generateheightmap klassen
 
     public GameObject toggleGroup;
 
     private Controller()
     {
-        /*
+        Debug.Log("Controller");
+    }
+
+    public void LoadController()
+    {
+        Debug.Log("Load controller");
         if (String.IsNullOrEmpty(fileName))
         {
-            //fileName = @"C:\Users\kanne\Desktop\7k_data_extracted_rotated.json";
-            fileName = @"C:\Users\Max\Desktop\7k_data_extracted_rotated.json";
+            fileName = @"C:\Users\kanne\Desktop\7k_data_extracted_rotated.json";
+            //fileName = @"C:\Users\Max\Desktop\7k_data_extracted_rotated.json";
             //fileName = @"C:\Users\jacob\OneDrive\Dokumenter\GitHub\bachelor_project_teledyne\7k_data_extracted_rotated.json";
         }
         string jsonString = File.ReadAllText(fileName);
         sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
 
-        // setting temporary min and max height in pointcloud
-        minDepth = sonarData.minimum_depth;
-        maxDepth = sonarData.maximum_depth;
-        minLengthAxis = sonarData.min_length_axis;
-        maxLengthAxis = sonarData.max_length_axis;
-        minWidthAxis = sonarData.min_width_axis;
-        maxWidthAxis = sonarData.max_width_axis;
+        //setting min and max values from pointcloud in database
+        db.setShallowDepth(sonarData.minimum_depth);
+        db.setDeepDepth(sonarData.maximum_depth);
+        db.setMinLengthAxis(sonarData.min_length_axis);
+        db.setMaxLengthAxis(sonarData.max_length_axis);
+        db.setMinWidthAxis(sonarData.min_width_axis);
+        db.setMaxWidthAxis(sonarData.max_width_axis);
 
-        // tmp line calls remove this remove dis later bitches
-        PointLoader();
-        triangulate = true;
+        //Changing values for sliders to be more user friendly
+        db.setSliderShallowDepth(Math.Abs(db.getShallowDepth()));
+        db.setSliderDeepDepth(Math.Abs(db.getDeepDepth()));
+        db.setSliderMinLengthAxis(0);
 
-        //showMesh = true;
-        //showHeightmap = true;
-
-        showHeightmap = true;
-    }
-
-        */
-    }
-
-    public void LoadController()
-    {
-        Debug.Log(fileName);
-        if (String.IsNullOrEmpty(fileName))
+        if (db.getMinLengthAxis() < 0)
         {
-            //fileName = @"C:\Users\kanne\Desktop\7k_data_extracted_rotated.json";
-            //fileName = @"C:\Users\Max\Desktop\7k_data_extracted_rotated.json";
-            fileName = @"C:\Users\jacob\OneDrive\Dokumenter\GitHub\bachelor_project_teledyne\7k_data_extracted_rotated.json";
+            db.setSliderMaxLengthAxis(db.getMaxLengthAxis() + Math.Abs(db.getMinLengthAxis()));
+        } else
+        {
+            db.setSliderMaxLengthAxis(db.getMaxLengthAxis() - db.getMinLengthAxis());
         }
-        string jsonString = File.ReadAllText(fileName);
-        sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
-
-        // setting temporary min and max height in pointcloud
-        minDepth = sonarData.minimum_depth;
-        maxDepth = sonarData.maximum_depth;
-        minLengthAxis = sonarData.min_length_axis;
-        maxLengthAxis = sonarData.max_length_axis;
-        minWidthAxis = sonarData.min_width_axis;
-        maxWidthAxis = sonarData.max_width_axis;
-
-        // tmp line calls remove this remove dis later bitches
-
-        //PointLoader();
 
     }
-
 
     public void PointLoader()
     {
+        Debug.Log("Pointloader");
         List<float> heightOutlierDetectionList = new List<float>();
         List<double[]> kDTreeSetupList = new List<double[]>();
         List<Vector3> new_points = new List<Vector3>();
         Vector3 point;
         Vector3 boatPoint;
 
-        //Test values, needs to get the values from the slider here
-        /*
-        minDepth = getMinDepth();
-        maxDepth = getMaxDepth();
-        minLengthAxis = getMinLengthAxis();
-        maxLengthAxis = getMaxLengthAxis();
-        minWidthAxis = getMinWidthAxis();
-        maxWidthAxis = getMaxWidthAxis();
-        */
+        //Getting values for pointloader into variables, to avoid excessive calls to the database class
+        int finalShallowDepth = -db.getSliderShallowDepth();
+        int finalDeepDepth = -db.getSliderDeepDepth();
+        int finalMinLengthAxis = db.getSliderMinLengthAxis() + db.getMinLengthAxis();
+        int finalMaxLengthAxis = db.getSliderMaxLengthAxis() + db.getMinLengthAxis();
+        int finalMinWidthAxis = db.getMinWidthAxis();
+        int finalMaxWidthAxis = db.getMaxWidthAxis();
 
-        Debug.Log(minLengthAxis);
+        //Storing new min and max depth for correct colours in the color height map mesh
+        int newShallowDepth = int.MinValue;
+        int newDeepDepth = int.MaxValue;
 
-        outlierHeightEnabled = getOutlierHeight();
-        nearestNeighbourEnabled = getNearestNeighbour();
+        bool outlierHeightEnabled = db.getOutlierHeightEnabled();
+        bool nearestNeighbourEnabled = db.getNearestNeighbourEnabled();
 
         for (int i = 0; i < sonarData.no_pings; i++)
         {
@@ -154,16 +107,28 @@ public class Controller
                 // getting coordinates for single point
                 point = new Vector3((float)sonarData.pings[i].coords_x[j], (float)sonarData.pings[i].coords_z[j], (float)sonarData.pings[i].coords_y[j]);
 
-                if ((point[1] < minDepth && point[1] > maxDepth)
-                    && (point[0] > minLengthAxis && point[0] < maxLengthAxis)
-                    && (point[2] > minWidthAxis && point[2] < maxWidthAxis))
+                if ((point[1] < finalShallowDepth && point[1] > finalDeepDepth)
+                    && (point[0] > finalMinLengthAxis && point[0] < finalMaxLengthAxis)
+                    && (point[2] > finalMinWidthAxis && point[2] < finalMaxWidthAxis))
                 {
                     // adding point to pointcloud
                     points.Add(point);
-
-                    if(!outlierHeightEnabled && !nearestNeighbourEnabled)
+                    
+                    if (!outlierHeightEnabled && !nearestNeighbourEnabled)
+                    {
                         pointsDelaunay.Add(new DelaunatorSharp.Point(point[0], point[2]));
 
+                        //Finding the new shallow and deep depth values for color height map
+                        if (newShallowDepth < point[1])
+                        {
+                            newShallowDepth = (int)Math.Ceiling(point[1]);
+
+                        }
+                        else if (newDeepDepth > point[1])
+                        {
+                            newDeepDepth = (int)Math.Floor(point[1]);
+                        }
+                    }
                     // Adding point to other lists for outlier removal functions to safe running over all points multiple times
                     if (outlierHeightEnabled)
                     {
@@ -182,6 +147,12 @@ public class Controller
 
         }
 
+        if (!outlierHeightEnabled && !nearestNeighbourEnabled)
+        {
+            db.setNewShallowDepth(newShallowDepth);
+            db.setNewDeepDepth(newDeepDepth);
+        }
+
         if (outlierHeightEnabled)
         {
             float sumMean = 0;
@@ -189,6 +160,7 @@ public class Controller
             float mean = 0;
             double standardDeviation = 0;
             int n = heightOutlierDetectionList.Count;
+            double outlierHeightThreshold = db.getOutlierHeightThreshold();
 
             //Summin over all height values to calculate the mean height
             for (int i = 0; i < n; i++)
@@ -214,28 +186,48 @@ public class Controller
             {
 
                 //Points with a z score higher than the defined threshold will not be added to the new point list
-                if (Math.Abs((heightOutlierDetectionList[i] - mean) / standardDeviation) < Z_scoreThreshold)
+                if (Math.Abs((heightOutlierDetectionList[i] - mean) / standardDeviation) < outlierHeightThreshold)
                 {
                     new_points.Add(points[i]);
 
-                    if(!nearestNeighbourEnabled)
+                    if (!nearestNeighbourEnabled)
+                    {
                         pointsDelaunay.Add(new DelaunatorSharp.Point(points[i].x, points[i].z));
+
+                        //Finding the new shallow and deep depth values for color height map
+                        if (newShallowDepth < points[i].y)
+                        {
+                            newShallowDepth = (int)Math.Ceiling(points[i].y);
+
+                        }
+                        else if (newDeepDepth > points[i].y)
+                        {
+                            newDeepDepth = (int)Math.Floor(points[i].y);
+                        }
+
+                    }
+
                 }
 
             }
 
             //The pointloader will set the points as the new found points that satisfy the z score threshold
             points = new_points;
+
+            if (!nearestNeighbourEnabled)
+            {
+                db.setNewShallowDepth(newShallowDepth);
+                db.setNewDeepDepth(newDeepDepth);
+            }
+
         }
 
         if (nearestNeighbourEnabled)
         {
+            int numberOfNeighbours = db.getNumberOfNeighbours();
+            double neighbourDistance = db.getNeighbourDistance();
             new_points = new List<Vector3>();
-
-            Debug.Log(neighbourDistance);
-
             double[][] kDTreeSetupArray = kDTreeSetupList.ToArray();
-
             KDTree<int> kDTree = KDTree.FromData<int>(kDTreeSetupArray);
 
             for (int i = 0; i < points.Count; i++)
@@ -244,15 +236,30 @@ public class Controller
                 double[] currPoint = new double[] { points[i].x, points[i].y, points[i].z };
                 List<NodeDistance<KDTreeNode<int>>> neighbours = kDTree.Nearest(currPoint, radius: neighbourDistance);
 
-                if (neighbours.Count > n_neighbours)
+                if (neighbours.Count > numberOfNeighbours)
                 {
                     new_points.Add(points[i]);
                     pointsDelaunay.Add(new DelaunatorSharp.Point(points[i].x, points[i].z));
+
+                    //Finding the new shallow and deep depth values for color height map
+                    if (newShallowDepth < points[i].y)
+                    {
+                        newShallowDepth = (int)Math.Ceiling(points[i].y);
+
+                    }
+                    else if (newDeepDepth > points[i].y)
+                    {
+                        newDeepDepth = (int)Math.Floor(points[i].y);
+                    }
+
                 }
 
             }
 
             points = new_points;
+            db.setNewShallowDepth(newShallowDepth);
+            db.setNewDeepDepth(newDeepDepth);
+
         }
 
     }
@@ -262,7 +269,7 @@ public class Controller
         return controller;
     }
 
-    public List<Vector3> getPoints()
+public List<Vector3> getPoints()
     {
         return points;
     }
@@ -286,91 +293,6 @@ public class Controller
             fileName = newPath;
         }
     }
-    public int getMinDepth()
-    {
-        return minDepth;
-    }
-
-    public int getMaxDepth()
-    {
-        return maxDepth;
-    }
-
-    public void setMinDepth(int newMin)
-    {
-        minDepth = newMin;
-    }
-
-    public void setMaxDepth(int newMax)
-    {
-        maxDepth = newMax;
-    }
-    public bool getNearestNeighbour()
-    {
-        return nearestNeighbourEnabled;
-    }
-
-    public bool getOutlierHeight()
-    {
-        return outlierHeightEnabled;
-    }
-
-    public bool getHeightMap()
-    {
-        return heightMap;
-    }
-
-    public int getMinLengthAxis()
-    {
-        return minLengthAxis;
-    }
-
-    public int getMaxLengthAxis()
-    {
-        return maxLengthAxis;
-    }
-
-    public int getMinWidthAxis()
-    {
-        return minWidthAxis;
-    }
-
-    public int getMaxWidthAxis()
-    {
-        return maxWidthAxis;
-    }
-
-    public void setMinLengthAxis(int minLength)
-    {
-        minLengthAxis = minLength;
-    }
-
-    public void setMaxLengthAxis(int maxLength)
-    {
-        maxLengthAxis = maxLength;
-    }
-
-    public void setMinWidthAxis(int minWidth)
-    {
-        minWidthAxis = minWidth;
-    }
-
-    public void setMaxWidthAxis(int maxWidth)
-    {
-        maxWidthAxis = maxWidth;
-    }
-    
-    public int getTriangulationType()
-    {
-        return triangulation;
-    }
-
-    public void setTriangulationType(int newTriang)
-    {
-        triangulation = newTriang;
-    }
-
-
     public List<int> getTriangles()
     {
         return triangles;

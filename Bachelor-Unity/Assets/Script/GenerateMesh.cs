@@ -8,6 +8,7 @@ using DelaunatorSharp;
 
 public class GenerateMesh : MonoBehaviour
 {
+    DataBase db = DataBase.getInstance();
     Controller controller = Controller.getInstance();
     Hashtable map;
     List<Color> colors = new List<Color>();
@@ -15,7 +16,7 @@ public class GenerateMesh : MonoBehaviour
 
     private void Start()
     {
-        if (controller.triangulate)
+        if (db.getTriangulationEnabled())
         {
             Mesh mesh = new Mesh();
 
@@ -44,12 +45,12 @@ public class GenerateMesh : MonoBehaviour
 
     private void Update()
     {
-        if (controller.updateOceanfloor && controller.showMesh) {
+        if (db.getUpdateOceanFloor() && db.getShowMesh()) {
             this.gameObject.GetComponent<Renderer>().enabled = true;
-            controller.updateOceanfloor = false;
-        } else if (controller.updateOceanfloor && !controller.showMesh) {
+            db.setUpdateOceanFloor(false);
+        } else if (db.getUpdateOceanFloor() && !db.getShowMesh()) {
             this.gameObject.GetComponent<Renderer>().enabled = false;
-            controller.updateOceanfloor = false;
+            db.setUpdateOceanFloor(false);
         }
     }
 }

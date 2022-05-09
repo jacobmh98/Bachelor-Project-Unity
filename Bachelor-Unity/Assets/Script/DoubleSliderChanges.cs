@@ -6,34 +6,23 @@ using Min_Max_Slider;
 
 public class DoubleSliderChanges : MonoBehaviour
 {
-    Controller cont = Controller.getInstance();
+    DataBase db = DataBase.getInstance();
+
     public MinMaxSlider depthSlider;
     public MinMaxSlider lengthSlider;
     public MinMaxSlider widthSlider;
 
-    // Start is called before the first frame update
     void Start()
     {
-        depthSlider.SetLimits(cont.getMaxDepth(), cont.getMinDepth());
-        depthSlider.SetValues(cont.getMaxDepth(), cont.getMinDepth());
-        lengthSlider.SetLimits(cont.getMinLengthAxis(), cont.getMaxLengthAxis());
-        lengthSlider.SetValues(cont.getMinLengthAxis(), cont.getMaxLengthAxis());
-        widthSlider.SetLimits(cont.getMinWidthAxis(), cont.getMaxWidthAxis());
-        widthSlider.SetValues(cont.getMinWidthAxis(), cont.getMaxWidthAxis());
+        print("Slider start");
+
+        depthSlider.SetLimits(db.getSliderShallowDepth(), db.getSliderDeepDepth());
+        depthSlider.SetValues(db.getSliderShallowDepth(), db.getSliderDeepDepth());
+        lengthSlider.SetLimits(db.getSliderMinLengthAxis(), db.getSliderMaxLengthAxis());
+        lengthSlider.SetValues(db.getSliderMinLengthAxis(), db.getSliderMaxLengthAxis());
+        widthSlider.SetLimits(db.getMinWidthAxis(), db.getMaxWidthAxis());
+        widthSlider.SetValues(db.getMinWidthAxis(), db.getMaxWidthAxis());
+
     }
 
-    public void depthSliderChange()
-    {
-        print(depthSlider.Values);
-    }
-
-    public void lengthSliderChange()
-    {
-        print(lengthSlider.Values);
-    }
-
-    public void widthSliderChange()
-    {
-        print(widthSlider.Values);
-    }
 }
