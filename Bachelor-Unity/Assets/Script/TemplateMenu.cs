@@ -9,6 +9,7 @@ public class TemplateMenu : MonoBehaviour
     public TMP_Dropdown dropdown;
     public string templateName;
     public int templateChosen = -1;
+    Controller controller = Controller.getInstance();
 
     public Image panel;
     public Sprite sprite;
@@ -22,9 +23,10 @@ public class TemplateMenu : MonoBehaviour
 
         } else if (dropdown.value == 1)
         {
-            templateName = "NBS-Snippets-Sensor-WC.s7k";
-            templateChosen = dropdown.value;
+            controller.setPath(Application.streamingAssetsPath + @"/NBS-Snippets-Sensor-WC_JSON.json");
+
         }
+        controller.LoadController();
     }
     public void changeBackground()
     {
