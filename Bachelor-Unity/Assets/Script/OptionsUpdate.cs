@@ -8,17 +8,17 @@ using TMPro;
 
 public class OptionsUpdate : MonoBehaviour
 {
-    public Toggle toggleTriang;
-    public Toggle toggleNN;
-    public Toggle toggleOD;
+
     public TMP_InputField input1;
     public TMP_InputField input2;
-    public TMP_Dropdown dropdown;
+    public TMP_InputField input3;
+    DataBase db = DataBase.getInstance();
 
-    public void loadOptions()
+    void Start()
     {
-        //toggleTriang.isOn = 
-
+        input1.text = db.getNumberOfNeighbours().ToString();
+        input2.text = db.getNeighbourDistance().ToString();
+        input3.text = db.getOutlierHeightThreshold().ToString();
     }
 
 }
