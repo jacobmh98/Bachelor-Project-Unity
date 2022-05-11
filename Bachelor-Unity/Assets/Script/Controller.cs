@@ -38,12 +38,12 @@ public class Controller
 
     private Controller()
     {
-        Debug.Log("Controller");
+        //Debug.Log("Controller");
     }
 
     public void LoadController()
     {
-        Debug.Log("Load controller");
+        //Debug.Log("Load controller");
         if (String.IsNullOrEmpty(fileName))
         {
             fileName = @"C:\Users\kanne\Desktop\7k_data_extracted_rotated.json";

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.0.2",
     "com.brogan89.minmaxslider": "https://github.com/brogan89/MinMaxSlider.git",
     "com.nol1fe.delaunator": "https://github.com/nol1fe/delaunator-sharp.git?path=DelaunatorSharp.Unity",
     "com.unity.collab-proxy": "1.15.13",

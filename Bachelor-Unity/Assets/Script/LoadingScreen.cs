@@ -15,14 +15,25 @@ public class LoadingScreen : MonoBehaviour
 
     public void loadingScene(int sceneIndex)
     {
+
+        panel.sprite = sprite;
+        //StartCoroutine(WaitingTime());
         StartCoroutine(LoadAsynchronously(sceneIndex));
+
+
+    }
+
+    IEnumerator WaitingTime()
+    {
+        yield return new WaitForSeconds(1);
+
+
         
     }
 
     IEnumerator LoadAsynchronously (int sceneIndex)
     {
-        panel.sprite = sprite;
-
+        yield return new WaitForSeconds(5);
         controller.PointLoader();
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
         while (!operation.isDone)
