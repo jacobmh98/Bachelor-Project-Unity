@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class LoadingScreen : MonoBehaviour
 {
     public GameObject loadingScreen;
+    public GameObject optionsScreen;
     public Slider slider;
     public Image panel;
     public Sprite sprite;
@@ -15,12 +16,11 @@ public class LoadingScreen : MonoBehaviour
     public void loadingScene(int sceneIndex)
     {
         print("loadingScene");
-        panel.sprite = sprite;
+        //panel.sprite = sprite;
         //System.Threading.Thread.Sleep(5000);
         //StartCoroutine(LoadAsynchronously(sceneIndex));
-        controller.PointLoader();
-        SceneManager.LoadScene(sceneIndex);
-
+        //controller.PointLoader();
+        //SceneManager.LoadScene(sceneIndex);
     }
 
     IEnumerator LoadAsynchronously (int sceneIndex)
@@ -33,5 +33,6 @@ public class LoadingScreen : MonoBehaviour
             slider.value = progress;
             yield return null;
         }
+        
     }
 }

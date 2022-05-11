@@ -51,16 +51,27 @@ public class OptionsButtons : MonoBehaviour
         if (int.TryParse(neighbourField.text,out int intResult))
         {
             db.setNumberOfNeighbours(intResult);
+        } else
+        {
+            db.setNumberOfNeighbours(20);
         }
 
         if (float.TryParse(distanceField.text, out float neighbourDistance))
         {
             db.setNeighbourDistance(neighbourDistance);
         }
+        else
+        {
+            db.setNeighbourDistance(1.5);
+        }
 
         if(double.TryParse(thresholdField.text, out double outlierHeightThreshold))
         {
             db.setOutlierHeightThreshold(outlierHeightThreshold);
+        }
+        else
+        {
+            db.setOutlierHeightThreshold(1);
         }
 
         if (db.getTriangulationEnabled())
