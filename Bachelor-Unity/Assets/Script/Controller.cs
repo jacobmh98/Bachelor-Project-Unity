@@ -15,12 +15,6 @@ public class Controller
 
     Sonar sonarData;
 
-    // List variables for point coordinates
-    private List<Vector3> points = new List<Vector3>();
-    private List<int> triangles = new List<int>();
-    private List<Vector3> boatPathPoints = new List<Vector3>();
-    private List<IPoint> pointsDelaunay = new List<IPoint>();
-
     public bool backFromPoints = false;
 
     public bool pointCloudGradient = false;
@@ -31,7 +25,7 @@ public class Controller
     public bool generateHeightmap;
     public bool generateMesh;
 
-    public Mesh mesh = null; //Skal denne variabel i databasen? Bliver kaldt i generateheightmap klassen
+    public Mesh mesh = null;
 
     public GameObject toggleGroup;
 
@@ -51,6 +45,8 @@ public class Controller
         }
         string jsonString = File.ReadAllText(fileName);
         sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
+
+        db.setNumberOfPings(sonarData.no_pings);
 
         //setting min and max values from pointcloud in database
         db.setShallowDepth(sonarData.minimum_depth);
@@ -88,16 +84,17 @@ public class Controller
     public void PointLoader()
     {
         Debug.Log("Pointloader");
-        List<float> heightOutlierDetectionList = new List<float>();
-        List<double[]> kDTreeSetupList = new List<double[]>();
-        List<Vector3> new_points = new List<Vector3>();
-
-        points = new List<Vector3>();
-        triangles = new List<int>();
-        pointsDelaunay = new List<IPoint>();
-
+        // Variables for point coordinates
+        List<Vector3> points = new List<Vector3>();
+        List<Vector3> boatPathPoints = new List<Vector3>();
+        List<IPoint> pointsDelaunay = new List<IPoint>();
         Vector3 point;
         Vector3 boatPoint;
+
+        // Variables for outlier detections
+        List<float> heightOutlierDetectionList = new List<float>();
+        List<double[]> kDTreeSetupList = new List<double[]>();
+        List<Vector3> newPoints = new List<Vector3>();
 
         //Getting values for pointloader into variables, to avoid excessive calls to the database class
         int finalShallowDepth = -db.getSliderValueShallowDepth();
@@ -107,24 +104,35 @@ public class Controller
         int finalMinWidthAxis = db.getSliderValueMinWidth();
         int finalMaxWidthAxis = db.getSliderValueMaxWidth();
 
+        //Fetching values from the database
+        bool outlierHeightEnabled = db.getOutlierHeightEnabled();
+        bool nearestNeighbourEnabled = db.getNearestNeighbourEnabled();
+        int numberOfPings = db.getNumberOfPings();
+
         //Storing new min and max depth for correct colours in the color height map mesh
         int newShallowDepth = int.MinValue;
         int newDeepDepth = int.MaxValue;
 
-        bool outlierHeightEnabled = db.getOutlierHeightEnabled();
-        bool nearestNeighbourEnabled = db.getNearestNeighbourEnabled();
-
-        for (int i = 0; i < sonarData.no_pings; i++)
+        for (int i = 0; i < numberOfPings; i++)
         {
+            /* Calculated wrong in the python program
             boatPoint = new Vector3((float)sonarData.pings[i].ping_boat_coord[0], 
                                     (float)sonarData.pings[i].ping_boat_coord[2], 
                                     (float)sonarData.pings[i].ping_boat_coord[1]);
             boatPathPoints.Add(boatPoint);
+            */
+
+            //Approximating boat location at each ping
+            float middle = sonarData.pings[i].no_points / 2;
+            boatPoint = new Vector3((float)sonarData.pings[i].coords_x[(int)middle], 0, (float)sonarData.pings[i].coords_y[(int)middle]);
+            boatPathPoints.Add(boatPoint);
+
 
             for (int j = 0; j < sonarData.pings[i].no_points; j++)
             {
                 // getting coordinates for single point
                 point = new Vector3((float)sonarData.pings[i].coords_x[j], (float)sonarData.pings[i].coords_z[j], (float)sonarData.pings[i].coords_y[j]);
+
 
                 if ((point[1] < finalShallowDepth && point[1] > finalDeepDepth)
                     && (point[0] > finalMinLengthAxis && point[0] < finalMaxLengthAxis)
@@ -168,6 +176,8 @@ public class Controller
 
         if (!outlierHeightEnabled && !nearestNeighbourEnabled)
         {
+            db.setPoints(points);
+            db.setPointsDelauney(pointsDelaunay);
             db.setNewShallowDepth(newShallowDepth);
             db.setNewDeepDepth(newDeepDepth);
         }
@@ -207,7 +217,7 @@ public class Controller
                 //Points with a z score higher than the defined threshold will not be added to the new point list
                 if (Math.Abs((heightOutlierDetectionList[i] - mean) / standardDeviation) < outlierHeightThreshold)
                 {
-                    new_points.Add(points[i]);
+                    newPoints.Add(points[i]);
 
                     if (!nearestNeighbourEnabled)
                     {
@@ -230,11 +240,10 @@ public class Controller
 
             }
 
-            //The pointloader will set the points as the new found points that satisfy the z score threshold
-            points = new_points;
-
             if (!nearestNeighbourEnabled)
             {
+                db.setPoints(newPoints);
+                db.setPointsDelauney(pointsDelaunay);
                 db.setNewShallowDepth(newShallowDepth);
                 db.setNewDeepDepth(newDeepDepth);
             }
@@ -245,7 +254,7 @@ public class Controller
         {
             int numberOfNeighbours = db.getNumberOfNeighbours();
             double neighbourDistance = db.getNeighbourDistance();
-            new_points = new List<Vector3>();
+            newPoints = new List<Vector3>();
             double[][] kDTreeSetupArray = kDTreeSetupList.ToArray();
             KDTree<int> kDTree = KDTree.FromData<int>(kDTreeSetupArray);
 
@@ -257,7 +266,7 @@ public class Controller
 
                 if (neighbours.Count > numberOfNeighbours)
                 {
-                    new_points.Add(points[i]);
+                    newPoints.Add(points[i]);
                     pointsDelaunay.Add(new DelaunatorSharp.Point(points[i].x, points[i].z));
 
                     //Finding the new shallow and deep depth values for color height map
@@ -274,11 +283,10 @@ public class Controller
                 }
 
             }
-
-            points = new_points;
+            db.setPoints(newPoints);
+            db.setPointsDelauney(pointsDelaunay);
             db.setNewShallowDepth(newShallowDepth);
             db.setNewDeepDepth(newDeepDepth);
-
         }
 
     }
@@ -288,20 +296,6 @@ public class Controller
         return controller;
     }
 
-    public List<Vector3> getPoints()
-    {
-        return points;
-    }
-
-    public List<Vector3> getBoatPoints()
-    {
-        return boatPathPoints;
-    }
-
-    public List<IPoint> getPointsDelaunay()
-    {
-        return pointsDelaunay;
-    }
 
     public void setPath(string newPath)
     {
@@ -316,10 +310,6 @@ public class Controller
         {
             fileName = newPath;
         }
-    }
-    public List<int> getTriangles()
-    {
-        return triangles;
     }
 
 }

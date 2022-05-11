@@ -1,47 +1,67 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
+using DelaunatorSharp;
 
 public class DataBase
 {
     public static DataBase db = new DataBase();
 
     //Setting initial variables 
+
+    //Values from sonar data
+    private int numberOfPings = 0;
+
+    //Values for point cloud rendering
+    List<Vector3> points = new List<Vector3>();
+    List<Vector3> boatPathPoints = new List<Vector3>();
+    List<IPoint> pointsDelaunay = new List<IPoint>();
+    List<int> triangles = new List<int>();
+
+    //Values for pointcloud size
     private int shallowDepth;
     private int deepDepth;
     private int newShallowDepth;
     private int newDeepDepth;
+    private int minLength;
+    private int maxLength;
+    private int minWidth;
+    private int maxWidth;
+
+    //Values for sliders in options
     private int sliderValueShallowDepth = 0;
     private int sliderValueDeepDepth = 100;
     private int sliderLimitShallowDepth = 0;
     private int sliderLimitDeepDepth = 100;
-    private int minLength;
-    private int maxLength;
     private int sliderValueMinLength = 0;
     private int sliderValueMaxLength = 100;
     private int sliderLimitMinLength = 0;
     private int sliderLimitMaxLength = 100;
-    private int minWidth = 0;
-    private int maxWidth = 100;
     private int sliderValueMinWidth = 0;
     private int sliderValueMaxWidth = 100;
     private int sliderLimitMinWidth = 0;
     private int sliderLimitMaxWidth = 100;
 
+    //Values for check boxes in options
+    private bool triangulationEnabled = false;
+    private bool nearestNeighboursEnabled = false;
+    private bool outlierHeightEnabled = false;
+
+    //Values for dropdown menu in options
+    private int triangulationType = 0;
+
+    //Values for textfields in options
     private int numberOfNeighbours = 20;
     private double neighbourDistance = 1.5;
     private double outlierHeigthThreshold = 1.0;
 
-    private bool nearestNeighboursEnabled = false;
-    private bool outlierHeightEnabled = false;
-
+    //Values for controls in pointcloud scene
     private bool showMesh = false;
-    private bool triangulationEnabled = false;
-    private int triangulationType = 0;
-
     private bool heightMapEnabled = false;
     private bool showHeightMap = false;
     private bool showPointCloud = true;
+    private float particleSize = 0.05f;
 
     // Variables set if game object should update
     private bool updateHeightMap = false;
@@ -49,7 +69,6 @@ public class DataBase
     private bool updatePointCloud = false;
     private bool updatePointSize = false;
 
-    private float particleSize = 0.05f;
 
     private DataBase() {}
     public static DataBase getInstance()
@@ -57,6 +76,27 @@ public class DataBase
         return db;
     }
     //Set variables methods
+
+    public void setNumberOfPings(int newNumberOfPings)
+    {
+        numberOfPings = newNumberOfPings;
+    }
+    public void setPoints(List<Vector3> newPoints)
+    {
+        points = newPoints;
+    }
+    public void setBoatPathPoints(List<Vector3> newBoatPathPoints)
+    {
+        boatPathPoints = newBoatPathPoints;
+    }
+    public void setPointsDelauney(List<IPoint> newPointsDelauney)
+    {
+        pointsDelaunay = newPointsDelauney;
+    }
+    public void setTriangles(List<int> newTriangles)
+    {
+        triangles = newTriangles;
+    }
     public void setShallowDepth(int newMinDepth)
     {
         shallowDepth = newMinDepth;
@@ -205,6 +245,26 @@ public class DataBase
 
 
     //Get variables methods
+    public int getNumberOfPings()
+    {
+        return numberOfPings;
+    }
+    public List<Vector3> getPoints()
+    {
+        return points;
+    }
+    public List<Vector3> getBoatPathPoints()
+    {
+        return boatPathPoints;
+    }
+    public List<IPoint> getPointsDelauney()
+    {
+        return pointsDelaunay;
+    }
+    public List<int> getTriangles()
+    {
+        return triangles;
+    }
     public int getShallowDepth()
     {
         return shallowDepth;
