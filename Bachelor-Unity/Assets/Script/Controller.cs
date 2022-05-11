@@ -12,22 +12,22 @@ public class Controller
 {
     public static Controller controller = new Controller();
     DataBase db = DataBase.getInstance();
-
     Sonar sonarData;
+
+    public Mesh mesh = null;
+    public GameObject toggleGroup;
+
+
+    string fileName;
 
     public bool backFromPoints = false;
 
     public bool pointCloudGradient = false;
     public bool updatePointColor = false;
 
-    string fileName;
+    
 
-    public bool generateHeightmap;
-    public bool generateMesh;
 
-    public Mesh mesh = null;
-
-    public GameObject toggleGroup;
 
     private Controller()
     {

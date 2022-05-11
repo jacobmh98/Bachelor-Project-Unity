@@ -6,7 +6,6 @@ using UnityEngine.VFX;
 public class BoatPathRenderer : MonoBehaviour
 {
     DataBase db = DataBase.getInstance();
-    Controller controller = Controller.getInstance();
 
     Texture2D texColor;
     Texture2D texPosScale;
@@ -29,7 +28,7 @@ public class BoatPathRenderer : MonoBehaviour
 
         vfx = GetComponent<VisualEffect>();
 
-        positions = controller.getBoatPathPoints().ToArray();
+        positions = db.getBoatPathPoints().ToArray();
         colors = new Color[positions.Length];
         //colorsGradient = new Color[positions.Length];
 

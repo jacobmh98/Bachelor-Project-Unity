@@ -68,7 +68,9 @@ public class DataBase
     private bool updateOceanFloor = false;
     private bool updatePointCloud = false;
     private bool updatePointSize = false;
-
+    public bool pointCloudGradient = false;
+    public bool updatePointColor = false;
+    public bool backFromPoints = false;
 
     private DataBase() {}
     public static DataBase getInstance()

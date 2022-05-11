@@ -31,7 +31,7 @@ public class PointCloudRenderer : MonoBehaviour
 
         vfx = GetComponent<VisualEffect>();
 
-        positions = controller.getPoints().ToArray();
+        positions = db.getPoints().ToArray();
         colors = new Color[positions.Length];
         colorsGradient = new Color[positions.Length];
 
@@ -83,8 +83,18 @@ public class PointCloudRenderer : MonoBehaviour
     public void SetParticles(Vector3[] positions, Color[] colors)
     {
         particleSize = db.getParticleSize();
-        texColor = new Texture2D(positions.Length > (int)resolution ? (int)resolution : positions.Length, Mathf.Clamp(positions.Length / (int)resolution, 1, (int)resolution), TextureFormat.RGBAFloat, false);
-        texPosScale = new Texture2D(positions.Length > (int)resolution ? (int)resolution : positions.Length, Mathf.Clamp(positions.Length / (int)resolution, 1, (int)resolution), TextureFormat.RGBAFloat, false);
+        texColor = new Texture2D(positions.Length > (int)resolution ? (int)resolution : positions.Length, 
+                       Mathf.Clamp(positions.Length / (int)resolution, 
+                       1, 
+                       (int)resolution), 
+                       TextureFormat.RGBAFloat, false);
+
+        texPosScale = new Texture2D(positions.Length > (int)resolution ? (int)resolution : positions.Length, 
+                          Mathf.Clamp(positions.Length / (int)resolution, 
+                          1, 
+                          (int)resolution), 
+                          TextureFormat.RGBAFloat, false);
+
         int texWidth = texColor.width;
         int texHeight = texColor.height;
 
