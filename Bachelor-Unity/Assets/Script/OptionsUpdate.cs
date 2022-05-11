@@ -16,6 +16,7 @@ public class OptionsUpdate : MonoBehaviour
 
     void Start()
     {
+        print("OptionsUpdate ");
         input1.text = db.getNumberOfNeighbours().ToString();
         input2.text = db.getNeighbourDistance().ToString();
         input3.text = db.getOutlierHeightThreshold().ToString();
