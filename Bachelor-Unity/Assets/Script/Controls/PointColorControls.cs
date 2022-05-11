@@ -5,10 +5,11 @@ using UnityEngine.UI;
 
 public class PointColorControls : MonoBehaviour
 {
+    DataBase db = DataBase.getInstance();
+
     Toggle toggle;
     public GameObject scale;
     public Toggle toggleHeightMap;
-    Controller controller = Controller.getInstance();
 
     void Start()
     {
@@ -19,8 +20,8 @@ public class PointColorControls : MonoBehaviour
 
     private void valueChangeCheck()
     {
-        controller.pointCloudGradient = toggle.isOn;
-        controller.updatePointColor = true;
+        db.setPointCloudGradient(toggle.isOn);
+        db.setUpdatePointColor(true);
         if (toggleHeightMap.isOn)
         {
             scale.SetActive(true);
@@ -32,8 +33,4 @@ public class PointColorControls : MonoBehaviour
 
     }
 
-    void Update()
-    {
-
-    }
 }

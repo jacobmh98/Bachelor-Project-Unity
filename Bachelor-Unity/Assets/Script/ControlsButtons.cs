@@ -5,10 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class ControlsButtons : MonoBehaviour
 {
-    Controller cont = Controller.getInstance();
+    DataBase db = DataBase.getInstance();
     public void letsGoBack()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
-        cont.backFromPoints = true;
+        db.setBackFromPoints(true);
     }
 }

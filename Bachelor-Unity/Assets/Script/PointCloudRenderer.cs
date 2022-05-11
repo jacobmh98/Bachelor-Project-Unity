@@ -49,13 +49,13 @@ public class PointCloudRenderer : MonoBehaviour
     {
         if(db.getUpdatePointSize())
         {
-            SetParticles(positions, controller.pointCloudGradient ? colorsGradient : colors);
+            SetParticles(positions, db.getPointCloudGradient() ? colorsGradient : colors);
             db.setUpdatePointSize(false);
         }
-        if(controller.updatePointColor)
+        if(db.getUpdatePointColor())
         {
-            SetParticles(positions, controller.pointCloudGradient ? colorsGradient : colors);
-            controller.updatePointColor = false;
+            SetParticles(positions, db.getPointCloudGradient() ? colorsGradient : colors);
+            db.setUpdatePointColor(false);
         }
         if (toUpdate)
         {
