@@ -30,6 +30,7 @@ public class OptionsButtons : MonoBehaviour
     {
         print("changeBackground in optionsButtons");
         panel.sprite = sprite;
+        runButton();
     }
     public void runButton()
     {

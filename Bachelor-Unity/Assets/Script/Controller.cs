@@ -14,7 +14,6 @@ public class Controller
     DataBase db = DataBase.getInstance();
 
     Sonar sonarData;
-    Ping pingData;
 
     // List variables for point coordinates
     private List<Vector3> points = new List<Vector3>();
@@ -117,10 +116,10 @@ public class Controller
 
         for (int i = 0; i < sonarData.no_pings; i++)
         {
-
-            //Not quite working
-            //boatPoint = new Vector3((float)pingData.ping_boat_coord[0], (float)pingData.ping_boat_coord[2], (float)pingData.ping_boat_coord[1]);
-            //boatPathPoints.Add(boatPoint);
+            boatPoint = new Vector3((float)sonarData.pings[i].ping_boat_coord[0], 
+                                    (float)sonarData.pings[i].ping_boat_coord[2], 
+                                    (float)sonarData.pings[i].ping_boat_coord[1]);
+            boatPathPoints.Add(boatPoint);
 
             for (int j = 0; j < sonarData.pings[i].no_points; j++)
             {
@@ -289,9 +288,14 @@ public class Controller
         return controller;
     }
 
-public List<Vector3> getPoints()
+    public List<Vector3> getPoints()
     {
         return points;
+    }
+
+    public List<Vector3> getBoatPoints()
+    {
+        return boatPathPoints;
     }
 
     public List<IPoint> getPointsDelaunay()
