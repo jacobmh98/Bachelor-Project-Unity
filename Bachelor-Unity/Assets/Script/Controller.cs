@@ -92,6 +92,11 @@ public class Controller
         List<float> heightOutlierDetectionList = new List<float>();
         List<double[]> kDTreeSetupList = new List<double[]>();
         List<Vector3> new_points = new List<Vector3>();
+
+        points = new List<Vector3>();
+        triangles = new List<int>();
+        pointsDelaunay = new List<IPoint>();
+
         Vector3 point;
         Vector3 boatPoint;
 
@@ -102,8 +107,6 @@ public class Controller
         int finalMaxLengthAxis = db.getSliderValueMaxLength() + db.getMinLength();
         int finalMinWidthAxis = db.getSliderValueMinWidth();
         int finalMaxWidthAxis = db.getSliderValueMaxWidth();
-        Debug.Log(finalMaxWidthAxis);
-        Debug.Log(finalMinWidthAxis);
 
         //Storing new min and max depth for correct colours in the color height map mesh
         int newShallowDepth = int.MinValue;

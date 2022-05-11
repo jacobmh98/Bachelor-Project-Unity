@@ -14,10 +14,13 @@ public class LoadingScreen : MonoBehaviour
 
     public void loadingScene(int sceneIndex)
     {
+        print("loadingScene");
         panel.sprite = sprite;
-        System.Threading.Thread.Sleep(5000);
-        StartCoroutine(LoadAsynchronously(sceneIndex));
-        
+        //System.Threading.Thread.Sleep(5000);
+        //StartCoroutine(LoadAsynchronously(sceneIndex));
+        controller.PointLoader();
+        SceneManager.LoadScene(sceneIndex);
+
     }
 
     IEnumerator LoadAsynchronously (int sceneIndex)
@@ -28,7 +31,6 @@ public class LoadingScreen : MonoBehaviour
             float progress = Mathf.Clamp01(operation.progress / .9f);
             print(progress);
             slider.value = progress;
-            controller.PointLoader();
             yield return null;
         }
     }

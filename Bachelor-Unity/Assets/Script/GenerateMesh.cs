@@ -40,6 +40,7 @@ public class GenerateMesh : MonoBehaviour
 
     public void Triangulate()
     {
+        Debug.Log("GenerateMesh calls triangulate");
         if (t == null)
             t = new Triangulate(controller.getPoints(), controller.getPointsDelaunay());
     }

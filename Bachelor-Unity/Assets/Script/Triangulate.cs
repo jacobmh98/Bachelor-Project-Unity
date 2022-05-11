@@ -17,6 +17,7 @@ public class Triangulate
 
     public Triangulate(List<Vector3> v, List<IPoint> p)
     {
+        Debug.Log("Triangulate");
         vertices = v;
         delaunayPoints = p;
 
