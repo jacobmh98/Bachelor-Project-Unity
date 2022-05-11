@@ -98,7 +98,6 @@ public class Controller
         pointsDelaunay = new List<IPoint>();
 
         Vector3 point;
-        Vector3 boatPoint;
 
         //Getting values for pointloader into variables, to avoid excessive calls to the database class
         int finalShallowDepth = -db.getSliderValueShallowDepth();
@@ -119,10 +118,11 @@ public class Controller
         {
 
             //Not quite working
-            //boatPoint = new Vector3((float)pingData.ping_boat_coord[0], (float)pingData.ping_boat_coord[2], (float)pingData.ping_boat_coord[1]);
-            //boatPathPoints.Add(boatPoint);
+            Vector3 boatPoint = new Vector3(-(float)sonarData.pings[i].ping_boat_coord[0], (float)sonarData.pings[i].ping_boat_coord[2], (float)sonarData.pings[i].ping_boat_coord[1]);
+            boatPathPoints.Add(boatPoint);
 
-            for (int j = 0; j < sonarData.pings[i].no_points; j++)
+            //Approximating boat location at each ping
+             for (int j = 0; j < sonarData.pings[i].no_points; j++)
             {
                 // getting coordinates for single point
                 point = new Vector3((float)sonarData.pings[i].coords_x[j], (float)sonarData.pings[i].coords_z[j], (float)sonarData.pings[i].coords_y[j]);
@@ -289,7 +289,12 @@ public class Controller
         return controller;
     }
 
-public List<Vector3> getPoints()
+    public List<Vector3> getBoatPathPoints()
+    {
+        return boatPathPoints;
+    }
+
+    public List<Vector3> getPoints()
     {
         return points;
     }
