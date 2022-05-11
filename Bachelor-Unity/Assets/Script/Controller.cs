@@ -89,7 +89,6 @@ public class Controller
         List<Vector3> boatPathPoints = new List<Vector3>();
         List<IPoint> pointsDelaunay = new List<IPoint>();
         Vector3 point;
-        Vector3 boatPoint;
 
         // Variables for outlier detections
         List<float> heightOutlierDetectionList = new List<float>();
@@ -119,16 +118,10 @@ public class Controller
             boatPoint = new Vector3((float)sonarData.pings[i].ping_boat_coord[0], 
                                     (float)sonarData.pings[i].ping_boat_coord[2], 
                                     (float)sonarData.pings[i].ping_boat_coord[1]);
-            boatPathPoints.Add(boatPoint);
             */
 
-            //Approximating boat location at each ping
-            float middle = sonarData.pings[i].no_points / 2;
-            boatPoint = new Vector3((float)sonarData.pings[i].coords_x[(int)middle], 0, (float)sonarData.pings[i].coords_y[(int)middle]);
-            boatPathPoints.Add(boatPoint);
 
-
-            for (int j = 0; j < sonarData.pings[i].no_points; j++)
+             for (int j = 0; j < sonarData.pings[i].no_points; j++)
             {
                 // getting coordinates for single point
                 point = new Vector3((float)sonarData.pings[i].coords_x[j], (float)sonarData.pings[i].coords_z[j], (float)sonarData.pings[i].coords_y[j]);
@@ -295,7 +288,6 @@ public class Controller
     {
         return controller;
     }
-
 
     public void setPath(string newPath)
     {

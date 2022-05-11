@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 
-public class PointCloudRenderer : MonoBehaviour
+public class BoatPathRenderer : MonoBehaviour
 {
     DataBase db = DataBase.getInstance();
     Controller controller = Controller.getInstance();
@@ -14,32 +14,30 @@ public class PointCloudRenderer : MonoBehaviour
     uint resolution = 2048;
     public Gradient gradient;
 
-    public float particleSize;
-    public int update = 0;
+    public float particleSize = 0.05f;
     bool toUpdate = false;
     uint particleCount = 0;
-    
+
     Vector3[] positions;
     Color[] colors;
     Color[] colorsGradient;
 
     private void Start()
     {
-
         int finalShallowDepth = db.getNewShallowDepth();
         int finalDeepDepth = db.getNewDeepDepth();
 
         vfx = GetComponent<VisualEffect>();
 
-        positions = controller.getPoints().ToArray();
+        positions = controller.getBoatPathPoints().ToArray();
         colors = new Color[positions.Length];
-        colorsGradient = new Color[positions.Length];
+        //colorsGradient = new Color[positions.Length];
 
         for (int x = 0; x < positions.Length; x++)
         {
-            float height = Mathf.InverseLerp(finalDeepDepth, finalShallowDepth, positions[x].y);
-            colorsGradient[x] = gradient.Evaluate(height);
-            colors[x] = new Color(0, 0, 0);
+            //float height = Mathf.InverseLerp(finalDeepDepth, finalShallowDepth, positions[x].y);
+            //colorsGradient[x] = gradient.Evaluate(height);
+            colors[x] = new Color(1, 0, 0);
         }
 
         SetParticles(positions, colors);
@@ -47,16 +45,6 @@ public class PointCloudRenderer : MonoBehaviour
 
     private void Update()
     {
-        if(db.getUpdatePointSize())
-        {
-            SetParticles(positions, controller.pointCloudGradient ? colorsGradient : colors);
-            db.setUpdatePointSize(false);
-        }
-        if(controller.updatePointColor)
-        {
-            SetParticles(positions, controller.pointCloudGradient ? colorsGradient : colors);
-            controller.updatePointColor = false;
-        }
         if (toUpdate)
         {
             toUpdate = false;
@@ -68,15 +56,16 @@ public class PointCloudRenderer : MonoBehaviour
             vfx.SetUInt(Shader.PropertyToID("Resolution"), resolution);
         }
 
-        if (db.getUpdatePointCloud() && db.getShowPointCloud())
+        /*if (db.getUpdatePointCloud() && db.getShowPointCloud())
         {
             this.gameObject.GetComponent<Renderer>().enabled = true;
             db.setUpdatePointCloud(false);
         }
-        else if (db.getUpdatePointCloud() && !db.getShowPointCloud()) {
+        else if (db.getUpdatePointCloud() && !db.getShowPointCloud())
+        {
             this.gameObject.GetComponent<Renderer>().enabled = false;
             db.setUpdatePointCloud(false);
-        }
+        }*/
 
     }
 
