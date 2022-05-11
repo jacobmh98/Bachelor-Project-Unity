@@ -4921,9 +4921,9 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: NBS-Snippets-Sensor-WC+-+1.s7k
-      m_Image: {fileID: 0}
     - m_Text: NBS-Snippets-Sensor-WC.s7k
+      m_Image: {fileID: 0}
+    - m_Text: NBS-Snippets-Sensor-WC+-+1.s7k
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:

@@ -24,9 +24,9 @@ public class ChooseMenu : MonoBehaviour
 
     private void Start()
     {
-        if (controller.backFromPoints)
+        if (db.getBackFromPoints())
         {
-            controller.backFromPoints = false;
+            db.setBackFromPoints(false);
             chooseMenu.SetActive(false);
             optionsMenu.SetActive(true);
             tgToggle = GameObject.Find("TriangulationToggle").GetComponent<Toggle>();

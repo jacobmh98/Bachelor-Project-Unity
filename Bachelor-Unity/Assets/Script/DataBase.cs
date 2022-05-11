@@ -14,10 +14,10 @@ public class DataBase
     private int numberOfPings = 0;
 
     //Values for point cloud rendering
-    List<Vector3> points = new List<Vector3>();
-    List<Vector3> boatPathPoints = new List<Vector3>();
-    List<IPoint> pointsDelaunay = new List<IPoint>();
-    List<int> triangles = new List<int>();
+    private List<Vector3> points = new List<Vector3>();
+    private List<Vector3> boatPathPoints = new List<Vector3>();
+    private List<IPoint> pointsDelaunay = new List<IPoint>();
+    private List<int> triangles = new List<int>();
 
     //Values for pointcloud size
     private int shallowDepth;
@@ -68,9 +68,9 @@ public class DataBase
     private bool updateOceanFloor = false;
     private bool updatePointCloud = false;
     private bool updatePointSize = false;
-    public bool pointCloudGradient = false;
-    public bool updatePointColor = false;
-    public bool backFromPoints = false;
+    private bool pointCloudGradient = false;
+    private bool updatePointColor = false;
+    private bool backFromPoints = false;
 
     private DataBase() {}
     public static DataBase getInstance()
@@ -78,7 +78,6 @@ public class DataBase
         return db;
     }
     //Set variables methods
-
     public void setNumberOfPings(int newNumberOfPings)
     {
         numberOfPings = newNumberOfPings;
@@ -239,10 +238,21 @@ public class DataBase
     {
         updatePointSize = newUpdatePointSize;
     }
-
     public void setParticleSize(float newParticleSize)
     {
         particleSize = newParticleSize;
+    }
+    public void setPointCloudGradient(bool newPointCloudGradient)
+    {
+        pointCloudGradient = newPointCloudGradient;
+    }
+    public void setUpdatePointColor(bool newUpdatePointColor)
+    {
+        updatePointColor = newUpdatePointColor;
+    }
+    public void setBackFromPoints(bool newBackFromPoints)
+    {
+        backFromPoints = newBackFromPoints;
     }
 
 
@@ -412,6 +422,18 @@ public class DataBase
     public float getParticleSize()
     {
         return particleSize;
+    }
+    public bool getPointCloudGradient()
+    {
+        return pointCloudGradient;
+    }
+    public bool getUpdatePointColor()
+    {
+        return updatePointColor;
+    }
+    public bool getBackFromPoints()
+    {
+        return backFromPoints;
     }
 
 }

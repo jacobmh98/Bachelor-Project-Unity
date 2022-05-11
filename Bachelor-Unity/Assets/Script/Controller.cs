@@ -17,17 +17,7 @@ public class Controller
     public Mesh mesh = null;
     public GameObject toggleGroup;
 
-
     string fileName;
-
-    public bool backFromPoints = false;
-
-    public bool pointCloudGradient = false;
-    public bool updatePointColor = false;
-
-    
-
-
 
     private Controller()
     {
@@ -233,6 +223,8 @@ public class Controller
 
             }
 
+            points = newPoints;
+
             if (!nearestNeighbourEnabled)
             {
                 db.setPoints(newPoints);
@@ -276,6 +268,7 @@ public class Controller
                 }
 
             }
+
             db.setPoints(newPoints);
             db.setPointsDelauney(pointsDelaunay);
             db.setNewShallowDepth(newShallowDepth);
