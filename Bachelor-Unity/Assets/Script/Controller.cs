@@ -14,7 +14,6 @@ public class Controller
     DataBase db = DataBase.getInstance();
 
     Sonar sonarData;
-    Ping pingData;
 
     // List variables for point coordinates
     private List<Vector3> points = new List<Vector3>();
@@ -289,14 +288,14 @@ public class Controller
         return controller;
     }
 
-    public List<Vector3> getBoatPathPoints()
-    {
-        return boatPathPoints;
-    }
-
     public List<Vector3> getPoints()
     {
         return points;
+    }
+
+    public List<Vector3> getBoatPoints()
+    {
+        return boatPathPoints;
     }
 
     public List<IPoint> getPointsDelaunay()
