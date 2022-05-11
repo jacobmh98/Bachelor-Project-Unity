@@ -23,8 +23,18 @@ public class OptionsButtons : MonoBehaviour
     public TMP_InputField distanceField;
     public TMP_InputField thresholdField;
 
+    public Image panel;
+    public Sprite sprite;
+
+    public void changeBackground()
+    {
+        print("changeBackground in optionsButtons");
+        panel.sprite = sprite;
+        runButton();
+    }
     public void runButton()
     {
+        print("runButton in OptionsButtons");
         //Setting the values in the database to the values set in options
         db.setSliderValueShallowDepth((int)DepthSlider.Values.minValue);
         db.setSliderValueDeepDepth((int)DepthSlider.Values.maxValue);
@@ -69,6 +79,9 @@ public class OptionsButtons : MonoBehaviour
             db.setShowMesh(true);
 
         print("Saved settings!");
+
+        controller.PointLoader();
+        SceneManager.LoadScene(1);
 
     }
 

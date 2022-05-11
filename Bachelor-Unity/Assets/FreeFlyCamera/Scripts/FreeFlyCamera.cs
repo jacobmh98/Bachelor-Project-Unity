@@ -88,6 +88,9 @@ public class FreeFlyCamera : MonoBehaviour
     private Vector3 _initPosition;
     private Vector3 _initRotation;
 
+    Transform directionalLight;
+    bool lightLock = true;
+
 #if UNITY_EDITOR
     private void OnValidate()
     {
@@ -99,6 +102,8 @@ public class FreeFlyCamera : MonoBehaviour
 
     private void Start()
     {
+        directionalLight = GameObject.Find("Directional Light").GetComponent<Transform>();
+
         _initPosition = transform.position;
         _initRotation = transform.eulerAngles;
     }
@@ -123,6 +128,11 @@ public class FreeFlyCamera : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             // _wantedMode = CursorLockMode.Locked;
+        }
+
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            lightLock = !lightLock;
         }
 
         // Apply cursor state
@@ -210,6 +220,9 @@ public class FreeFlyCamera : MonoBehaviour
                 transform.eulerAngles.z
             );
         }
+
+        if(!lightLock)
+            directionalLight.GetComponent<Transform>().SetPositionAndRotation(transform.position, transform.rotation);
 
         // Return to init position
         if (Input.GetKeyDown(_initPositonButton))

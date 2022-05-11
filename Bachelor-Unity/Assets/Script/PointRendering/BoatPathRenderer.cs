@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 
-public class PointCloudRenderer : MonoBehaviour
+public class BoatPathRenderer : MonoBehaviour
 {
     DataBase db = DataBase.getInstance();
-    Controller controller = Controller.getInstance();
 
     Texture2D texColor;
     Texture2D texPosScale;
@@ -14,32 +13,30 @@ public class PointCloudRenderer : MonoBehaviour
     uint resolution = 2048;
     public Gradient gradient;
 
-    public float particleSize;
-    public int update = 0;
+    public float particleSize = 0.05f;
     bool toUpdate = false;
     uint particleCount = 0;
-    
+
     Vector3[] positions;
     Color[] colors;
     Color[] colorsGradient;
 
     private void Start()
     {
-
         int finalShallowDepth = db.getNewShallowDepth();
         int finalDeepDepth = db.getNewDeepDepth();
 
         vfx = GetComponent<VisualEffect>();
 
-        positions = db.getPoints().ToArray();
+        positions = db.getBoatPathPoints().ToArray();
         colors = new Color[positions.Length];
-        colorsGradient = new Color[positions.Length];
+        //colorsGradient = new Color[positions.Length];
 
         for (int x = 0; x < positions.Length; x++)
         {
-            float height = Mathf.InverseLerp(finalDeepDepth, finalShallowDepth, positions[x].y);
-            colorsGradient[x] = gradient.Evaluate(height);
-            colors[x] = new Color(0, 0, 0);
+            //float height = Mathf.InverseLerp(finalDeepDepth, finalShallowDepth, positions[x].y);
+            //colorsGradient[x] = gradient.Evaluate(height);
+            colors[x] = new Color(1, 0, 0);
         }
 
         SetParticles(positions, colors);
@@ -47,16 +44,6 @@ public class PointCloudRenderer : MonoBehaviour
 
     private void Update()
     {
-        if(db.getUpdatePointSize())
-        {
-            SetParticles(positions, db.getPointCloudGradient() ? colorsGradient : colors);
-            db.setUpdatePointSize(false);
-        }
-        if(db.getUpdatePointColor())
-        {
-            SetParticles(positions, db.getPointCloudGradient() ? colorsGradient : colors);
-            db.setUpdatePointColor(false);
-        }
         if (toUpdate)
         {
             toUpdate = false;
@@ -68,33 +55,24 @@ public class PointCloudRenderer : MonoBehaviour
             vfx.SetUInt(Shader.PropertyToID("Resolution"), resolution);
         }
 
-        if (db.getUpdatePointCloud() && db.getShowPointCloud())
+        /*if (db.getUpdatePointCloud() && db.getShowPointCloud())
         {
             this.gameObject.GetComponent<Renderer>().enabled = true;
             db.setUpdatePointCloud(false);
         }
-        else if (db.getUpdatePointCloud() && !db.getShowPointCloud()) {
+        else if (db.getUpdatePointCloud() && !db.getShowPointCloud())
+        {
             this.gameObject.GetComponent<Renderer>().enabled = false;
             db.setUpdatePointCloud(false);
-        }
+        }*/
 
     }
 
     public void SetParticles(Vector3[] positions, Color[] colors)
     {
         particleSize = db.getParticleSize();
-        texColor = new Texture2D(positions.Length > (int)resolution ? (int)resolution : positions.Length, 
-                       Mathf.Clamp(positions.Length / (int)resolution, 
-                       1, 
-                       (int)resolution), 
-                       TextureFormat.RGBAFloat, false);
-
-        texPosScale = new Texture2D(positions.Length > (int)resolution ? (int)resolution : positions.Length, 
-                          Mathf.Clamp(positions.Length / (int)resolution, 
-                          1, 
-                          (int)resolution), 
-                          TextureFormat.RGBAFloat, false);
-
+        texColor = new Texture2D(positions.Length > (int)resolution ? (int)resolution : positions.Length, Mathf.Clamp(positions.Length / (int)resolution, 1, (int)resolution), TextureFormat.RGBAFloat, false);
+        texPosScale = new Texture2D(positions.Length > (int)resolution ? (int)resolution : positions.Length, Mathf.Clamp(positions.Length / (int)resolution, 1, (int)resolution), TextureFormat.RGBAFloat, false);
         int texWidth = texColor.width;
         int texHeight = texColor.height;
 

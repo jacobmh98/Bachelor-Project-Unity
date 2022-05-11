@@ -19,9 +19,9 @@ public class SetScale : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        textShallow.text = Math.Abs(db.getSliderValueShallowDepth()).ToString();
-        textDeep.text = Math.Abs(db.getSliderValueDeepDepth()).ToString();
-        textHalf.text = (Math.Abs(db.getSliderValueShallowDepth() + db.getSliderValueDeepDepth()) / 2).ToString();
+        textShallow.text = Math.Abs(db.getNewShallowDepth()).ToString();
+        textDeep.text = Math.Abs(db.getNewDeepDepth()).ToString();
+        textHalf.text = (Math.Abs(db.getNewShallowDepth() + db.getNewDeepDepth()) / 2).ToString();
         scale.SetActive(toggleHeightMap.isOn);
     }
 
@@ -34,7 +34,7 @@ public class SetScale : MonoBehaviour
         {
             scale.SetActive(toggleHeightMap.isOn);
         }
-    }
 
+    }
 
 }

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4209,6 +4209,8 @@ MonoBehaviour:
   neighbourField: {fileID: 1177683129}
   distanceField: {fileID: 1833532498}
   thresholdField: {fileID: 792783576}
+  panel: {fileID: 0}
+  sprite: {fileID: 0}
 --- !u!1 &783409689
 GameObject:
   m_ObjectHideFlags: 0
@@ -4919,9 +4921,9 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: NBS-Snippets-Sensor-WC+-+1.s7k
-      m_Image: {fileID: 0}
     - m_Text: NBS-Snippets-Sensor-WC.s7k
+      m_Image: {fileID: 0}
+    - m_Text: NBS-Snippets-Sensor-WC+-+1.s7k
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -7288,24 +7290,12 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1299846682}
         m_TargetAssemblyTypeName: OptionsButtons, Assembly-CSharp
-        m_MethodName: runButton
+        m_MethodName: changeBackground
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1823774582}
-        m_TargetAssemblyTypeName: LoadingScreen, Assembly-CSharp
-        m_MethodName: loadingScene
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -7371,6 +7361,8 @@ MonoBehaviour:
   neighbourField: {fileID: 1177683129}
   distanceField: {fileID: 1833532498}
   thresholdField: {fileID: 792783576}
+  panel: {fileID: 1992668977}
+  sprite: {fileID: 21300000, guid: fd8685f9f4af8c545a4cf7d9712d2a9a, type: 3}
 --- !u!1 &1337944027
 GameObject:
   m_ObjectHideFlags: 0

@@ -28,7 +28,7 @@ public class GenerateMesh : MonoBehaviour
             mesh.Clear();
             mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
 
-            mesh.vertices = controller.getPoints().ToArray();
+            mesh.vertices = db.getPoints().ToArray();
             mesh.triangles = t.getTriangles().ToArray();
             mesh.colors = colors.ToArray();
 
@@ -40,8 +40,9 @@ public class GenerateMesh : MonoBehaviour
 
     public void Triangulate()
     {
+        Debug.Log("GenerateMesh calls triangulate");
         if (t == null)
-            t = new Triangulate(controller.getPoints(), controller.getPointsDelaunay());
+            t = new Triangulate(db.getPoints(), db.getPointsDelauney());
     }
 
     private void Update()

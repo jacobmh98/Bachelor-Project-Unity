@@ -26,10 +26,10 @@ public class ChooseMenu : MonoBehaviour
 
     private void Start()
     {
-        //Check if we just clicked "Back to Options" from the pointcloud 
-        if (controller.backFromPoints)
+        //Check if we just came back from pointcloud scene
+        if (db.getBackFromPoints())
         {
-            controller.backFromPoints = false;
+            db.setBackFromPoints(false);
             chooseMenu.SetActive(false);
             optionsMenu.SetActive(true);
             tgToggle = GameObject.Find("TriangulationToggle").GetComponent<Toggle>();
