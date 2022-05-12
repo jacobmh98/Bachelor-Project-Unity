@@ -78,10 +78,11 @@ public class OptionsButtons : MonoBehaviour
         if (db.getTriangulationEnabled())
             db.setShowMesh(true);
 
+        db.setParticleSize(0.05f);
         print("Saved settings!");
 
-        controller.PointLoader();
-        SceneManager.LoadScene(1);
+        //controller.PointLoader();
+        //SceneManager.LoadScene(1);
 
     }
 
