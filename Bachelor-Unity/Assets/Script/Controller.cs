@@ -1,16 +1,15 @@
 using DelaunatorSharp;
 using Newtonsoft.Json;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System;
 using UnityEngine;
 using Accord.Collections;
-using Accord.MachineLearning;
 
 public class Controller
 {
     public static Controller controller = new Controller();
+
     DataBase db = DataBase.getInstance();
     Sonar sonarData;
 
@@ -46,7 +45,7 @@ public class Controller
         db.setMinWidth(sonarData.min_width_axis);
         db.setMaxWidth(sonarData.max_width_axis);
 
-        //Changing values for sliders to be more user friendly
+        //Changing values for sliders to be more user friendly (From 0 to x, instead of -x to x)
         db.setSliderValueShallowDepth(Math.Abs(db.getShallowDepth()));
         db.setSliderLimitShallowDepth(Math.Abs(db.getShallowDepth()));
         db.setSliderValueDeepDepth(Math.Abs(db.getDeepDepth()));
@@ -54,6 +53,7 @@ public class Controller
         db.setSliderValueMinLength(0);
         db.setSliderLimitMinLength(0);
 
+        //Different methods if the min length is positive instead of negative negative
         if (db.getMinLength() < 0)
         {
             db.setSliderValueMaxLength(db.getMaxLength() + Math.Abs(db.getMinLength()));
@@ -64,6 +64,9 @@ public class Controller
             db.setSliderValueMaxLength(db.getMaxLength() - db.getMinLength());
             db.setSliderLimitMaxLength(db.getMaxLength() - db.getMinLength());
         }
+
+        //The width slider has values from -z to z, since the boat is roughly at z = 0 when sending out a ping
+        //So values will go from negative to the left of boat and positive to the right
         db.setSliderValueMinWidth(db.getMinWidth());
         db.setSliderValueMaxWidth(db.getMaxWidth());
         db.setSliderLimitMinWidth(db.getMinWidth());
@@ -71,21 +74,22 @@ public class Controller
 
     }
 
+    //Method to load all the points from the JSON file, and filter away points from the chosen option filters
     public void PointLoader()
     {
-        Debug.Log("Pointloader");
         // Variables for point coordinates
-        List<Vector3> points = new List<Vector3>();
-        List<Vector3> boatPathPoints = new List<Vector3>();
-        List<IPoint> pointsDelaunay = new List<IPoint>();
         Vector3 point;
+        List<Vector3> points = new List<Vector3>();
+        List<IPoint> pointsDelaunay = new List<IPoint>();
+        List<Vector3> boatPathPoints = new List<Vector3>();
 
         // Variables for outlier detections
+        List<Vector3> newPoints = new List<Vector3>();
         List<float> heightOutlierDetectionList = new List<float>();
         List<double[]> kDTreeSetupList = new List<double[]>();
-        List<Vector3> newPoints = new List<Vector3>();
 
         //Getting values for pointloader into variables, to avoid excessive calls to the database class
+        //and transforming them back from 0 to x to the original -x to x form the points are on
         int finalShallowDepth = -db.getSliderValueShallowDepth();
         int finalDeepDepth = -db.getSliderValueDeepDepth();
         int finalMinLengthAxis = db.getSliderValueMinLength() + db.getMinLength();
@@ -99,6 +103,7 @@ public class Controller
         int numberOfPings = db.getNumberOfPings();
 
         //Storing new min and max depth for correct colours in the color height map mesh
+        // since the original min and max depth can be filtered away in the pointloader
         int newShallowDepth = int.MinValue;
         int newDeepDepth = int.MaxValue;
 
@@ -110,13 +115,12 @@ public class Controller
                                     (float)sonarData.pings[i].ping_boat_coord[1]);
             */
 
-
              for (int j = 0; j < sonarData.pings[i].no_points; j++)
             {
-                // getting coordinates for single point
+                // Setting coordinates for the single current point
                 point = new Vector3((float)sonarData.pings[i].coords_x[j], (float)sonarData.pings[i].coords_z[j], (float)sonarData.pings[i].coords_y[j]);
 
-
+                //Filtering away values not included in the sliders
                 if ((point[1] < finalShallowDepth && point[1] > finalDeepDepth)
                     && (point[0] > finalMinLengthAxis && point[0] < finalMaxLengthAxis)
                     && (point[2] > finalMinWidthAxis && point[2] < finalMaxWidthAxis))
@@ -277,6 +281,7 @@ public class Controller
 
     }
 
+
     public static Controller getInstance()
     {
         return controller;
@@ -295,6 +300,7 @@ public class Controller
         {
             fileName = newPath;
         }
+
     }
 
 }

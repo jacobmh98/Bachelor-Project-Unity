@@ -6,7 +6,6 @@ using UnityEngine.VFX;
 public class PointCloudRenderer : MonoBehaviour
 {
     DataBase db = DataBase.getInstance();
-    Controller controller = Controller.getInstance();
 
     Texture2D texColor;
     Texture2D texPosScale;

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DelaunatorSharp;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
@@ -13,14 +12,11 @@ public class GenerateHeightmap : MonoBehaviour
     DataBase db = DataBase.getInstance();
 
     Hashtable map;
+
     List<Color> colors = new List<Color>();
     public Gradient gradient;
     bool hasRun = false;
 
-    private void Start()
-    {
-        //print(this.gameObject.)
-    }
 
     private void Update()
     {
@@ -50,6 +46,7 @@ public class GenerateHeightmap : MonoBehaviour
         else if (db.getUpdateHeightMap() && db.getShowHeightMap())
         {
             this.gameObject.GetComponent<Renderer>().enabled = true;
+
         } else if(db.getTriangulationEnabled() && !db.getShowHeightMap())
         {
             this.gameObject.GetComponent<Renderer>().enabled = false;

@@ -16,7 +16,7 @@ public class PointSizeControls : MonoBehaviour, IPointerUpHandler
     {
         slider = GetComponent<Slider>();
         pointSizeText = GameObject.Find("pointSize").GetComponent<Text>();
-        
+
         slider.onValueChanged.AddListener(delegate { valueChangeCheck(); });
         prevVal = slider.value;
     }

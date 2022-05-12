@@ -70,7 +70,7 @@ public class DataBase
     private bool updatePointSize = false;
     private bool pointCloudGradient = false;
     private bool updatePointColor = false;
-    private bool backFromPoints = false;
+    private bool fromPoints = false;
 
     private DataBase() {}
     public static DataBase getInstance()
@@ -250,9 +250,9 @@ public class DataBase
     {
         updatePointColor = newUpdatePointColor;
     }
-    public void setBackFromPoints(bool newBackFromPoints)
+    public void setFromPoints(bool newFromPoints)
     {
-        backFromPoints = newBackFromPoints;
+        fromPoints = newFromPoints;
     }
 
 
@@ -431,9 +431,9 @@ public class DataBase
     {
         return updatePointColor;
     }
-    public bool getBackFromPoints()
+    public bool getFromPoints()
     {
-        return backFromPoints;
+        return fromPoints;
     }
 
 }

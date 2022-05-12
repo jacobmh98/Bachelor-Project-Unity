@@ -10,13 +10,14 @@ public class GenerateMesh : MonoBehaviour
 {
     DataBase db = DataBase.getInstance();
     Controller controller = Controller.getInstance();
+
     Hashtable map;
     List<Color> colors = new List<Color>();
     Triangulate t = null;
 
     private void Start()
     {
-        Debug.Log("Generate_mesh start");
+
         if (db.getTriangulationEnabled())
         {
             Mesh mesh = new Mesh();

@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 using System.Diagnostics;
@@ -20,33 +17,28 @@ public class ChooseMenu : MonoBehaviour
     public GameObject text;
     public TMP_Text errorText;
 
-    Toggle tgToggle;
-    Toggle nnToggle;
-    Toggle odToggle;
-
+    private LoadOptions loader;
     private void Start()
     {
+        loader = GetComponent<LoadOptions>();
+
         //Check if we just came back from pointcloud scene
-        if (db.getBackFromPoints())
+        if (db.getFromPoints())
         {
-            db.setBackFromPoints(false);
             chooseMenu.SetActive(false);
             optionsMenu.SetActive(true);
-            tgToggle = GameObject.Find("TriangulationToggle").GetComponent<Toggle>();
-            nnToggle = GameObject.Find("NNToggle").GetComponent<Toggle>();
-            odToggle = GameObject.Find("ODToggle").GetComponent<Toggle>();
-            tgToggle.isOn = db.getTriangulationEnabled();
-            nnToggle.isOn = db.getNearestNeighbourEnabled();
-            odToggle.isOn = db.getOutlierHeightEnabled();
+            loader.loadOptions();
         }
+
     }
 
-    //Creates a Json file from the s7k file
+    //Creates a Json file from the .s7k file
     public void RunVisualsWithPath()
     {
         string path = inputField.GetComponent<TMP_InputField>().text;
         print(path);
         print(File.Exists(path));
+
         //Check if the file path is valid/exists on the system
         if (File.Exists(path))
         {
@@ -84,8 +76,6 @@ public class ChooseMenu : MonoBehaviour
             text.SetActive(true);
         }
 
-        
-    
     }
 
     //Changes the background to a new image (only used for when we switch to TemplateMenu)
@@ -97,7 +87,6 @@ public class ChooseMenu : MonoBehaviour
     //Quits the program
     public void quitButton()
     {
-        print("QUIT PROGRAM!");
         Application.Quit();
     }
 

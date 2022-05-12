@@ -3149,7 +3149,7 @@ GameObject:
   - component: {fileID: 1143313095}
   - component: {fileID: 1143313094}
   m_Layer: 5
-  m_Name: Button
+  m_Name: BackButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3233,7 +3233,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1143313094}
         m_TargetAssemblyTypeName: ControlsButtons, Assembly-CSharp
-        m_MethodName: letsGoBack
+        m_MethodName: backToOptions
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -1,15 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Min_Max_Slider;
 using TMPro;
-using UnityEngine.SceneManagement;
 
 public class OptionsButtons : MonoBehaviour
 {
     DataBase db = DataBase.getInstance();
-    Controller controller = Controller.getInstance();
 
     public MinMaxSlider DepthSlider;
     public MinMaxSlider LengthSlider;
@@ -28,14 +24,26 @@ public class OptionsButtons : MonoBehaviour
 
     public void changeBackground()
     {
-        print("changeBackground in optionsButtons");
         panel.sprite = sprite;
         runButton();
     }
     public void runButton()
     {
-        print("runButton in OptionsButtons");
-        //Setting the values in the database to the values set in options
+        resetPointCloudControllerVariables();
+        setOptionsVariables();
+
+        print("Saved settings!");
+
+    }
+
+    public void backButton()
+    {
+        db.setFromPoints(false);
+    }
+
+    public void setOptionsVariables()
+    {
+        //Setting values in the database to the values chosen in the sliders
         db.setSliderValueShallowDepth((int)DepthSlider.Values.minValue);
         db.setSliderValueDeepDepth((int)DepthSlider.Values.maxValue);
         db.setSliderValueMinLength((int)LengthSlider.Values.minValue);
@@ -43,16 +51,19 @@ public class OptionsButtons : MonoBehaviour
         db.setSliderValueMinWidth((int)WidthSlider.Values.minValue);
         db.setSliderValueMaxWidth((int)WidthSlider.Values.maxValue);
 
+        //Setting values in the database to the values picked in the checkboxes
         db.setOutlierHeightEnabled(odFilter.isOn);
         db.setNearestNeighbourEnabled(nnFilter.isOn);
-
-        db.setTriangulationType(triangulation.value);
         db.setTriangulationEnabled(tgFilter.isOn);
+        db.setTriangulationType(triangulation.value);
 
-        if (int.TryParse(neighbourField.text,out int intResult))
+        //Setting values in the database to the values in written in the textfields
+        // if the values written is not valid, the values is set to the default ones.
+        if (int.TryParse(neighbourField.text, out int intResult))
         {
             db.setNumberOfNeighbours(intResult);
-        } else
+        }
+        else
         {
             db.setNumberOfNeighbours(20);
         }
@@ -66,7 +77,7 @@ public class OptionsButtons : MonoBehaviour
             db.setNeighbourDistance(1.5);
         }
 
-        if(double.TryParse(thresholdField.text, out double outlierHeightThreshold))
+        if (double.TryParse(thresholdField.text, out double outlierHeightThreshold))
         {
             db.setOutlierHeightThreshold(outlierHeightThreshold);
         }
@@ -78,12 +89,23 @@ public class OptionsButtons : MonoBehaviour
         if (db.getTriangulationEnabled())
             db.setShowMesh(true);
 
+    }
+
+    // Resetting the variables in the controller box when running the point cloud
+    // to avoid all values when running new pointcloud
+    public void resetPointCloudControllerVariables()
+    {
+        db.setShowMesh(false);
+        db.setHeightMapEnabled(false);
+        db.setShowHeightMap(false);
+        db.setShowPointCloud(true);
         db.setParticleSize(0.05f);
-        print("Saved settings!");
-
-        //controller.PointLoader();
-        //SceneManager.LoadScene(1);
-
+        db.setUpdateHeightMap(false);
+        db.setUpdateOceanFloor(false);
+        db.setUpdatePointCloud(false);
+        db.setUpdatePointSize(false);
+        db.setPointCloudGradient(false);
+        db.setUpdatePointColor(false);
     }
 
 }

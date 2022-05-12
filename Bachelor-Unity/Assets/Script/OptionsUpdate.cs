@@ -8,11 +8,11 @@ using TMPro;
 
 public class OptionsUpdate : MonoBehaviour
 {
+    DataBase db = DataBase.getInstance();
 
     public TMP_InputField input1;
     public TMP_InputField input2;
     public TMP_InputField input3;
-    DataBase db = DataBase.getInstance();
 
     void Start()
     {

@@ -6,9 +6,12 @@ using UnityEngine.SceneManagement;
 public class ControlsButtons : MonoBehaviour
 {
     DataBase db = DataBase.getInstance();
-    public void letsGoBack()
+
+    //Method to change scene from pointcloud to options menu scene
+    public void backToOptions()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
-        db.setBackFromPoints(true);
+        db.setFromPoints(true);
     }
+
 }
