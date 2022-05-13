@@ -11,6 +11,7 @@ public class LoadOptions : MonoBehaviour
     public MinMaxSlider lengthSlider;
     public MinMaxSlider widthSlider;
     public Toggle triangulationToggle;
+    public Toggle edgeTrianglesToggle;
     public Toggle nearestNeighbourToggle;
     public Toggle outlierHeightDetectionToggle;
 
@@ -21,12 +22,14 @@ public class LoadOptions : MonoBehaviour
         {
             db.setFromPoints(false);
             triangulationToggle.isOn = db.getTriangulationEnabled();
+            edgeTrianglesToggle.isOn = db.getEdgeTrianglesRemoved();
             nearestNeighbourToggle.isOn = db.getNearestNeighbourEnabled();
             outlierHeightDetectionToggle.isOn = db.getOutlierHeightEnabled();
         }
         else
         {
             triangulationToggle.isOn = false;
+            edgeTrianglesToggle.isOn = false;
             nearestNeighbourToggle.isOn = false;
             outlierHeightDetectionToggle.isOn = false;
         }

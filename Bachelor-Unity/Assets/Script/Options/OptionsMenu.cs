@@ -7,6 +7,9 @@ public class OptionsMenu : MonoBehaviour
     DataBase db = DataBase.getInstance();
 
     public Toggle toggle;
+    //Only for toggleTriangle method, if changing in toggleEdgeTriangleRemoval, use "toggle" as EdgeTriangleRemovalToggle
+    public Toggle edgeTrianglesToggle;
+    //
     public TMP_InputField input1;
     public TMP_InputField input2;
     public GameObject text1;
@@ -31,6 +34,13 @@ public class OptionsMenu : MonoBehaviour
     {
         db.setTriangulationEnabled(toggle.isOn);
         dropdown.interactable = toggle.isOn;
+        edgeTrianglesToggle.interactable = toggle.isOn;
+    }
+
+    public void toggleEdgeTriangleRemoval()
+    {
+        db.setEdgeTrianglesRemoved(toggle.isOn);
+
     }
 
 }

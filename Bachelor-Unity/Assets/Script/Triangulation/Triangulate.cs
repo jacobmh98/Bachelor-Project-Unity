@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Triangulate
 {
+    DataBase db = DataBase.getInstance();
     Hashtable map;
     List<Vector3> vertices;
     List<IPoint> delaunayPoints;
@@ -40,8 +41,11 @@ public class Triangulate
         // GenerateMedianLength();
 
         // Remove edge borders with edge length greater than median length
-        //while (removedTriangles != 0 || removedTriIterations < 20)
-          //  RemoveEdgeTriangles();
+        if (db.getEdgeTrianglesRemoved())
+        {
+            while (removedTriangles != 0 || removedTriIterations < 20)
+                RemoveEdgeTriangles();
+        }
 
         // Generate uvs for mesh
         /*Vector2[] uvs = new Vector2[vertices.Count];

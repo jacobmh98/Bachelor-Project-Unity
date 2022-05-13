@@ -45,6 +45,7 @@ public class DataBase
 
     //Values for check boxes in options
     private bool triangulationEnabled = false;
+    private bool edgeTrianglesRemoved = false;
     private bool nearestNeighboursEnabled = false;
     private bool outlierHeightEnabled = false;
 
@@ -209,6 +210,10 @@ public class DataBase
     public void setTriangulationType(int newTriangulationType)
     {
         triangulationType = newTriangulationType;
+    }
+    public void setEdgeTrianglesRemoved(bool newEdgeTrianglesRemoved)
+    {
+        edgeTrianglesRemoved = newEdgeTrianglesRemoved;
     }
     public void setHeightMapEnabled(bool newHeightMapEnabled)
     {
@@ -388,6 +393,10 @@ public class DataBase
     public int getTriangulationType()
     {
         return triangulationType;
+    }
+    public bool getEdgeTrianglesRemoved()
+    {
+        return edgeTrianglesRemoved;
     }
     public bool getHeightMapEnabled()
     {
