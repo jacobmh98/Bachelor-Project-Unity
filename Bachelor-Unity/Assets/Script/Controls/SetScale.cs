@@ -19,9 +19,10 @@ public class SetScale : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        textShallow.text = Math.Abs(db.getNewShallowDepth()).ToString();
-        textDeep.text = Math.Abs(db.getNewDeepDepth()).ToString();
-        textHalf.text = (Math.Abs(db.getNewShallowDepth() + db.getNewDeepDepth()) / 2).ToString();
+        print(db.getNewShallowDepth());
+        textShallow.text = Math.Abs((int)db.getNewShallowDepth()).ToString();
+        textDeep.text = Math.Abs((int)db.getNewDeepDepth()).ToString();
+        textHalf.text = (Math.Abs((int)db.getNewShallowDepth() + db.getNewDeepDepth()) / 2).ToString();
         scale.SetActive(toggleHeightMap.isOn);
     }
 
