@@ -104,8 +104,8 @@ public class Controller
 
         //Storing new min and max depth for correct colours in the color height map mesh
         // since the original min and max depth can be filtered away in the pointloader
-        int newShallowDepth = int.MinValue;
-        int newDeepDepth = int.MaxValue;
+        int newShallowDepth = int.MinValue + 1;
+        int newDeepDepth = int.MaxValue - 1;
 
         for (int i = 0; i < numberOfPings; i++)
         {

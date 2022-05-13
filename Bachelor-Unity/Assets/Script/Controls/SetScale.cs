@@ -19,10 +19,30 @@ public class SetScale : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        print(db.getNewShallowDepth());
-        textShallow.text = Math.Abs((int)db.getNewShallowDepth()).ToString();
-        textDeep.text = Math.Abs((int)db.getNewDeepDepth()).ToString();
-        textHalf.text = (Math.Abs((int)db.getNewShallowDepth() + db.getNewDeepDepth()) / 2).ToString();
+
+        // Checking if there is 0 or 1 points in point cloud after filtering, else null pointer errors
+        if (db.getNewShallowDepth() == int.MinValue + 1 && db.getNewDeepDepth() == int.MaxValue - 1)
+        {
+            textShallow.text = "Null";
+            textDeep.text = "Null";
+            textHalf.text = "Null";
+        }
+        else
+        {
+            if (db.getNewShallowDepth() == int.MinValue + 1)
+            {
+                db.setNewShallowDepth(db.getNewDeepDepth());
+
+            }
+            else if (db.getNewDeepDepth() == int.MaxValue - 1)
+            {
+                db.setNewDeepDepth(db.getNewShallowDepth());
+            }
+            textShallow.text = Math.Abs((int)db.getNewShallowDepth()).ToString();
+            textDeep.text = Math.Abs((int)db.getNewDeepDepth()).ToString();
+            textHalf.text = (Math.Abs((int)db.getNewShallowDepth() + db.getNewDeepDepth()) / 2).ToString();
+        }
+
         scale.SetActive(toggleHeightMap.isOn);
     }
 
