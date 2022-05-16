@@ -50,7 +50,7 @@ public class ChooseMenu : MonoBehaviour
                 Process p = new Process();
                 p.StartInfo = new ProcessStartInfo();
                 p.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
-                p.StartInfo.FileName = Application.streamingAssetsPath + @"/jsonload.exe";
+                p.StartInfo.FileName = Application.streamingAssetsPath + @"/CreateJSON.exe";
                 p.StartInfo.WorkingDirectory = Application.streamingAssetsPath;
                 p.StartInfo.Arguments = path;
                 p.Start();
@@ -58,11 +58,9 @@ public class ChooseMenu : MonoBehaviour
 
                 controller.setPath(Application.streamingAssetsPath + @"/7k_data_extracted_rotated.json");
 
-                print("ChooseMenu calls controller.LoadController");
                 controller.LoadController();
                 chooseMenu.SetActive(false);
                 optionsMenu.SetActive(true);
-                print("well done bro you can choose the right file type *clap*");
             }
             else
             {
