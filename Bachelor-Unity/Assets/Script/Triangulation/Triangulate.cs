@@ -10,7 +10,6 @@ public class Triangulate
     List<Vector3> vertices;
     List<IPoint> delaunayPoints;
     List<int> triangles = new List<int>();
-    List<Color> colors;
     List<int> sideLengths = new List<int>();
     int medianLength = 4;
     int removedTriangles = -1;
@@ -18,11 +17,15 @@ public class Triangulate
 
     public Triangulate(List<Vector3> v, List<IPoint> p)
     {
-        Debug.Log("Triangulate");
         vertices = v;
         delaunayPoints = p;
 
-        CreateShape();
+        // If there is less than 3 points in the point cloud, there cant be triangulated
+        if (db.getPoints().Count > 3)
+        {
+            CreateShape();
+        }
+
     }
 
     /**
