@@ -17,7 +17,7 @@ public class LoadOptions : MonoBehaviour
 
     public void loadOptions()
     {
-
+        //Check if we just came from the point cloud visualization (clicked "Back to Options")
         if (db.getFromPoints())
         {
             db.setFromPoints(false);

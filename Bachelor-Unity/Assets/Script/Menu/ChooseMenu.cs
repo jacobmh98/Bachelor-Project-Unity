@@ -52,7 +52,7 @@ public class ChooseMenu : MonoBehaviour
                 p.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
                 p.StartInfo.FileName = Application.streamingAssetsPath + @"/CreateJSON.exe";
                 p.StartInfo.WorkingDirectory = Application.streamingAssetsPath;
-                p.StartInfo.Arguments = path;
+                p.StartInfo.Arguments = @"""" + path + @"""";
                 p.Start();
                 p.WaitForExit();
 

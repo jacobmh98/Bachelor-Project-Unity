@@ -14,7 +14,7 @@ public class OptionsButtons : MonoBehaviour
     public Toggle odFilter;
     public Toggle tgFilter;
     public TMP_Dropdown triangulation;
-    public Toggle heightMap;
+    public Toggle edgeTriangleRemoval;
     public TMP_InputField neighbourField;
     public TMP_InputField distanceField;
     public TMP_InputField thresholdField;
@@ -41,6 +41,18 @@ public class OptionsButtons : MonoBehaviour
         db.setFromPoints(false);
     }
 
+    public void resetOptions()
+    {
+        DepthSlider.SetValues(db.getSliderLimitShallowDepth(), db.getSliderValueDeepDepth());
+        LengthSlider.SetValues(db.getSliderLimitMinLength(), db.getSliderLimitMaxLength());
+        WidthSlider.SetValues(db.getSliderLimitMinWidth(), db.getSliderLimitMaxWidth());
+        nnFilter.isOn = false;
+        odFilter.isOn = false;
+        tgFilter.isOn = false;
+        triangulation.value = 1;
+        edgeTriangleRemoval.isOn = false;
+    }
+
     public void setOptionsVariables()
     {
         //Setting values in the database to the values chosen in the sliders
@@ -56,6 +68,7 @@ public class OptionsButtons : MonoBehaviour
         db.setNearestNeighbourEnabled(nnFilter.isOn);
         db.setTriangulationEnabled(tgFilter.isOn);
         db.setTriangulationType(triangulation.value);
+        db.setEdgeTrianglesRemoved(edgeTriangleRemoval.isOn);
 
         //Setting values in the database to the values in written in the textfields
         // if the values written is not valid, the values is set to the default ones.
