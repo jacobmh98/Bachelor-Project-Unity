@@ -62,6 +62,7 @@ public class Triangulate
         watch.Stop();
         var elapsedTime = watch.ElapsedMilliseconds;
         print("time = " + elapsedTime);*/
+        db.setTriangles(triangles);
     }
 
     /**
@@ -195,8 +196,4 @@ public class Triangulate
         }
     }
 
-    public List<int> getTriangles()
-    {
-        return triangles;
-    }
 }

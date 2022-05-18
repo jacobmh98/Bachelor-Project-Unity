@@ -30,7 +30,7 @@ public class GenerateMesh : MonoBehaviour
             mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
 
             mesh.vertices = db.getPoints().ToArray();
-            mesh.triangles = t.getTriangles().ToArray();
+            mesh.triangles = db.getTriangles().ToArray();
             mesh.colors = colors.ToArray();
 
             mesh.RecalculateNormals();
