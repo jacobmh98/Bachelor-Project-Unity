@@ -15,9 +15,9 @@ public class OptionsButtons : MonoBehaviour
     public Toggle tgFilter;
     public TMP_Dropdown triangulation;
     public Toggle edgeTriangleRemoval;
-    public TMP_InputField neighbourField;
-    public TMP_InputField distanceField;
-    public TMP_InputField thresholdField;
+    public TMP_InputField noOfNeighbourInputField;
+    public TMP_InputField neighbourDistanceInputField;
+    public TMP_InputField outlierHeightThresholdInputField;
 
     public Image panel;
     public Sprite sprite;
@@ -33,7 +33,6 @@ public class OptionsButtons : MonoBehaviour
         setOptionsVariables();
 
         print("Saved settings!");
-
     }
 
     public void backButton()
@@ -43,14 +42,23 @@ public class OptionsButtons : MonoBehaviour
 
     public void resetOptions()
     {
+        //Retting values for sliders
         DepthSlider.SetValues(db.getSliderLimitShallowDepth(), db.getSliderValueDeepDepth());
         LengthSlider.SetValues(db.getSliderLimitMinLength(), db.getSliderLimitMaxLength());
         WidthSlider.SetValues(db.getSliderLimitMinWidth(), db.getSliderLimitMaxWidth());
+
+        //Setting toggles to un checked
         nnFilter.isOn = false;
         odFilter.isOn = false;
         tgFilter.isOn = false;
         triangulation.value = 1;
         edgeTriangleRemoval.isOn = false;
+
+        //Retting values for textfields
+        noOfNeighbourInputField.text = db.getDefaultNumberOfNeighbours().ToString();
+        neighbourDistanceInputField.text = db.getDefaultNeighbourDistance().ToString();
+        outlierHeightThresholdInputField.text = db.getDefaultOutlierHeightThreshold().ToString();
+
     }
 
     public void setOptionsVariables()
@@ -72,31 +80,31 @@ public class OptionsButtons : MonoBehaviour
 
         //Setting values in the database to the values in written in the textfields
         // if the values written is not valid, the values is set to the default ones.
-        if (int.TryParse(neighbourField.text, out int intResult))
+        if (int.TryParse(noOfNeighbourInputField.text, out int intResult))
         {
             db.setNumberOfNeighbours(intResult);
         }
         else
         {
-            db.setNumberOfNeighbours(20);
+            db.setNumberOfNeighbours(db.getDefaultNumberOfNeighbours());
         }
 
-        if (float.TryParse(distanceField.text, out float neighbourDistance))
+        if (float.TryParse(neighbourDistanceInputField.text, out float neighbourDistance))
         {
             db.setNeighbourDistance(neighbourDistance);
         }
         else
         {
-            db.setNeighbourDistance(1.5);
+            db.setNeighbourDistance(db.getDefaultNeighbourDistance());
         }
 
-        if (double.TryParse(thresholdField.text, out double outlierHeightThreshold))
+        if (double.TryParse(outlierHeightThresholdInputField.text, out double outlierHeightThreshold))
         {
             db.setOutlierHeightThreshold(outlierHeightThreshold);
         }
         else
         {
-            db.setOutlierHeightThreshold(1);
+            db.setOutlierHeightThreshold(db.getDefaultOutlierHeightThreshold());
         }
 
         if (db.getTriangulationEnabled())

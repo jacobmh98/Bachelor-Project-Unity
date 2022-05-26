@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Min_Max_Slider;
+using TMPro;
 
 
 public class LoadOptions : MonoBehaviour
@@ -14,6 +15,9 @@ public class LoadOptions : MonoBehaviour
     public Toggle edgeTrianglesToggle;
     public Toggle nearestNeighbourToggle;
     public Toggle outlierHeightDetectionToggle;
+    public TMP_InputField noOfNeighbourInputField;
+    public TMP_InputField neighbourDistanceInputField;
+    public TMP_InputField outlierHeightThresholdInputField;
 
     public void loadOptions()
     {
@@ -21,17 +25,30 @@ public class LoadOptions : MonoBehaviour
         if (db.getFromPoints())
         {
             db.setFromPoints(false);
+
+            //Setting checkbox values
             triangulationToggle.isOn = db.getTriangulationEnabled();
             edgeTrianglesToggle.isOn = db.getEdgeTrianglesRemoved();
             nearestNeighbourToggle.isOn = db.getNearestNeighbourEnabled();
             outlierHeightDetectionToggle.isOn = db.getOutlierHeightEnabled();
+
+            //Setting values for textfields
+            noOfNeighbourInputField.text = db.getNumberOfNeighbours().ToString();
+            neighbourDistanceInputField.text = db.getNeighbourDistance().ToString();
+            outlierHeightThresholdInputField.text = db.getOutlierHeightThreshold().ToString();
         }
         else
         {
+            //Setting checkbox values
             triangulationToggle.isOn = false;
             edgeTrianglesToggle.isOn = false;
             nearestNeighbourToggle.isOn = false;
             outlierHeightDetectionToggle.isOn = false;
+
+            //Setting values for textfields
+            noOfNeighbourInputField.text = db.getDefaultNumberOfNeighbours().ToString();
+            neighbourDistanceInputField.text = db.getDefaultNeighbourDistance().ToString();
+            outlierHeightThresholdInputField.text = db.getDefaultOutlierHeightThreshold().ToString();
         }
 
         //Setting the slider values in options

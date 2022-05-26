@@ -18,6 +18,10 @@ public class Controller
 
     string fileName;
 
+    public int newShallowDepth;
+    public int newDeepDepth;
+
+
     private Controller()
     {
         //Debug.Log("Controller");
@@ -83,10 +87,9 @@ public class Controller
         List<IPoint> pointsDelaunay = new List<IPoint>();
         List<Vector3> boatPathPoints = new List<Vector3>();
 
-        // Variables for outlier detections
-        List<Vector3> newPoints = new List<Vector3>();
-        List<float> heightOutlierDetectionList = new List<float>();
-        List<double[]> kDTreeSetupList = new List<double[]>();
+        // Lists for outlier detections
+        List<float> heightValues = new List<float>();
+        List<double[]> initial_kDTree = new List<double[]>();
 
         //Getting values for pointloader into variables, to avoid excessive calls to the database class
         //and transforming them back from 0 to x to the original -x to x form the points are on
@@ -104,8 +107,8 @@ public class Controller
 
         //Storing new min and max depth for correct colours in the color height map mesh
         // since the original min and max depth can be filtered away in the pointloader
-        int newShallowDepth = int.MinValue + 1;
-        int newDeepDepth = int.MaxValue - 1;
+        newShallowDepth = int.MinValue + 1;
+        newDeepDepth = int.MaxValue - 1;
 
         for (int i = 0; i < numberOfPings; i++)
         {
@@ -146,13 +149,13 @@ public class Controller
                     // Adding point to other lists for outlier removal functions to safe running over all points multiple times
                     if (outlierHeightEnabled)
                     {
-                        heightOutlierDetectionList.Add(point[1]);
+                        heightValues.Add(point[1]);
                     }
 
-                    if (nearestNeighbourEnabled)
+                    if (!outlierHeightEnabled && nearestNeighbourEnabled)
                     {
                         double[] toKDTreePoint = new double[] { point[0], point[1], point[2] };
-                        kDTreeSetupList.Add(toKDTreePoint);
+                        initial_kDTree.Add(toKDTreePoint);
                     }
                     
                 }
@@ -161,126 +164,148 @@ public class Controller
 
         }
 
+        // Storing values in database unless they will be changed in outlier removing methods
         if (!outlierHeightEnabled && !nearestNeighbourEnabled)
         {
             db.setPoints(points);
             db.setPointsDelauney(pointsDelaunay);
             db.setNewShallowDepth(newShallowDepth);
             db.setNewDeepDepth(newDeepDepth);
+
+        } else if (outlierHeightEnabled) 
+        {
+            outlierHeightDetection(points, heightValues);
+
+        } else if (nearestNeighbourEnabled)
+        {
+            nearestNeighbourDetection(points, initial_kDTree.ToArray());
         }
 
-        if (outlierHeightEnabled)
+    }
+
+    private void outlierHeightDetection(List<Vector3> points, List<float> heightValues)
+    {
+        List<Vector3> filteredPoints = new List<Vector3>();
+        List<IPoint> pointsDelaunay = new List<IPoint>();
+        List<double[]> initial_kDTree = new List<double[]>();
+        bool nearestNeighbourEnabled = db.getNearestNeighbourEnabled();
+        double outlierHeightThreshold = db.getOutlierHeightThreshold();
+        int n = heightValues.Count;
+        float sumMean = 0;
+        double sumStd = 0;
+        float mean = 0;
+        double standardDeviation = 0;
+
+        //Summing over all height values to calculate the mean height
+        for (int i = 0; i < n; i++)
         {
-            float sumMean = 0;
-            double sumStd = 0;
-            float mean = 0;
-            double standardDeviation = 0;
-            int n = heightOutlierDetectionList.Count;
-            double outlierHeightThreshold = db.getOutlierHeightThreshold();
-
-            //Summin over all height values to calculate the mean height
-            for (int i = 0; i < n; i++)
-            {
-                sumMean += heightOutlierDetectionList[i];
-            }
-
-            //If there exists more than 1 element in the height list, then the mean and standard deviation can be calculated
-            if (n > 0)
-            {
-                mean = sumMean / n;
-
-                for (int i = 0; i < n; i++)
-                {
-                    sumStd += Math.Pow(Math.Abs(heightOutlierDetectionList[i] - mean), 2);
-                }
-
-                standardDeviation = sumStd / n;
-            }
-
-            //Checking all points in the height list
-            for (int i = 0; i < n; i++)
-            {
-
-                //Points with a z score higher than the defined threshold will not be added to the new point list
-                if (Math.Abs((heightOutlierDetectionList[i] - mean) / standardDeviation) < outlierHeightThreshold)
-                {
-                    newPoints.Add(points[i]);
-
-                    if (!nearestNeighbourEnabled)
-                    {
-                        pointsDelaunay.Add(new DelaunatorSharp.Point(points[i].x, points[i].z));
-
-                        //Finding the new shallow and deep depth values for color height map
-                        if (newShallowDepth < points[i].y)
-                        {
-                            newShallowDepth = (int)Math.Ceiling(points[i].y);
-
-                        }
-                        else if (newDeepDepth > points[i].y)
-                        {
-                            newDeepDepth = (int)Math.Floor(points[i].y);
-                        }
-
-                    }
-
-                }
-
-            }
-
-            points = newPoints;
-
-            if (!nearestNeighbourEnabled)
-            {
-                db.setPoints(newPoints);
-                db.setPointsDelauney(pointsDelaunay);
-                db.setNewShallowDepth(newShallowDepth);
-                db.setNewDeepDepth(newDeepDepth);
-            }
-
+            sumMean += heightValues[i];
         }
 
-        if (nearestNeighbourEnabled)
+        //If there exists more than 1 element in the height list,
+        // then the mean and standard deviation can be calculated
+        if (n > 0)
         {
-            int numberOfNeighbours = db.getNumberOfNeighbours();
-            double neighbourDistance = db.getNeighbourDistance();
-            newPoints = new List<Vector3>();
-            double[][] kDTreeSetupArray = kDTreeSetupList.ToArray();
-            KDTree<int> kDTree = KDTree.FromData<int>(kDTreeSetupArray);
+            mean = sumMean / n;
 
-            for (int i = 0; i < points.Count; i++)
+            for (int i = 0; i < n; i++)
             {
+                sumStd += Math.Pow(Math.Abs(heightValues[i] - mean), 2);
+            }
 
-                double[] currPoint = new double[] { points[i].x, points[i].y, points[i].z };
-                List<NodeDistance<KDTreeNode<int>>> neighbours = kDTree.Nearest(currPoint, radius: neighbourDistance);
+            standardDeviation = sumStd / n;
+        }
 
-                if (neighbours.Count > numberOfNeighbours)
+        //Checking all points in the height list
+        for (int i = 0; i < n; i++)
+        {
+
+            //Points with a z score higher than the defined threshold will not be added to the new point list
+            if (Math.Abs((heightValues[i] - mean) / standardDeviation) < outlierHeightThreshold)
+            {
+                filteredPoints.Add(points[i]);
+
+                if (!nearestNeighbourEnabled)
                 {
-                    newPoints.Add(points[i]);
                     pointsDelaunay.Add(new DelaunatorSharp.Point(points[i].x, points[i].z));
 
                     //Finding the new shallow and deep depth values for color height map
+                    // only if nearest neighbour is not enabled
                     if (newShallowDepth < points[i].y)
                     {
                         newShallowDepth = (int)Math.Ceiling(points[i].y);
-
                     }
                     else if (newDeepDepth > points[i].y)
                     {
                         newDeepDepth = (int)Math.Floor(points[i].y);
                     }
 
+                } else
+                {   
+                    // Setting up list for kDtree creation in nearest neighbour method
+                    double[] kDTreePoint = new double[] { points[i][0], points[i][1], points[i][2] };
+                    initial_kDTree.Add(kDTreePoint);   
                 }
 
             }
 
-            db.setPoints(newPoints);
+        }
+
+        // Storing values in database, unless they will be changed in nearest neighbour method
+        if (!nearestNeighbourEnabled)
+        {
+            db.setPoints(filteredPoints);
             db.setPointsDelauney(pointsDelaunay);
             db.setNewShallowDepth(newShallowDepth);
             db.setNewDeepDepth(newDeepDepth);
+        } else
+        {
+            nearestNeighbourDetection(filteredPoints, initial_kDTree.ToArray());
         }
 
     }
 
+    private void nearestNeighbourDetection(List<Vector3> points, double[][] initial_kDTree)
+    {
+        List<Vector3> newPoints = new List<Vector3>();
+        List<IPoint> pointsDelaunay = new List<IPoint>();
+        KDTree<int> kDTree = KDTree.FromData<int>(initial_kDTree);
+
+        int numberOfNeighbours = db.getNumberOfNeighbours();
+        double neighbourDistance = db.getNeighbourDistance();
+
+        for (int i = 0; i < points.Count; i++)
+        {
+
+            double[] currPoint = new double[] { points[i].x, points[i].y, points[i].z };
+            List<NodeDistance<KDTreeNode<int>>> neighbours = kDTree.Nearest(currPoint, radius: neighbourDistance);
+
+            if (neighbours.Count > numberOfNeighbours)
+            {
+                newPoints.Add(points[i]);
+                pointsDelaunay.Add(new DelaunatorSharp.Point(points[i].x, points[i].z));
+
+                //Finding the new shallow and deep depth values for color height map
+                if (newShallowDepth < points[i].y)
+                {
+                    newShallowDepth = (int)Math.Ceiling(points[i].y);
+
+                }
+                else if (newDeepDepth > points[i].y)
+                {
+                    newDeepDepth = (int)Math.Floor(points[i].y);
+                }
+
+            }
+
+        }
+
+        // Storing the final values in the database
+        db.setPoints(newPoints);
+        db.setPointsDelauney(pointsDelaunay);
+        db.setNewShallowDepth(newShallowDepth);
+        db.setNewDeepDepth(newDeepDepth);
+    }
 
     public static Controller getInstance()
     {

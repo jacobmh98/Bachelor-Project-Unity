@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -450,7 +450,6 @@ GameObject:
   m_Component:
   - component: {fileID: 153551823}
   - component: {fileID: 153551824}
-  - component: {fileID: 153551825}
   - component: {fileID: 153551826}
   m_Layer: 5
   m_Name: OptionsMenu
@@ -506,21 +505,6 @@ MonoBehaviour:
   text1: {fileID: 0}
   text2: {fileID: 0}
   dropdown: {fileID: 0}
---- !u!114 &153551825
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 153551822}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c885293ecc39c8f45abab24e605f1d31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  input1: {fileID: 1177683129}
-  input2: {fileID: 1833532498}
-  input3: {fileID: 792783576}
 --- !u!114 &153551826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -540,6 +524,9 @@ MonoBehaviour:
   edgeTrianglesToggle: {fileID: 622655679}
   nearestNeighbourToggle: {fileID: 407334928}
   outlierHeightDetectionToggle: {fileID: 211051332}
+  noOfNeighbourInputField: {fileID: 1177683129}
+  neighbourDistanceInputField: {fileID: 1833532498}
+  outlierHeightThresholdInputField: {fileID: 792783576}
 --- !u!1 &169221451
 GameObject:
   m_ObjectHideFlags: 0
@@ -1458,7 +1445,7 @@ GameObject:
   - component: {fileID: 425425206}
   - component: {fileID: 425425205}
   m_Layer: 5
-  m_Name: DistanceText
+  m_Name: NeighbourDistanceText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1726,7 +1713,7 @@ GameObject:
   - component: {fileID: 474706756}
   - component: {fileID: 474706755}
   m_Layer: 5
-  m_Name: ThresholdText
+  m_Name: OutlierHeightThreshold
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5413,7 +5400,7 @@ GameObject:
   - component: {fileID: 946362375}
   - component: {fileID: 946362374}
   m_Layer: 5
-  m_Name: AmountText
+  m_Name: NeighbourAmountText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6590,7 +6577,6 @@ GameObject:
   - component: {fileID: 1177683131}
   - component: {fileID: 1177683130}
   - component: {fileID: 1177683129}
-  - component: {fileID: 1177683132}
   m_Layer: 5
   m_Name: NeighbourField
   m_TagString: Untagged
@@ -6754,21 +6740,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1177683127}
   m_CullTransparentMesh: 1
---- !u!114 &1177683132
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1177683127}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c885293ecc39c8f45abab24e605f1d31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  input1: {fileID: 1177683129}
-  input2: {fileID: 1833532498}
-  input3: {fileID: 792783576}
 --- !u!1 &1178123972
 GameObject:
   m_ObjectHideFlags: 0
@@ -6990,7 +6961,7 @@ GameObject:
   - component: {fileID: 1214178843}
   - component: {fileID: 1214178842}
   m_Layer: 5
-  m_Name: BackText
+  m_Name: ResetText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7591,9 +7562,9 @@ MonoBehaviour:
   tgFilter: {fileID: 743613331}
   triangulation: {fileID: 1446205921}
   edgeTriangleRemoval: {fileID: 622655679}
-  neighbourField: {fileID: 1177683129}
-  distanceField: {fileID: 1833532498}
-  thresholdField: {fileID: 792783576}
+  noOfNeighbourInputField: {fileID: 1177683129}
+  neighbourDistanceInputField: {fileID: 1833532498}
+  outlierHeightThresholdInputField: {fileID: 792783576}
   panel: {fileID: 1992668977}
   sprite: {fileID: 21300000, guid: fd8685f9f4af8c545a4cf7d9712d2a9a, type: 3}
 --- !u!1 &1337944027
@@ -8882,6 +8853,9 @@ MonoBehaviour:
   edgeTrianglesToggle: {fileID: 622655679}
   nearestNeighbourToggle: {fileID: 407334928}
   outlierHeightDetectionToggle: {fileID: 211051332}
+  noOfNeighbourInputField: {fileID: 1177683129}
+  neighbourDistanceInputField: {fileID: 1833532498}
+  outlierHeightThresholdInputField: {fileID: 792783576}
 --- !u!1 &1577399771
 GameObject:
   m_ObjectHideFlags: 0

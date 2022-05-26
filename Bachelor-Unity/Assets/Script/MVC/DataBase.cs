@@ -55,7 +55,12 @@ public class DataBase
     //Values for textfields in options
     private int numberOfNeighbours = 20;
     private double neighbourDistance = 1.5;
-    private double outlierHeigthThreshold = 1.0;
+    private double outlierHeigthThreshold = 3.0;
+
+    //Default values for textfields, used when picking a template s7k file
+    private int defaultNumberOfNeighbours = 20;
+    private double defaultNeighbourDistance = 1.5;
+    private double defaultOutlierHeigthThreshold = 3.0;
 
     //Values for controls in pointcloud scene
     private bool showMesh = false;
@@ -198,6 +203,18 @@ public class DataBase
     public void setOutlierHeightThreshold(double newOutlierThreshold)
     {
         outlierHeigthThreshold = newOutlierThreshold;
+    }
+    public void setDefaultNumberOfNeighbours(int newDefaultNoOfNeighbours)
+    {
+        defaultNumberOfNeighbours = newDefaultNoOfNeighbours;
+    }
+    public void setDefaultNeighbourDistance(double newDefaultNeighbourDist)
+    {
+        defaultNeighbourDistance = newDefaultNeighbourDist;
+    }
+    public void setDefaultOutlierHeightThreshold(double newDefaultOutlierThreshold)
+    {
+        defaultOutlierHeigthThreshold = newDefaultOutlierThreshold;
     }
     public void setShowMesh(bool newShowMesh)
     {
@@ -381,6 +398,18 @@ public class DataBase
     public double getOutlierHeightThreshold()
     {
         return outlierHeigthThreshold;
+    }
+    public int getDefaultNumberOfNeighbours()
+    {
+        return defaultNumberOfNeighbours;
+    }
+    public double getDefaultNeighbourDistance()
+    {
+        return defaultNeighbourDistance;
+    }
+    public double getDefaultOutlierHeightThreshold()
+    {
+        return defaultOutlierHeigthThreshold;
     }
     public bool getShowMesh()
     {

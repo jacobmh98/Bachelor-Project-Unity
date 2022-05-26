@@ -24,9 +24,9 @@ public class TemplateMenu : MonoBehaviour
         {
             print("loading default values for 0");
             controller.setPath(Application.streamingAssetsPath + @"/NBS-Snippets-Sensor-WC_JSON.json");
-            db.setNumberOfNeighbours(30);
-            db.setNeighbourDistance(1);
-            db.setOutlierHeightThreshold(1);
+            db.setDefaultNumberOfNeighbours(30);
+            db.setDefaultNeighbourDistance(1);
+            db.setDefaultOutlierHeightThreshold(1);
             input1.text = db.getNumberOfNeighbours().ToString();
             input2.text = db.getNeighbourDistance().ToString();
             input3.text = db.getOutlierHeightThreshold().ToString();
@@ -36,9 +36,9 @@ public class TemplateMenu : MonoBehaviour
         {
             print("loading default values for 1");
             controller.setPath(Application.streamingAssetsPath + @"/NBS-Snippets-Sensor-WC+-+1_JSON.json");
-            db.setNumberOfNeighbours(50);
-            db.setNeighbourDistance(0.9);
-            db.setOutlierHeightThreshold(19);
+            db.setDefaultNumberOfNeighbours(50);
+            db.setDefaultNeighbourDistance(10);
+            db.setDefaultOutlierHeightThreshold(19);
             input1.text = db.getNumberOfNeighbours().ToString();
             input2.text = db.getNeighbourDistance().ToString();
             input3.text = db.getOutlierHeightThreshold().ToString();
@@ -47,9 +47,9 @@ public class TemplateMenu : MonoBehaviour
         {
             print("loading default values for 2");
             controller.setPath(Application.streamingAssetsPath + @"/20150411_145216_JSON.json");
-            db.setNumberOfNeighbours(50);
-            db.setNeighbourDistance(0.9);
-            db.setOutlierHeightThreshold(19);
+            db.setDefaultNumberOfNeighbours(20);
+            db.setDefaultNeighbourDistance(1.5);
+            db.setDefaultOutlierHeightThreshold(19);
             input1.text = db.getNumberOfNeighbours().ToString();
             input2.text = db.getNeighbourDistance().ToString();
             input3.text = db.getOutlierHeightThreshold().ToString();
@@ -58,9 +58,9 @@ public class TemplateMenu : MonoBehaviour
         {
             print("loading default values for 3");
             controller.setPath(Application.streamingAssetsPath + @"/20200407_104315_PDS_JSON.json");
-            db.setNumberOfNeighbours(50);
-            db.setNeighbourDistance(0.9);
-            db.setOutlierHeightThreshold(19);
+            db.setDefaultNumberOfNeighbours(20);
+            db.setDefaultNeighbourDistance(1.5);
+            db.setDefaultOutlierHeightThreshold(19);
             input1.text = db.getNumberOfNeighbours().ToString();
             input2.text = db.getNeighbourDistance().ToString();
             input3.text = db.getOutlierHeightThreshold().ToString();
@@ -69,9 +69,9 @@ public class TemplateMenu : MonoBehaviour
         {
             print("loading default values for 4");
             controller.setPath(Application.streamingAssetsPath + @"/Compressed WC - 2_JSON.json");
-            db.setNumberOfNeighbours(50);
-            db.setNeighbourDistance(0.9);
-            db.setOutlierHeightThreshold(19);
+            db.setDefaultNumberOfNeighbours(25);
+            db.setDefaultNeighbourDistance(1);
+            db.setDefaultOutlierHeightThreshold(1);
             input1.text = db.getNumberOfNeighbours().ToString();
             input2.text = db.getNeighbourDistance().ToString();
             input3.text = db.getOutlierHeightThreshold().ToString();
@@ -80,9 +80,9 @@ public class TemplateMenu : MonoBehaviour
         {
             print("loading default values for 5");
             controller.setPath(Application.streamingAssetsPath + @"/NBS-Snippets-Sensor - 1_JSON.json");
-            db.setNumberOfNeighbours(50);
-            db.setNeighbourDistance(0.9);
-            db.setOutlierHeightThreshold(19);
+            db.setDefaultNumberOfNeighbours(40);
+            db.setDefaultNeighbourDistance(0.7);
+            db.setDefaultOutlierHeightThreshold(2);
             input1.text = db.getNumberOfNeighbours().ToString();
             input2.text = db.getNeighbourDistance().ToString();
             input3.text = db.getOutlierHeightThreshold().ToString();
@@ -91,9 +91,9 @@ public class TemplateMenu : MonoBehaviour
         {
             print("loading default values for 6");
             controller.setPath(Application.streamingAssetsPath + @"/NBS-Snippets-Sensor - 2_JSON.json");
-            db.setNumberOfNeighbours(50);
-            db.setNeighbourDistance(0.9);
-            db.setOutlierHeightThreshold(19);
+            db.setDefaultNumberOfNeighbours(20);
+            db.setDefaultNeighbourDistance(0.8);
+            db.setDefaultOutlierHeightThreshold(8);
             input1.text = db.getNumberOfNeighbours().ToString();
             input2.text = db.getNeighbourDistance().ToString();
             input3.text = db.getOutlierHeightThreshold().ToString();
@@ -102,9 +102,9 @@ public class TemplateMenu : MonoBehaviour
         {
             print("loading default values for 7");
             controller.setPath(Application.streamingAssetsPath + @"/SimulationFile_JSON.json");
-            db.setNumberOfNeighbours(50);
-            db.setNeighbourDistance(0.9);
-            db.setOutlierHeightThreshold(19);
+            db.setDefaultNumberOfNeighbours(50);
+            db.setDefaultNeighbourDistance(10);
+            db.setDefaultOutlierHeightThreshold(19);
             input1.text = db.getNumberOfNeighbours().ToString();
             input2.text = db.getNeighbourDistance().ToString();
             input3.text = db.getOutlierHeightThreshold().ToString();
