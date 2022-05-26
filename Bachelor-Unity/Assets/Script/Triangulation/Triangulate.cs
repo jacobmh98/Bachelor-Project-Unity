@@ -146,9 +146,7 @@ public class Triangulate
                                         triangles[i] == v2 && triangles[i + 1] == v0 && triangles[i + 2] == v1 ||
                                         triangles[i] == v1 && triangles[i + 1] == v2 && triangles[i + 2] == v0)
                                     {
-                                        triangles.RemoveAt(i);
-                                        triangles.RemoveAt(i);
-                                        triangles.RemoveAt(i);
+                                        triangles.RemoveRange(i, 3);
                                     }
                                 }
                             }

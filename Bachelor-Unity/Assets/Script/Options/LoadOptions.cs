@@ -3,7 +3,6 @@ using UnityEngine.UI;
 using Min_Max_Slider;
 using TMPro;
 
-
 public class LoadOptions : MonoBehaviour
 {
     DataBase db = DataBase.getInstance();
@@ -36,6 +35,7 @@ public class LoadOptions : MonoBehaviour
             noOfNeighbourInputField.text = db.getNumberOfNeighbours().ToString();
             neighbourDistanceInputField.text = db.getNeighbourDistance().ToString();
             outlierHeightThresholdInputField.text = db.getOutlierHeightThreshold().ToString();
+
         }
         else
         {
@@ -59,6 +59,10 @@ public class LoadOptions : MonoBehaviour
         widthSlider.SetLimits(db.getSliderLimitMinWidth(), db.getSliderLimitMaxWidth());
         widthSlider.SetValues(db.getSliderValueMinWidth(), db.getSliderValueMaxWidth());
 
+        //Setting placeholder text for text fields as the default value
+        noOfNeighbourInputField.placeholder.GetComponent<TMP_Text>().text = "Default: " + db.getDefaultNumberOfNeighbours().ToString();
+        neighbourDistanceInputField.placeholder.GetComponent<TMP_Text>().text = "Default: " + db.getDefaultNeighbourDistance().ToString();
+        outlierHeightThresholdInputField.placeholder.GetComponent<TMP_Text>().text = "Default: " + db.getDefaultOutlierHeightThreshold().ToString();
     }
 
 }
