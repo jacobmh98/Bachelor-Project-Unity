@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.IO;
 using DelaunatorSharp;
 
 public class DataBase
@@ -77,6 +75,10 @@ public class DataBase
     private bool pointCloudGradient = false;
     private bool updatePointColor = false;
     private bool fromPoints = false;
+
+    // Variables for position of object to show scaling in pointcloud
+    private Vector3 initialPos;
+
 
     private DataBase() {}
     public static DataBase getInstance()
@@ -277,6 +279,10 @@ public class DataBase
         fromPoints = newFromPoints;
     }
 
+    public void setInitialPos(Vector3 newPos)
+    {
+        initialPos = newPos;
+    }
 
     //Get variables methods
     public int getNumberOfPings()
@@ -472,6 +478,11 @@ public class DataBase
     public bool getFromPoints()
     {
         return fromPoints;
+    }
+
+    public Vector3 getInitialPos()
+    {
+        return initialPos;
     }
 
 }

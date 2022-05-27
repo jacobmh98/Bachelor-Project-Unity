@@ -50,15 +50,20 @@ public class Controller
         db.setMaxWidth(sonarData.max_width_axis);
 
         //Changing values for sliders to be more user friendly (From 0 to x, instead of -x to x)
-        db.setSliderValueShallowDepth(Math.Abs(db.getShallowDepth()));
-        db.setSliderLimitShallowDepth(Math.Abs(db.getShallowDepth()));
+        db.setSliderValueShallowDepth(0);
+        db.setSliderLimitShallowDepth(0);
         db.setSliderValueDeepDepth(Math.Abs(db.getDeepDepth()));
         db.setSliderLimitDeepDepth(Math.Abs(db.getDeepDepth()));
         db.setSliderValueMinLength(0);
         db.setSliderLimitMinLength(0);
 
         //Different methods if the min length is positive instead of negative negative
-        if (db.getMinLength() < 0)
+        if (db.getMinLength() < 0 && db.getMaxLength() < 0)
+        {
+            db.setSliderValueMaxLength(Math.Abs(db.getMinLength()) + db.getMaxLength());
+            db.setSliderLimitMaxLength(Math.Abs(db.getMinLength()) + db.getMaxLength());
+        }
+        else if (db.getMinLength() < 0)
         {
             db.setSliderValueMaxLength(db.getMaxLength() + Math.Abs(db.getMinLength()));
             db.setSliderLimitMaxLength(db.getMaxLength() + Math.Abs(db.getMinLength()));
@@ -181,6 +186,10 @@ public class Controller
             nearestNeighbourDetection(points, initial_kDTree.ToArray());
         }
 
+
+
+        db.setInitialPos(points[0]);
+
     }
 
     private void outlierHeightDetection(List<Vector3> points, List<float> heightValues)
@@ -191,10 +200,10 @@ public class Controller
         bool nearestNeighbourEnabled = db.getNearestNeighbourEnabled();
         double outlierHeightThreshold = db.getOutlierHeightThreshold();
         int n = heightValues.Count;
-        float sumMean = 0;
-        double sumStd = 0;
-        float mean = 0;
+        double mean = 0;
+        double sumMean = 0;
         double standardDeviation = 0;
+        double sumStd = 0;
 
         //Summing over all height values to calculate the mean height
         for (int i = 0; i < n; i++)

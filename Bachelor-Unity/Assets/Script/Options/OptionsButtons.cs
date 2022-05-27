@@ -89,7 +89,7 @@ public class OptionsButtons : MonoBehaviour
             db.setNumberOfNeighbours(db.getDefaultNumberOfNeighbours());
         }
 
-        if (float.TryParse(neighbourDistanceInputField.text, out float neighbourDistance))
+        if (double.TryParse(neighbourDistanceInputField.text, out double neighbourDistance))
         {
             db.setNeighbourDistance(neighbourDistance);
         }
