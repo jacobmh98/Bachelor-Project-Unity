@@ -92,8 +92,7 @@ public class Controller
         List<IPoint> pointsDelaunay = new List<IPoint>();
         List<Vector3> boatPathPoints = new List<Vector3>();
 
-        // Lists for outlier detections
-        List<float> heightValues = new List<float>();
+        // Lists for nearest neighbour outlier detection
         List<double[]> initial_kDTree = new List<double[]>();
 
         //Getting values for pointloader into variables, to avoid excessive calls to the database class
@@ -151,12 +150,7 @@ public class Controller
                             newDeepDepth = (int)Math.Floor(point[1]);
                         }
                     }
-                    // Adding point to other lists for outlier removal functions to safe running over all points multiple times
-                    if (outlierHeightEnabled)
-                    {
-                        heightValues.Add(point[1]);
-                    }
-
+                    // Adding point to other lists for nearest neighbour detection algorithm
                     if (!outlierHeightEnabled && nearestNeighbourEnabled)
                     {
                         double[] toKDTreePoint = new double[] { point[0], point[1], point[2] };
@@ -179,7 +173,7 @@ public class Controller
 
         } else if (outlierHeightEnabled) 
         {
-            outlierHeightDetection(points, heightValues);
+            outlierHeightDetection(points);
 
         } else if (nearestNeighbourEnabled)
         {
@@ -192,14 +186,14 @@ public class Controller
 
     }
 
-    private void outlierHeightDetection(List<Vector3> points, List<float> heightValues)
+    private void outlierHeightDetection(List<Vector3> points)
     {
         List<Vector3> filteredPoints = new List<Vector3>();
         List<IPoint> pointsDelaunay = new List<IPoint>();
         List<double[]> initial_kDTree = new List<double[]>();
         bool nearestNeighbourEnabled = db.getNearestNeighbourEnabled();
         double outlierHeightThreshold = db.getOutlierHeightThreshold();
-        int n = heightValues.Count;
+        int n = points.Count;
         double mean = 0;
         double sumMean = 0;
         double standardDeviation = 0;
@@ -208,7 +202,7 @@ public class Controller
         //Summing over all height values to calculate the mean height
         for (int i = 0; i < n; i++)
         {
-            sumMean += heightValues[i];
+            sumMean += points[i][1];
         }
 
         //If there exists more than 1 element in the height list,
@@ -219,10 +213,9 @@ public class Controller
 
             for (int i = 0; i < n; i++)
             {
-                sumStd += Math.Pow(Math.Abs(heightValues[i] - mean), 2);
+                sumStd += Math.Pow(points[i][1] - mean, 2);
             }
-
-            standardDeviation = sumStd / n;
+            standardDeviation = Math.Sqrt(sumStd / n);
         }
 
         //Checking all points in the height list
@@ -230,23 +223,23 @@ public class Controller
         {
 
             //Points with a z score higher than the defined threshold will not be added to the new point list
-            if (Math.Abs((heightValues[i] - mean) / standardDeviation) < outlierHeightThreshold)
+            if (Math.Abs((points[i][1] - mean) / standardDeviation) < outlierHeightThreshold)
             {
                 filteredPoints.Add(points[i]);
 
                 if (!nearestNeighbourEnabled)
                 {
-                    pointsDelaunay.Add(new DelaunatorSharp.Point(points[i].x, points[i].z));
+                    pointsDelaunay.Add(new DelaunatorSharp.Point(points[i][0], points[i][2]));
 
                     //Finding the new shallow and deep depth values for color height map
                     // only if nearest neighbour is not enabled
                     if (newShallowDepth < points[i].y)
                     {
-                        newShallowDepth = (int)Math.Ceiling(points[i].y);
+                        newShallowDepth = (int)Math.Ceiling(points[i][1]);
                     }
                     else if (newDeepDepth > points[i].y)
                     {
-                        newDeepDepth = (int)Math.Floor(points[i].y);
+                        newDeepDepth = (int)Math.Floor(points[i][1]);
                     }
 
                 } else
