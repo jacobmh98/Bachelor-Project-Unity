@@ -157,7 +157,6 @@ public class Triangulate
             }
         }
         removedTriIterations++;
-        Debug.Log("removed " + removedTriangles + " triangles");
     }
 
     /**

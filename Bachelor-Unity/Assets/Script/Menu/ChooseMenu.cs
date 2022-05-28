@@ -36,8 +36,6 @@ public class ChooseMenu : MonoBehaviour
     public void RunVisualsWithPath()
     {
         string path = inputField.GetComponent<TMP_InputField>().text;
-        print(path);
-        print(File.Exists(path));
 
         //Check if the file path is valid/exists on the system
         if (File.Exists(path))

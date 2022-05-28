@@ -22,20 +22,10 @@ public class Controller
     public int newDeepDepth;
 
 
-    private Controller()
-    {
-        //Debug.Log("Controller");
-    }
+    private Controller() {}
 
     public void LoadController()
     {
-        //Debug.Log("Load controller");
-        if (String.IsNullOrEmpty(fileName))
-        {
-            fileName = @"C:\Users\kanne\Desktop\7k_data_extracted_rotated.json";
-            //fileName = @"C:\Users\Max\Desktop\7k_data_extracted_rotated.json";
-            //fileName = @"C:\Users\jacob\OneDrive\Dokumenter\GitHub\bachelor_project_teledyne\7k_data_extracted_rotated.json";
-        }
         string jsonString = File.ReadAllText(fileName);
         sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
 
@@ -180,10 +170,7 @@ public class Controller
             nearestNeighbourDetection(points, initial_kDTree.ToArray());
         }
 
-
-
         db.setInitialPos(points[0]);
-
     }
 
     private void outlierHeightDetection(List<Vector3> points)
@@ -229,6 +216,7 @@ public class Controller
 
                 if (!nearestNeighbourEnabled)
                 {
+                    //Adding x and z value to a list for the Delauney triangulation method
                     pointsDelaunay.Add(new DelaunatorSharp.Point(points[i][0], points[i][2]));
 
                     //Finding the new shallow and deep depth values for color height map
@@ -316,18 +304,7 @@ public class Controller
 
     public void setPath(string newPath)
     {
-        if (String.IsNullOrEmpty(newPath))
-        {
-            Debug.Log("newPath is null or empty!");
-            Debug.Log(newPath);
-            fileName = @"C:\Users\jacob\OneDrive\Dokumenter\GitHub\bachelor_project_teledyne\7k_data_extracted_rotated.json";
-
-        }
-        else
-        {
-            fileName = newPath;
-        }
-
+        fileName = newPath;
     }
 
 }

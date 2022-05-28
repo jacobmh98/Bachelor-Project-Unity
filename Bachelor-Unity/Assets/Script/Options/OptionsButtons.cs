@@ -31,8 +31,6 @@ public class OptionsButtons : MonoBehaviour
     {
         resetPointCloudControllerVariables();
         setOptionsVariables();
-
-        print("Saved settings!");
     }
 
     public void backButton()
