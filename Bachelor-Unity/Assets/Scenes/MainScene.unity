@@ -975,7 +975,7 @@ GameObject:
   - component: {fileID: 366573683}
   - component: {fileID: 366573682}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: BackButtonText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3407,7 +3407,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1143313094}
         m_TargetAssemblyTypeName: ControlsButtons, Assembly-CSharp
-        m_MethodName: backToOptions
+        m_MethodName: BackToOptionsButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

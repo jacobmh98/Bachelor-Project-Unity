@@ -6,8 +6,8 @@ using System.IO;
 
 public class ChooseMenu : MonoBehaviour
 {
-    Controller controller = Controller.getInstance();
     DataBase db = DataBase.getInstance();
+    Controller controller = Controller.getInstance();
 
     public GameObject inputField;
     public Image panel;
@@ -32,8 +32,9 @@ public class ChooseMenu : MonoBehaviour
 
     }
 
-    //Creates a Json file from the .s7k file
     public void RunVisualsWithPath()
+    /* Creates a JSON file from the chosen .s7k file
+    */
     {
         string path = inputField.GetComponent<TMP_InputField>().text;
 
@@ -74,14 +75,16 @@ public class ChooseMenu : MonoBehaviour
 
     }
 
-    //Changes the background to a new image (only used for when we switch to TemplateMenu)
     public void changeBackground()
+    /* Changes the background to a new image, only used for when switching to the template menu
+    */
     {
         panel.sprite = sprite;
     }
 
-    //Quits the program
     public void quitButton()
+    /* Quits the program
+    */
     {
         Application.Quit();
     }

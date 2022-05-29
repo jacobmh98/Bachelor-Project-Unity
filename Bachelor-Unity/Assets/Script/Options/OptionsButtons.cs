@@ -13,55 +13,36 @@ public class OptionsButtons : MonoBehaviour
     public Toggle nnFilter;
     public Toggle odFilter;
     public Toggle tgFilter;
-    public TMP_Dropdown triangulation;
     public Toggle edgeTriangleRemoval;
+    public TMP_Dropdown triangulation;
     public TMP_InputField noOfNeighbourInputField;
     public TMP_InputField neighbourDistanceInputField;
     public TMP_InputField outlierHeightThresholdInputField;
-
     public Image panel;
     public Sprite sprite;
 
-    public void changeBackground()
+    public void ChangeBackground()
     {
         panel.sprite = sprite;
-        runButton();
+        RunButton();
     }
-    public void runButton()
+    public void RunButton()
     {
-        resetPointCloudControllerVariables();
+        ResetPointCloudControllerVariables();
         setOptionsVariables();
     }
 
-    public void backButton()
+    public void BackButton()
     {
         db.setFromPoints(false);
     }
 
-    public void resetOptions()
-    {
-        //Retting values for sliders
-        DepthSlider.SetValues(db.getSliderLimitShallowDepth(), db.getSliderValueDeepDepth());
-        LengthSlider.SetValues(db.getSliderLimitMinLength(), db.getSliderLimitMaxLength());
-        WidthSlider.SetValues(db.getSliderLimitMinWidth(), db.getSliderLimitMaxWidth());
-
-        //Setting toggles to un checked
-        nnFilter.isOn = false;
-        odFilter.isOn = false;
-        tgFilter.isOn = false;
-        triangulation.value = 1;
-        edgeTriangleRemoval.isOn = false;
-
-        //Retting values for textfields
-        noOfNeighbourInputField.text = db.getDefaultNumberOfNeighbours().ToString();
-        neighbourDistanceInputField.text = db.getDefaultNeighbourDistance().ToString();
-        outlierHeightThresholdInputField.text = db.getDefaultOutlierHeightThreshold().ToString();
-
-    }
-
     public void setOptionsVariables()
+    /* When the run button is pressed, all the chosen values in options will be set in
+       the database
+    */
     {
-        //Setting values in the database to the values chosen in the sliders
+        // Setting values in the database to the values chosen in the sliders
         db.setSliderValueShallowDepth((int)DepthSlider.Values.minValue);
         db.setSliderValueDeepDepth((int)DepthSlider.Values.maxValue);
         db.setSliderValueMinLength((int)LengthSlider.Values.minValue);
@@ -69,14 +50,14 @@ public class OptionsButtons : MonoBehaviour
         db.setSliderValueMinWidth((int)WidthSlider.Values.minValue);
         db.setSliderValueMaxWidth((int)WidthSlider.Values.maxValue);
 
-        //Setting values in the database to the values picked in the checkboxes
+        // Setting values in the database to the values picked in the checkboxes
         db.setOutlierHeightEnabled(odFilter.isOn);
         db.setNearestNeighbourEnabled(nnFilter.isOn);
         db.setTriangulationEnabled(tgFilter.isOn);
         db.setTriangulationType(triangulation.value);
-        db.setEdgeTrianglesRemoved(edgeTriangleRemoval.isOn);
+        db.setEdgeTrianglesRemovalEnabled(edgeTriangleRemoval.isOn);
 
-        //Setting values in the database to the values in written in the textfields
+        // Setting values in the database to the values in written in the textfields
         // if the values written is not valid, the values is set to the default ones.
         if (int.TryParse(noOfNeighbourInputField.text, out int intResult))
         {
@@ -106,13 +87,39 @@ public class OptionsButtons : MonoBehaviour
         }
 
         if (db.getTriangulationEnabled())
+        {
             db.setShowMesh(true);
+        }
 
     }
 
-    // Resetting the variables in the controller box when running the point cloud
-    // to avoid all values when running new pointcloud
-    public void resetPointCloudControllerVariables()
+    public void ResetButton()
+    /* Action for the reset button, sets every checkbox to unchecked, and resets all
+       values to their default value.
+    */
+    {
+        // Setting values for sliders
+        DepthSlider.SetValues(db.getSliderLimitShallowDepth(), db.getSliderValueDeepDepth());
+        LengthSlider.SetValues(db.getSliderLimitMinLength(), db.getSliderLimitMaxLength());
+        WidthSlider.SetValues(db.getSliderLimitMinWidth(), db.getSliderLimitMaxWidth());
+
+        // Setting toggles to unchecked
+        nnFilter.isOn = false;
+        odFilter.isOn = false;
+        tgFilter.isOn = false;
+        triangulation.value = 1;
+        edgeTriangleRemoval.isOn = false;
+
+        // Setting values for textfields
+        noOfNeighbourInputField.text = db.getDefaultNumberOfNeighbours().ToString();
+        neighbourDistanceInputField.text = db.getDefaultNeighbourDistance().ToString();
+        outlierHeightThresholdInputField.text = db.getDefaultOutlierHeightThreshold().ToString();
+    }
+
+    public void ResetPointCloudControllerVariables()
+    /* Resetting the variables in the controller box when running the point cloud
+       to avoid all values when running new pointcloud
+    */
     {
         db.setShowMesh(false);
         db.setHeightMapEnabled(false);

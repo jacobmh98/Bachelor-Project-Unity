@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,17 +9,13 @@ public class PointCloudControls : MonoBehaviour
     void Start()
     {
         toggle = GetComponent<Toggle>();
-        toggle.onValueChanged.AddListener(delegate { valueChangeCheck(); });
+        toggle.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
     }
 
-    private void valueChangeCheck()
+    private void ValueChangeCheck()
     {
         db.setShowPointCloud(toggle.isOn);
         db.setUpdatePointCloud(true);
     }
 
-    void Update()
-    {
-        
-    }
 }

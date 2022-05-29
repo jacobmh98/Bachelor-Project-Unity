@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,11 +12,11 @@ public class PointColorControls : MonoBehaviour
     void Start()
     {
         toggle = GetComponent<Toggle>();
-        toggle.onValueChanged.AddListener(delegate { valueChangeCheck(); });
+        toggle.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
         scale.SetActive(toggle.isOn);
     }
 
-    private void valueChangeCheck()
+    private void ValueChangeCheck()
     {
         db.setPointCloudGradient(toggle.isOn);
         db.setUpdatePointColor(true);

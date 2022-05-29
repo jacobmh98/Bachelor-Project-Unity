@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
@@ -16,7 +14,6 @@ public class SetScale : MonoBehaviour
     public Toggle toggleHeightMap;
     public Toggle toggleGradient;
 
-    // Start is called before the first frame update
     void Start()
     {
 
@@ -46,7 +43,7 @@ public class SetScale : MonoBehaviour
         scale.SetActive(toggleHeightMap.isOn);
     }
 
-    public void scaleAppear()
+    public void ScaleAppear()
     {
         if (toggleGradient.isOn)
         {

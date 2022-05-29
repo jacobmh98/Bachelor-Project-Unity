@@ -538,7 +538,7 @@ GameObject:
   - component: {fileID: 169221452}
   - component: {fileID: 169221453}
   m_Layer: 5
-  m_Name: Text Area
+  m_Name: NeighbourAmountTextArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -591,7 +591,7 @@ GameObject:
   - component: {fileID: 211051332}
   - component: {fileID: 211051333}
   m_Layer: 5
-  m_Name: ODToggle
+  m_Name: HeightOutlierToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -667,7 +667,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 211051333}
         m_TargetAssemblyTypeName: OptionsMenu, Assembly-CSharp
-        m_MethodName: toggleOD
+        m_MethodName: HeightOutlierToggle
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1327,7 +1327,7 @@ GameObject:
   - component: {fileID: 407334928}
   - component: {fileID: 407334929}
   m_Layer: 5
-  m_Name: NNToggle
+  m_Name: NearestNeighbourToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1403,7 +1403,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 407334929}
         m_TargetAssemblyTypeName: OptionsMenu, Assembly-CSharp
-        m_MethodName: toggleNN
+        m_MethodName: NearestNeighbourToggle
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2389,7 +2389,7 @@ GameObject:
   - component: {fileID: 572228227}
   - component: {fileID: 572228228}
   m_Layer: 5
-  m_Name: Text Area
+  m_Name: OutlierHeightThresholdTextArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2711,7 +2711,7 @@ GameObject:
   - component: {fileID: 612920079}
   - component: {fileID: 612920078}
   m_Layer: 5
-  m_Name: PickButton
+  m_Name: PickTemplateButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2867,7 +2867,7 @@ GameObject:
   - component: {fileID: 622655679}
   - component: {fileID: 622655678}
   m_Layer: 5
-  m_Name: RemoveTrianglesToggle
+  m_Name: RemoveEdgeTrianglesToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2962,7 +2962,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 622655678}
         m_TargetAssemblyTypeName: OptionsMenu, Assembly-CSharp
-        m_MethodName: toggleEdgeTriangleRemoval
+        m_MethodName: EdgeTrianglesRemovalToggle
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4029,7 +4029,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 743613330}
         m_TargetAssemblyTypeName: OptionsMenu, Assembly-CSharp
-        m_MethodName: toggleTriangle
+        m_MethodName: TriangulationToggle
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4186,7 +4186,7 @@ GameObject:
   m_Component:
   - component: {fileID: 783409690}
   m_Layer: 5
-  m_Name: FilteringArea
+  m_Name: OutlierFilteringArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4232,7 +4232,7 @@ GameObject:
   - component: {fileID: 792783577}
   - component: {fileID: 792783576}
   m_Layer: 5
-  m_Name: ThresholdField
+  m_Name: OutlierHeightThresholdField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4539,7 +4539,7 @@ GameObject:
   - component: {fileID: 850939138}
   - component: {fileID: 850939139}
   m_Layer: 5
-  m_Name: Text Area
+  m_Name: NeighbourDistanceTextArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5073,7 +5073,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1299846682}
         m_TargetAssemblyTypeName: OptionsButtons, Assembly-CSharp
-        m_MethodName: resetOptions
+        m_MethodName: ResetButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6578,7 +6578,7 @@ GameObject:
   - component: {fileID: 1177683130}
   - component: {fileID: 1177683129}
   m_Layer: 5
-  m_Name: NeighbourField
+  m_Name: NeighbourAmountField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6752,7 +6752,7 @@ GameObject:
   - component: {fileID: 1178123975}
   - component: {fileID: 1178123974}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: PickTemplateText (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7494,7 +7494,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1299846682}
         m_TargetAssemblyTypeName: OptionsButtons, Assembly-CSharp
-        m_MethodName: runButton
+        m_MethodName: RunButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7560,8 +7560,8 @@ MonoBehaviour:
   nnFilter: {fileID: 407334928}
   odFilter: {fileID: 211051332}
   tgFilter: {fileID: 743613331}
-  triangulation: {fileID: 1446205921}
   edgeTriangleRemoval: {fileID: 622655679}
+  triangulation: {fileID: 1446205921}
   noOfNeighbourInputField: {fileID: 1177683129}
   neighbourDistanceInputField: {fileID: 1833532498}
   outlierHeightThresholdInputField: {fileID: 792783576}
@@ -8065,7 +8065,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1299846682}
         m_TargetAssemblyTypeName: OptionsButtons, Assembly-CSharp
-        m_MethodName: backButton
+        m_MethodName: BackButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8868,7 +8868,7 @@ GameObject:
   - component: {fileID: 1577399774}
   - component: {fileID: 1577399773}
   m_Layer: 5
-  m_Name: FilteringTitle
+  m_Name: OutlierFilteringTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9136,7 +9136,7 @@ GameObject:
   - component: {fileID: 1600165776}
   - component: {fileID: 1600165775}
   m_Layer: 5
-  m_Name: OptionsText
+  m_Name: OptionsTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10233,7 +10233,7 @@ GameObject:
   - component: {fileID: 1833532499}
   - component: {fileID: 1833532498}
   m_Layer: 5
-  m_Name: DistanceField
+  m_Name: NeighbourDistanceField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10474,7 +10474,7 @@ GameObject:
   - component: {fileID: 1891594997}
   - component: {fileID: 1891594996}
   m_Layer: 5
-  m_Name: LoadButton
+  m_Name: LoadFileButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

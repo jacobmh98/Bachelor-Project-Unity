@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -85,6 +83,7 @@ public class BoatPathRenderer : MonoBehaviour
                 var data = new Color(positions[index].x, positions[index].y, positions[index].z, particleSize);
                 texPosScale.SetPixel(x, y, data);
             }
+
         }
 
         texColor.Apply();
@@ -92,4 +91,5 @@ public class BoatPathRenderer : MonoBehaviour
         particleCount = (uint)positions.Length;
         toUpdate = true;
     }
+
 }

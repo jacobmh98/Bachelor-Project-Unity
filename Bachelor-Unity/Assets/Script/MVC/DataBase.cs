@@ -6,7 +6,7 @@ public class DataBase
 {
     public static DataBase db = new DataBase();
 
-    //Setting initial variables 
+    //Setting all initial variables 
 
     //Values from sonar data
     private int numberOfPings = 0;
@@ -43,7 +43,7 @@ public class DataBase
 
     //Values for check boxes in options
     private bool triangulationEnabled = false;
-    private bool edgeTrianglesRemoved = false;
+    private bool edgeTrianglesRemovalEnabled = false;
     private bool nearestNeighboursEnabled = false;
     private bool outlierHeightEnabled = false;
 
@@ -230,9 +230,9 @@ public class DataBase
     {
         triangulationType = newTriangulationType;
     }
-    public void setEdgeTrianglesRemoved(bool newEdgeTrianglesRemoved)
+    public void setEdgeTrianglesRemovalEnabled(bool newEdgeTrianglesRemovalEnabled)
     {
-        edgeTrianglesRemoved = newEdgeTrianglesRemoved;
+        edgeTrianglesRemovalEnabled = newEdgeTrianglesRemovalEnabled;
     }
     public void setHeightMapEnabled(bool newHeightMapEnabled)
     {
@@ -429,9 +429,9 @@ public class DataBase
     {
         return triangulationType;
     }
-    public bool getEdgeTrianglesRemoved()
+    public bool getEdgeTrianglesRemovalEnabled()
     {
-        return edgeTrianglesRemoved;
+        return edgeTrianglesRemovalEnabled;
     }
     public bool getHeightMapEnabled()
     {

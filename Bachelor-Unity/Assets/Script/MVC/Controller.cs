@@ -21,17 +21,17 @@ public class Controller
     public int newShallowDepth;
     public int newDeepDepth;
 
-
-    private Controller() {}
-
     public void LoadController()
+    /* Method used to load the JSON file, then setting values in the database
+       from the JSON file.
+    */
     {
         string jsonString = File.ReadAllText(fileName);
         sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
 
         db.setNumberOfPings(sonarData.no_pings);
 
-        //setting min and max values from pointcloud in database
+        // Setting min and max values from pointcloud in database
         db.setShallowDepth(sonarData.minimum_depth);
         db.setDeepDepth(sonarData.maximum_depth);
         db.setMinLength(sonarData.min_length_axis);
@@ -39,7 +39,7 @@ public class Controller
         db.setMinWidth(sonarData.min_width_axis);
         db.setMaxWidth(sonarData.max_width_axis);
 
-        //Changing values for sliders to be more user friendly (From 0 to x, instead of -x to x)
+        // Changing values for sliders to be more user friendly (From 0 to x, instead of -x to x)
         db.setSliderValueShallowDepth(0);
         db.setSliderLimitShallowDepth(0);
         db.setSliderValueDeepDepth(Math.Abs(db.getDeepDepth()));
@@ -47,7 +47,7 @@ public class Controller
         db.setSliderValueMinLength(0);
         db.setSliderLimitMinLength(0);
 
-        //Different methods if the min length is positive instead of negative negative
+        // Different methods if min and/or max length is negative.
         if (db.getMinLength() < 0 && db.getMaxLength() < 0)
         {
             db.setSliderValueMaxLength(Math.Abs(db.getMinLength()) + db.getMaxLength());
@@ -64,8 +64,8 @@ public class Controller
             db.setSliderLimitMaxLength(db.getMaxLength() - db.getMinLength());
         }
 
-        //The width slider has values from -z to z, since the boat is roughly at z = 0 when sending out a ping
-        //So values will go from negative to the left of boat and positive to the right
+        // The width slider has values from -z to z, since the boat is roughly at z = 0 when sending out the
+        // first ping, so values will go from negative to the left of boat and positive to the right
         db.setSliderValueMinWidth(db.getMinWidth());
         db.setSliderValueMaxWidth(db.getMaxWidth());
         db.setSliderLimitMinWidth(db.getMinWidth());
@@ -75,18 +75,24 @@ public class Controller
 
     //Method to load all the points from the JSON file, and filter away points from the chosen option filters
     public void PointLoader()
+    /* Loads points from the JSON file, removes points outside slider values and then calls
+       OutlierHeightDetection and/or NearestNeighbourDetection if enabled from options, else
+       stores the values in the database.
+    */
     {
         // Variables for point coordinates
         Vector3 point;
         List<Vector3> points = new List<Vector3>();
+        // Delauney points is all points' x and z values
         List<IPoint> pointsDelaunay = new List<IPoint>();
+        // Lists for nearest neighbour outlier detection
+        List<double[]> kDTreePoints = new List<double[]>();
+        // Boat path points is location of the boat at every ping
         List<Vector3> boatPathPoints = new List<Vector3>();
 
-        // Lists for nearest neighbour outlier detection
-        List<double[]> initial_kDTree = new List<double[]>();
-
-        //Getting values for pointloader into variables, to avoid excessive calls to the database class
-        //and transforming them back from 0 to x to the original -x to x form the points are on
+        // Getting values from database for pointloader variables, to avoid excessive calls to the
+        // database class. Then transforming them back from 0 to x to the original min_x to max_x
+        // form the points in the JSON file are on.
         int finalShallowDepth = -db.getSliderValueShallowDepth();
         int finalDeepDepth = -db.getSliderValueDeepDepth();
         int finalMinLengthAxis = db.getSliderValueMinLength() + db.getMinLength();
@@ -94,12 +100,12 @@ public class Controller
         int finalMinWidthAxis = db.getSliderValueMinWidth();
         int finalMaxWidthAxis = db.getSliderValueMaxWidth();
 
-        //Fetching values from the database
+        // Fetching values from the database
         bool outlierHeightEnabled = db.getOutlierHeightEnabled();
         bool nearestNeighbourEnabled = db.getNearestNeighbourEnabled();
         int numberOfPings = db.getNumberOfPings();
 
-        //Storing new min and max depth for correct colours in the color height map mesh
+        // Storing new min and max depth for correct colours in the color height map mesh
         // since the original min and max depth can be filtered away in the pointloader
         newShallowDepth = int.MinValue + 1;
         newDeepDepth = int.MaxValue - 1;
@@ -117,19 +123,19 @@ public class Controller
                 // Setting coordinates for the single current point
                 point = new Vector3((float)sonarData.pings[i].coords_x[j], (float)sonarData.pings[i].coords_z[j], (float)sonarData.pings[i].coords_y[j]);
 
-                //Filtering away values not included in the sliders
+                // Filtering away values not included in the sliders
                 if ((point[1] < finalShallowDepth && point[1] > finalDeepDepth)
                     && (point[0] > finalMinLengthAxis && point[0] < finalMaxLengthAxis)
                     && (point[2] > finalMinWidthAxis && point[2] < finalMaxWidthAxis))
                 {
-                    // adding point to pointcloud
+                    // Adding point to pointcloud
                     points.Add(point);
                     
                     if (!outlierHeightEnabled && !nearestNeighbourEnabled)
                     {
                         pointsDelaunay.Add(new DelaunatorSharp.Point(point[0], point[2]));
 
-                        //Finding the new shallow and deep depth values for color height map
+                        // Finding the new shallow and deep depth values for color height map
                         if (newShallowDepth < point[1])
                         {
                             newShallowDepth = (int)Math.Ceiling(point[1]);
@@ -144,7 +150,7 @@ public class Controller
                     if (!outlierHeightEnabled && nearestNeighbourEnabled)
                     {
                         double[] toKDTreePoint = new double[] { point[0], point[1], point[2] };
-                        initial_kDTree.Add(toKDTreePoint);
+                        kDTreePoints.Add(toKDTreePoint);
                     }
                     
                 }
@@ -153,46 +159,52 @@ public class Controller
 
         }
 
-        // Storing values in database unless they will be changed in outlier removing methods
-        if (!outlierHeightEnabled && !nearestNeighbourEnabled)
+        // Checking if either outlier height or nearest neighbour is enabled in options
+        if (outlierHeightEnabled) 
         {
+            OutlierHeightDetection(points);
+
+        } else if (nearestNeighbourEnabled)
+        {
+            NearestNeighbourDetection(points, kDTreePoints.ToArray());
+        }
+        else
+        {
+            // Setting values in the database if neither outlier detection is enabled
             db.setPoints(points);
             db.setPointsDelauney(pointsDelaunay);
             db.setNewShallowDepth(newShallowDepth);
             db.setNewDeepDepth(newDeepDepth);
-
-        } else if (outlierHeightEnabled) 
-        {
-            outlierHeightDetection(points);
-
-        } else if (nearestNeighbourEnabled)
-        {
-            nearestNeighbourDetection(points, initial_kDTree.ToArray());
         }
 
-        db.setInitialPos(points[0]);
     }
 
-    private void outlierHeightDetection(List<Vector3> points)
+    private void OutlierHeightDetection(List<Vector3> points)
+    /* Calculates Z score for all points' y-values, and removes the points with a Z score
+       above the chosen threshold.
+
+       Args:
+            points: A Vector3 list
+    */
     {
-        List<Vector3> filteredPoints = new List<Vector3>();
-        List<IPoint> pointsDelaunay = new List<IPoint>();
-        List<double[]> initial_kDTree = new List<double[]>();
+        List<Vector3> newPoints = new List<Vector3>();
+        List<IPoint> delauneyPoints = new List<IPoint>();
+        List<double[]> kDTreePoints = new List<double[]>();
+        int n = points.Count;
         bool nearestNeighbourEnabled = db.getNearestNeighbourEnabled();
         double outlierHeightThreshold = db.getOutlierHeightThreshold();
-        int n = points.Count;
         double mean = 0;
-        double sumMean = 0;
         double standardDeviation = 0;
+        double sumMean = 0;
         double sumStd = 0;
 
-        //Summing over all height values to calculate the mean height
+        // Summing over all height values to calculate the mean height
         for (int i = 0; i < n; i++)
         {
             sumMean += points[i][1];
         }
 
-        //If there exists more than 1 element in the height list,
+        // If there exists more than 1 element in the height list,
         // then the mean and standard deviation can be calculated
         if (n > 0)
         {
@@ -205,21 +217,21 @@ public class Controller
             standardDeviation = Math.Sqrt(sumStd / n);
         }
 
-        //Checking all points in the height list
+        // Checking all points in the height list
         for (int i = 0; i < n; i++)
         {
 
-            //Points with a z score higher than the defined threshold will not be added to the new point list
+            // Points with a Z score higher than the defined threshold will not be added to the new point list
             if (Math.Abs((points[i][1] - mean) / standardDeviation) < outlierHeightThreshold)
             {
-                filteredPoints.Add(points[i]);
+                newPoints.Add(points[i]);
 
                 if (!nearestNeighbourEnabled)
                 {
-                    //Adding x and z value to a list for the Delauney triangulation method
-                    pointsDelaunay.Add(new DelaunatorSharp.Point(points[i][0], points[i][2]));
+                    // Adding x and z value to a list for the Delauney triangulation method
+                    delauneyPoints.Add(new DelaunatorSharp.Point(points[i][0], points[i][2]));
 
-                    //Finding the new shallow and deep depth values for color height map
+                    // Finding the new shallow and deep depth values for color height map
                     // only if nearest neighbour is not enabled
                     if (newShallowDepth < points[i].y)
                     {
@@ -234,7 +246,7 @@ public class Controller
                 {   
                     // Setting up list for kDtree creation in nearest neighbour method
                     double[] kDTreePoint = new double[] { points[i][0], points[i][1], points[i][2] };
-                    initial_kDTree.Add(kDTreePoint);   
+                    kDTreePoints.Add(kDTreePoint);   
                 }
 
             }
@@ -244,18 +256,25 @@ public class Controller
         // Storing values in database, unless they will be changed in nearest neighbour method
         if (!nearestNeighbourEnabled)
         {
-            db.setPoints(filteredPoints);
-            db.setPointsDelauney(pointsDelaunay);
+            db.setPoints(newPoints);
+            db.setPointsDelauney(delauneyPoints);
             db.setNewShallowDepth(newShallowDepth);
             db.setNewDeepDepth(newDeepDepth);
         } else
         {
-            nearestNeighbourDetection(filteredPoints, initial_kDTree.ToArray());
+            NearestNeighbourDetection(newPoints, kDTreePoints.ToArray());
         }
 
     }
 
-    private void nearestNeighbourDetection(List<Vector3> points, double[][] initial_kDTree)
+    private void NearestNeighbourDetection(List<Vector3> points, double[][] initial_kDTree)
+    /* Removes points that have less than the chosen amount of neighbours, within a sphere with
+       a specified radius.
+
+       Args:
+            points: A Vector3 list
+            initial_kDTree: A 2 dimensional double array
+    */
     {
         List<Vector3> newPoints = new List<Vector3>();
         List<IPoint> pointsDelaunay = new List<IPoint>();
@@ -289,7 +308,6 @@ public class Controller
             }
 
         }
-
         // Storing the final values in the database
         db.setPoints(newPoints);
         db.setPointsDelauney(pointsDelaunay);
@@ -297,6 +315,7 @@ public class Controller
         db.setNewDeepDepth(newDeepDepth);
     }
 
+    private Controller() { }
     public static Controller getInstance()
     {
         return controller;

@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using DelaunatorSharp;
 
 public class TemplateMenu : MonoBehaviour
 {
@@ -20,15 +16,13 @@ public class TemplateMenu : MonoBehaviour
 
     public void loadTemplate()
     {
+        // Checking which template has been picked, then setting default values into database
         if (dropdown.value == 0)
         {
             controller.setPath(Application.streamingAssetsPath + @"/NBS-Snippets-Sensor-WC_JSON.json");
             db.setDefaultNumberOfNeighbours(30);
             db.setDefaultNeighbourDistance(1);
             db.setDefaultOutlierHeightThreshold(1);
-            input1.text = db.getNumberOfNeighbours().ToString();
-            input2.text = db.getNeighbourDistance().ToString();
-            input3.text = db.getOutlierHeightThreshold().ToString();
 
         }
         else if (dropdown.value == 1)
@@ -37,9 +31,6 @@ public class TemplateMenu : MonoBehaviour
             db.setDefaultNumberOfNeighbours(120);
             db.setDefaultNeighbourDistance(1.3);
             db.setDefaultOutlierHeightThreshold(5);
-            input1.text = db.getNumberOfNeighbours().ToString();
-            input2.text = db.getNeighbourDistance().ToString();
-            input3.text = db.getOutlierHeightThreshold().ToString();
         } 
         else if (dropdown.value == 2)
         {
@@ -47,9 +38,6 @@ public class TemplateMenu : MonoBehaviour
             db.setDefaultNumberOfNeighbours(20);
             db.setDefaultNeighbourDistance(1.5);
             db.setDefaultOutlierHeightThreshold(3);
-            input1.text = db.getNumberOfNeighbours().ToString();
-            input2.text = db.getNeighbourDistance().ToString();
-            input3.text = db.getOutlierHeightThreshold().ToString();
         } 
         else if (dropdown.value == 3)
         {
@@ -57,9 +45,6 @@ public class TemplateMenu : MonoBehaviour
             db.setDefaultNumberOfNeighbours(20);
             db.setDefaultNeighbourDistance(1.5);
             db.setDefaultOutlierHeightThreshold(3);
-            input1.text = db.getNumberOfNeighbours().ToString();
-            input2.text = db.getNeighbourDistance().ToString();
-            input3.text = db.getOutlierHeightThreshold().ToString();
         } 
         else if (dropdown.value == 4)
         {
@@ -67,9 +52,6 @@ public class TemplateMenu : MonoBehaviour
             db.setDefaultNumberOfNeighbours(25);
             db.setDefaultNeighbourDistance(0.8);
             db.setDefaultOutlierHeightThreshold(2);
-            input1.text = db.getNumberOfNeighbours().ToString();
-            input2.text = db.getNeighbourDistance().ToString();
-            input3.text = db.getOutlierHeightThreshold().ToString();
         } 
         else if (dropdown.value == 5)
         {
@@ -77,9 +59,6 @@ public class TemplateMenu : MonoBehaviour
             db.setDefaultNumberOfNeighbours(40);
             db.setDefaultNeighbourDistance(0.9);
             db.setDefaultOutlierHeightThreshold(3);
-            input1.text = db.getNumberOfNeighbours().ToString();
-            input2.text = db.getNeighbourDistance().ToString();
-            input3.text = db.getOutlierHeightThreshold().ToString();
         } 
         else if (dropdown.value == 6)
         {
@@ -87,9 +66,6 @@ public class TemplateMenu : MonoBehaviour
             db.setDefaultNumberOfNeighbours(30);
             db.setDefaultNeighbourDistance(0.8);
             db.setDefaultOutlierHeightThreshold(5.5);
-            input1.text = db.getNumberOfNeighbours().ToString();
-            input2.text = db.getNeighbourDistance().ToString();
-            input3.text = db.getOutlierHeightThreshold().ToString();
         }
         else if (dropdown.value == 7)
         {
@@ -97,32 +73,15 @@ public class TemplateMenu : MonoBehaviour
             db.setDefaultNumberOfNeighbours(50);
             db.setDefaultNeighbourDistance(10);
             db.setDefaultOutlierHeightThreshold(99);
-            input1.text = db.getNumberOfNeighbours().ToString();
-            input2.text = db.getNeighbourDistance().ToString();
-            input3.text = db.getOutlierHeightThreshold().ToString();
         }
 
+        // Calling the LoadController method in Controller with the chosen JSON file
         controller.LoadController();
-
     }
 
-    public void changeBackground()
+    public void ChangeBackground()
     {
         panel.sprite = sprite;
-    }
-
-    // Method to reset values in database between loaded files
-    public void resetData()
-    {
-        List<Vector3> points = new List<Vector3>();
-        List<Vector3> boatPathPoints = new List<Vector3>();
-        List<IPoint> pointsDelaunay = new List<IPoint>();
-        List<int> triangles = new List<int>();
-
-        db.setPoints(points);
-        db.setBoatPathPoints(boatPathPoints);
-        db.setPointsDelauney(pointsDelaunay);
-        db.setTriangles(triangles);
     }
 
 }
