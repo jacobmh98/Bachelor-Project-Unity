@@ -81,7 +81,7 @@ public class Controller
     */
     {
         // Variables for point coordinates
-        Vector3 point;
+        Vector3 point = new Vector3();
         List<Vector3> points = new List<Vector3>();
         // Delauney points is all points' x and z values
         List<IPoint> pointsDelaunay = new List<IPoint>();
@@ -105,6 +105,9 @@ public class Controller
         bool nearestNeighbourEnabled = db.getNearestNeighbourEnabled();
         int numberOfPings = db.getNumberOfPings();
 
+        // Center point of point cloud, used for setting the initial camera angle
+        Vector3 centerPoint = new Vector3();
+
         // Storing new min and max depth for correct colours in the color height map mesh
         // since the original min and max depth can be filtered away in the pointloader
         newShallowDepth = int.MinValue + 1;
@@ -122,6 +125,7 @@ public class Controller
             {
                 // Setting coordinates for the single current point
                 point = new Vector3((float)sonarData.pings[i].coords_x[j], (float)sonarData.pings[i].coords_z[j], (float)sonarData.pings[i].coords_y[j]);
+                centerPoint += point;
 
                 // Filtering away values not included in the sliders
                 if ((point[1] < finalShallowDepth && point[1] > finalDeepDepth)
@@ -158,6 +162,9 @@ public class Controller
             }
 
         }
+
+        centerPoint = centerPoint / points.Count;
+        db.setCenterPoint(centerPoint);
 
         // Checking if either outlier height or nearest neighbour is enabled in options
         if (outlierHeightEnabled) 
@@ -285,7 +292,6 @@ public class Controller
 
         for (int i = 0; i < points.Count; i++)
         {
-
             double[] currPoint = new double[] { points[i].x, points[i].y, points[i].z };
             List<NodeDistance<KDTreeNode<int>>> neighbours = kDTree.Nearest(currPoint, radius: neighbourDistance);
 

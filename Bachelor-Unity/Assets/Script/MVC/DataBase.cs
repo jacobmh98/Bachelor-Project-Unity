@@ -79,6 +79,8 @@ public class DataBase
     // Variables for position of object to show scaling in pointcloud
     private Vector3 initialPos;
 
+    // Center point of point cloud
+    private Vector3 centerPoint;
 
     private DataBase() {}
     public static DataBase getInstance()
@@ -283,6 +285,10 @@ public class DataBase
     {
         initialPos = newPos;
     }
+    public void setCenterPoint(Vector3 newCenterPoint)
+    {
+        centerPoint = newCenterPoint;
+    }
 
     //Get variables methods
     public int getNumberOfPings()
@@ -479,10 +485,13 @@ public class DataBase
     {
         return fromPoints;
     }
-
     public Vector3 getInitialPos()
     {
         return initialPos;
+    }
+    public Vector3 getCenterPoint()
+    {
+        return centerPoint;
     }
 
 }
