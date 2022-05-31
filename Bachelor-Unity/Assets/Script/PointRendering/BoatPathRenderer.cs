@@ -21,6 +21,7 @@ public class BoatPathRenderer : MonoBehaviour
 
     private void Start()
     {
+        this.gameObject.GetComponent<Renderer>().enabled = false;
         int finalShallowDepth = db.getNewShallowDepth();
         int finalDeepDepth = db.getNewDeepDepth();
 
@@ -36,7 +37,7 @@ public class BoatPathRenderer : MonoBehaviour
             //colorsGradient[x] = gradient.Evaluate(height);
             colors[x] = new Color(0.8f, 0.8f, 0.8f);
         }
-
+        
         SetParticles(positions, colors);
     }
 
@@ -52,17 +53,16 @@ public class BoatPathRenderer : MonoBehaviour
             vfx.SetTexture(Shader.PropertyToID("TexPosScale"), texPosScale);
             vfx.SetUInt(Shader.PropertyToID("Resolution"), resolution);
         }
-
-        /*if (db.getUpdatePointCloud() && db.getShowPointCloud())
+        if (db.getUpdateBoatPath() && db.getShowBoatPathPoints())
         {
             this.gameObject.GetComponent<Renderer>().enabled = true;
-            db.setUpdatePointCloud(false);
+            db.setUpdateBoatPath(false);
         }
-        else if (db.getUpdatePointCloud() && !db.getShowPointCloud())
+        else if (db.getUpdateBoatPath() && !db.getShowBoatPathPoints())
         {
             this.gameObject.GetComponent<Renderer>().enabled = false;
-            db.setUpdatePointCloud(false);
-        }*/
+            db.setUpdateBoatPath(false);
+        }
 
     }
 

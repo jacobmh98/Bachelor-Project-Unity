@@ -125,6 +125,7 @@ public class OptionsButtons : MonoBehaviour
         db.setHeightMapEnabled(false);
         db.setShowHeightMap(false);
         db.setShowPointCloud(true);
+        db.setShowBoatPathPoints(false);
         db.setParticleSize(0.05f);
         db.setUpdateHeightMap(false);
         db.setUpdateOceanFloor(false);
@@ -132,6 +133,7 @@ public class OptionsButtons : MonoBehaviour
         db.setUpdatePointSize(false);
         db.setPointCloudGradient(false);
         db.setUpdatePointColor(false);
+        
     }
 
 }

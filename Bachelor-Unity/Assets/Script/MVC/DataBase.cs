@@ -65,6 +65,7 @@ public class DataBase
     private bool heightMapEnabled = false;
     private bool showHeightMap = false;
     private bool showPointCloud = true;
+    private bool showBoatPathPoints = false;
     private float particleSize = 0.05f;
 
     // Variables set if game object should update
@@ -74,6 +75,7 @@ public class DataBase
     private bool updatePointSize = false;
     private bool pointCloudGradient = false;
     private bool updatePointColor = false;
+    private bool updateBoatPath = false;
     private bool fromPoints = false;
 
     // Variables for position of object to show scaling in pointcloud
@@ -248,6 +250,10 @@ public class DataBase
     {
         showPointCloud = newShowPointCloud;
     }
+    public void setShowBoatPathPoints(bool newShowBoatPathPoints)
+    {
+        showBoatPathPoints = newShowBoatPathPoints;
+    }
     public void setUpdateHeightMap(bool newUpdateHeightMap)
     {
         updateHeightMap = newUpdateHeightMap;
@@ -263,6 +269,10 @@ public class DataBase
     public void setUpdatePointSize(bool newUpdatePointSize)
     {
         updatePointSize = newUpdatePointSize;
+    }
+    public void setUpdateBoatPath(bool newUpdateBoatPath)
+    {
+        updateBoatPath = newUpdateBoatPath;
     }
     public void setParticleSize(float newParticleSize)
     {
@@ -451,7 +461,10 @@ public class DataBase
     {
         return showPointCloud;
     }
-
+    public bool getShowBoatPathPoints()
+    {
+        return showBoatPathPoints;
+    }
     public bool getUpdateHeightMap()
     {
         return updateHeightMap;
@@ -468,7 +481,10 @@ public class DataBase
     {
         return updatePointSize;
     }
-
+    public bool getUpdateBoatPath()
+    {
+        return updateBoatPath;
+    }
     public float getParticleSize()
     {
         return particleSize;
