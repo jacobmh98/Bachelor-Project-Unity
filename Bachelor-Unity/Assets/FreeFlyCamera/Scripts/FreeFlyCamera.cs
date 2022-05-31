@@ -88,6 +88,8 @@ public class FreeFlyCamera : MonoBehaviour
     private Vector3 _initPosition;
     private Vector3 _initRotation;
 
+    private DataBase db = DataBase.getInstance();
+
     Transform directionalLight;
     bool lightLock = true;
 
@@ -105,7 +107,22 @@ public class FreeFlyCamera : MonoBehaviour
         directionalLight = GameObject.Find("Directional Light").GetComponent<Transform>();
 
         _initPosition = transform.position;
-        _initRotation = transform.eulerAngles;
+        
+
+        Vector3 a = new Vector3(0.0f, 0.0f, 1.0f);
+        Vector3 b = db.getCenterPoint();
+        b[1] = 0;
+
+        float abDot = a[0] * b[0] + a[1] + b[1] + a[2] + b[2];
+        float aMag = Mathf.Sqrt(Mathf.Pow(a[0], 2) + Mathf.Pow(a[1], 2) + Mathf.Pow(a[2], 2));
+        float bMag = Mathf.Sqrt(Mathf.Pow(b[0], 2) + Mathf.Pow(b[1], 2) + Mathf.Pow(b[2], 2));
+
+        float angle1 = Mathf.Atan2(b[2] * a[0] - b[0] * a[2], b[0] * a[0] + b[2] * a[2]);
+        float angle2 = Vector3.Angle(a, b);
+
+        print("angles " + - angle1 * 180/Mathf.PI + " " + angle2);
+        _initRotation = (new Vector3(0, - angle1 * 180/Mathf.PI, 0));
+        transform.rotation = Quaternion.Euler(new Vector3(0, - angle1 * 180 / Mathf.PI, 0));
     }
 
     private void OnEnable()
