@@ -66,6 +66,7 @@ public class DataBase
     private bool showHeightMap = false;
     private bool showPointCloud = true;
     private bool showBoatPathPoints = false;
+    private bool lightLocked = true;
     private float particleSize = 0.05f;
 
     // Variables set if game object should update
@@ -253,6 +254,10 @@ public class DataBase
     public void setShowBoatPathPoints(bool newShowBoatPathPoints)
     {
         showBoatPathPoints = newShowBoatPathPoints;
+    }
+    public void setLightLocked(bool newLightLocked)
+    {
+        lightLocked = newLightLocked;
     }
     public void setUpdateHeightMap(bool newUpdateHeightMap)
     {
@@ -464,6 +469,10 @@ public class DataBase
     public bool getShowBoatPathPoints()
     {
         return showBoatPathPoints;
+    }
+    public bool getLightLocked()
+    {
+        return lightLocked;
     }
     public bool getUpdateHeightMap()
     {

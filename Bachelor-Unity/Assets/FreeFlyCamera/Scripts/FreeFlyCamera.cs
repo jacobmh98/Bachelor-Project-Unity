@@ -91,6 +91,7 @@ public class FreeFlyCamera : MonoBehaviour
     private DataBase db = DataBase.getInstance();
 
     Transform directionalLight;
+    GameObject lockImage;
     bool lightLock = true;
 
 #if UNITY_EDITOR
@@ -104,7 +105,9 @@ public class FreeFlyCamera : MonoBehaviour
 
     private void Start()
     {
+
         directionalLight = GameObject.Find("Directional Light").GetComponent<Transform>();
+        lockImage = GameObject.Find("/Canvas/LightLock/LockImage");
 
         _initPosition = transform.position;
         
@@ -150,6 +153,8 @@ public class FreeFlyCamera : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space))
         {
             lightLock = !lightLock;
+            lockImage.SetActive(lightLock);
+            db.setLightLocked(lightLock);
         }
 
         // Apply cursor state
