@@ -87,7 +87,10 @@ public class Controller
         List<IPoint> pointsDelaunay = new List<IPoint>();
         // Lists for nearest neighbour outlier detection
         List<double[]> kDTreePoints = new List<double[]>();
+
         // Boat path points is location of the boat at every ping
+        Vector3 boatPointLeft = new Vector3();
+        Vector3 boatPointRight= new Vector3();
         List<Vector3> boatPathPoints = new List<Vector3>();
 
         // Getting values from database for pointloader variables, to avoid excessive calls to the
@@ -115,13 +118,19 @@ public class Controller
 
         for (int i = 0; i < numberOfPings; i++)
         {
-            /* Calculated wrong in the python program
-            boatPoint = new Vector3((float)sonarData.pings[i].ping_boat_coord[0], 
-                                    (float)sonarData.pings[i].ping_boat_coord[2], 
-                                    (float)sonarData.pings[i].ping_boat_coord[1]);
-            */
+            // Calculating boat path, translate points left and right to create a path inbetween them
+            boatPointLeft = new Vector3((float)sonarData.pings[i].ping_boat_coord[0], 
+                                        (float)sonarData.pings[i].ping_boat_coord[2], 
+                                        (float)sonarData.pings[i].ping_boat_coord[1]-1f);
+            boatPointRight = new Vector3((float)sonarData.pings[i].ping_boat_coord[0],
+                                         (float)sonarData.pings[i].ping_boat_coord[2],
+                                         (float)sonarData.pings[i].ping_boat_coord[1]+1f);
 
-             for (int j = 0; j < sonarData.pings[i].no_points; j++)
+            // Adding the calculated points to the boat path list
+            boatPathPoints.Add(boatPointLeft);
+            boatPathPoints.Add(boatPointRight);
+
+            for (int j = 0; j < sonarData.pings[i].no_points; j++)
             {
                 // Setting coordinates for the single current point
                 point = new Vector3((float)sonarData.pings[i].coords_x[j], (float)sonarData.pings[i].coords_z[j], (float)sonarData.pings[i].coords_y[j]);
@@ -165,6 +174,8 @@ public class Controller
 
         centerPoint = centerPoint / points.Count;
         db.setCenterPoint(centerPoint);
+
+        db.setBoatPathPoints(boatPathPoints);
 
         // Checking if either outlier height or nearest neighbour is enabled in options
         if (outlierHeightEnabled) 

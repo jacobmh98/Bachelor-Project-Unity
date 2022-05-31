@@ -34,7 +34,7 @@ public class BoatPathRenderer : MonoBehaviour
         {
             //float height = Mathf.InverseLerp(finalDeepDepth, finalShallowDepth, positions[x].y);
             //colorsGradient[x] = gradient.Evaluate(height);
-            colors[x] = new Color(1, 0, 0);
+            colors[x] = new Color(0.8f, 0.8f, 0.8f);
         }
 
         SetParticles(positions, colors);
@@ -68,7 +68,7 @@ public class BoatPathRenderer : MonoBehaviour
 
     public void SetParticles(Vector3[] positions, Color[] colors)
     {
-        particleSize = db.getParticleSize();
+        particleSize = 0.1f;
         texColor = new Texture2D(positions.Length > (int)resolution ? (int)resolution : positions.Length, Mathf.Clamp(positions.Length / (int)resolution, 1, (int)resolution), TextureFormat.RGBAFloat, false);
         texPosScale = new Texture2D(positions.Length > (int)resolution ? (int)resolution : positions.Length, Mathf.Clamp(positions.Length / (int)resolution, 1, (int)resolution), TextureFormat.RGBAFloat, false);
         int texWidth = texColor.width;
