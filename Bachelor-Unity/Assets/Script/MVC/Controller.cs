@@ -118,17 +118,12 @@ public class Controller
 
         for (int i = 0; i < numberOfPings; i++)
         {
-            // Calculating boat path, translate points left and right to create a path inbetween them
-            boatPointLeft = new Vector3((float)sonarData.pings[i].ping_boat_coord[0], 
-                                        (float)sonarData.pings[i].ping_boat_coord[2], 
-                                        (float)sonarData.pings[i].ping_boat_coord[1]-1f);
-            boatPointRight = new Vector3((float)sonarData.pings[i].ping_boat_coord[0],
-                                         (float)sonarData.pings[i].ping_boat_coord[2],
-                                         (float)sonarData.pings[i].ping_boat_coord[1]+1f);
 
-            // Adding the calculated points to the boat path list
-            boatPathPoints.Add(boatPointLeft);
-            boatPathPoints.Add(boatPointRight);
+
+
+            boatPathPoints.Add(new Vector3((float)sonarData.pings[i].ping_boat_coord[0],
+                                            0,
+                                            (float)sonarData.pings[i].ping_boat_coord[1]));
 
             for (int j = 0; j < sonarData.pings[i].no_points; j++)
             {
