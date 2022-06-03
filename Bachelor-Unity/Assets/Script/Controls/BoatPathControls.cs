@@ -14,13 +14,12 @@ public class BoatPathControls : MonoBehaviour
     {
         toggle = GetComponent<Toggle>();
         toggle.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
-        print(db.getShowBoatPathPoints().ToString());
     }
 
     private void ValueChangeCheck()
     {
         db.setShowBoatPathPoints(toggle.isOn);
         db.setUpdateBoatPath(true);
-        print(db.getShowBoatPathPoints().ToString());
     }
+
 }

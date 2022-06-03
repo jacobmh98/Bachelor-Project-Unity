@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1641,7 +1641,6 @@ MonoBehaviour:
     m_Mode: 0
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
-  particleSize: 0.05
 --- !u!73398921 &490807504
 VFXRenderer:
   serializedVersion: 1
@@ -2556,7 +2555,7 @@ GameObject:
   - component: {fileID: 629403749}
   - component: {fileID: 629403750}
   m_Layer: 0
-  m_Name: heightmap
+  m_Name: HeightmapToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2729,7 +2728,7 @@ GameObject:
   - component: {fileID: 702319936}
   - component: {fileID: 702319937}
   m_Layer: 0
-  m_Name: oceanfloor
+  m_Name: OceanFloorToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3164,6 +3163,7 @@ MonoBehaviour:
   textHalf: {fileID: 1816811136}
   textDeep: {fileID: 901585966}
   scale: {fileID: 919677864}
+  toggleDisplay: {fileID: 2052001737}
   toggleHeightMap: {fileID: 629403750}
   toggleGradient: {fileID: 1329251262}
 --- !u!1 &937288824
@@ -3305,6 +3305,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6afbaf9e572f5794db7d88ce84b9ca54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scale: {fileID: 919677864}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -5885,6 +5886,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7842de550697cb44faa424b9c1405b4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scale: {fileID: 919677864}
+  toggleGradient: {fileID: 1329251262}
+  toggleHeightmap: {fileID: 629403750}
 --- !u!1 &2088028065
 GameObject:
   m_ObjectHideFlags: 0
@@ -6066,7 +6070,7 @@ GameObject:
   - component: {fileID: 2123315744}
   - component: {fileID: 2123315745}
   m_Layer: 0
-  m_Name: none
+  m_Name: NoneToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

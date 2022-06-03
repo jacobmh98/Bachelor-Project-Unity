@@ -17,7 +17,7 @@ public class GenerateMesh : MonoBehaviour
     private void Start()
     {
 
-        if (db.getTriangulationEnabled())
+        if (db.getTriangulationEnabled() && db.getPoints().Count > 2)
         {
             Mesh mesh = new Mesh();
 

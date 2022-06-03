@@ -81,17 +81,22 @@ public class Controller
     */
     {
         // Variables for point coordinates
-        Vector3 point = new Vector3();
+        Vector3 point;
         List<Vector3> points = new List<Vector3>();
+
         // Delauney points is all points' x and z values
         List<IPoint> pointsDelaunay = new List<IPoint>();
+
         // Lists for nearest neighbour outlier detection
         List<double[]> kDTreePoints = new List<double[]>();
 
         // Boat path points is location of the boat at every ping
-        Vector3 boatPointLeft = new Vector3();
-        Vector3 boatPointRight= new Vector3();
         List<Vector3> boatPathPoints = new List<Vector3>();
+
+        // Resetting values in database
+        db.setPoints(points);
+        db.setPointsDelauney(pointsDelaunay);
+        db.setTriangles(new List<int>());
 
         // Getting values from database for pointloader variables, to avoid excessive calls to the
         // database class. Then transforming them back from 0 to x to the original min_x to max_x
@@ -116,10 +121,10 @@ public class Controller
         newShallowDepth = int.MinValue + 1;
         newDeepDepth = int.MaxValue - 1;
 
+        int noOfPoints = sonarData.no_counts;
+
         for (int i = 0; i < numberOfPings; i++)
         {
-
-
 
             boatPathPoints.Add(new Vector3((float)sonarData.pings[i].ping_boat_coord[0],
                                             0,
@@ -167,9 +172,14 @@ public class Controller
 
         }
 
-        centerPoint = centerPoint / points.Count;
+        // Checking if more than 0 points in sonar file, to avoid division with 0
+        if(noOfPoints > 0)
+        {
+            centerPoint /= noOfPoints;
+        }
+        
+        // Setting centerpoint and boat path points in database
         db.setCenterPoint(centerPoint);
-
         db.setBoatPathPoints(boatPathPoints);
 
         // Checking if either outlier height or nearest neighbour is enabled in options
@@ -177,7 +187,7 @@ public class Controller
         {
             OutlierHeightDetection(points);
 
-        } else if (nearestNeighbourEnabled)
+        } else if (nearestNeighbourEnabled && points.Count > 0)
         {
             NearestNeighbourDetection(points, kDTreePoints.ToArray());
         }
@@ -250,12 +260,14 @@ public class Controller
                     {
                         newShallowDepth = (int)Math.Ceiling(points[i][1]);
                     }
+
                     else if (newDeepDepth > points[i].y)
                     {
                         newDeepDepth = (int)Math.Floor(points[i][1]);
                     }
 
-                } else
+                } 
+                else
                 {   
                     // Setting up list for kDtree creation in nearest neighbour method
                     double[] kDTreePoint = new double[] { points[i][0], points[i][1], points[i][2] };
@@ -273,14 +285,15 @@ public class Controller
             db.setPointsDelauney(delauneyPoints);
             db.setNewShallowDepth(newShallowDepth);
             db.setNewDeepDepth(newDeepDepth);
-        } else
+        } 
+        else if (newPoints.Count > 0)
         {
             NearestNeighbourDetection(newPoints, kDTreePoints.ToArray());
         }
 
     }
 
-    private void NearestNeighbourDetection(List<Vector3> points, double[][] initial_kDTree)
+    private void NearestNeighbourDetection(List<Vector3> points, double[][] initialKDTree)
     /* Removes points that have less than the chosen amount of neighbours, within a sphere with
        a specified radius.
 
@@ -291,8 +304,8 @@ public class Controller
     {
         List<Vector3> newPoints = new List<Vector3>();
         List<IPoint> pointsDelaunay = new List<IPoint>();
-        KDTree<int> kDTree = KDTree.FromData<int>(initial_kDTree);
-
+        KDTree<int> kDTree = KDTree.FromData<int>(initialKDTree);
+ 
         int numberOfNeighbours = db.getNumberOfNeighbours();
         double neighbourDistance = db.getNeighbourDistance();
 

@@ -102,7 +102,6 @@ public class FreeFlyCamera : MonoBehaviour
     }
 #endif
 
-
     private void Start()
     {
 
@@ -123,7 +122,6 @@ public class FreeFlyCamera : MonoBehaviour
         float angle1 = Mathf.Atan2(b[2] * a[0] - b[0] * a[2], b[0] * a[0] + b[2] * a[2]);
         float angle2 = Vector3.Angle(a, b);
 
-        print("angles " + - angle1 * 180/Mathf.PI + " " + angle2);
         _initRotation = (new Vector3(0, - angle1 * 180/Mathf.PI, 0));
         transform.rotation = Quaternion.Euler(new Vector3(0, - angle1 * 180 / Mathf.PI, 0));
     }

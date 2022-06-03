@@ -20,7 +20,7 @@ public class GenerateHeightmap : MonoBehaviour
     private void Update()
     {
 
-        if (db.getTriangulationEnabled() && !hasRun)
+        if (db.getTriangulationEnabled() && !hasRun && db.getPoints().Count > 2)
         {
             Mesh mesh = controller.mesh;
             if (colors.Count == 0)

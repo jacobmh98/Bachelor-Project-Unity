@@ -10,10 +10,10 @@ public class OptionsButtons : MonoBehaviour
     public MinMaxSlider DepthSlider;
     public MinMaxSlider LengthSlider;
     public MinMaxSlider WidthSlider;
-    public Toggle nnFilter;
-    public Toggle odFilter;
-    public Toggle tgFilter;
-    public Toggle edgeTriangleRemoval;
+    public Toggle toggleTriangulation;
+    public Toggle toggleNearestNeighbour;
+    public Toggle toggleHeightOutlier;
+    public Toggle toggleEdgeTriangleRemoval;
     public TMP_Dropdown triangulation;
     public TMP_InputField noOfNeighbourInputField;
     public TMP_InputField neighbourDistanceInputField;
@@ -51,11 +51,11 @@ public class OptionsButtons : MonoBehaviour
         db.setSliderValueMaxWidth((int)WidthSlider.Values.maxValue);
 
         // Setting values in the database to the values picked in the checkboxes
-        db.setOutlierHeightEnabled(odFilter.isOn);
-        db.setNearestNeighbourEnabled(nnFilter.isOn);
-        db.setTriangulationEnabled(tgFilter.isOn);
+        db.setOutlierHeightEnabled(toggleHeightOutlier.isOn);
+        db.setNearestNeighbourEnabled(toggleNearestNeighbour.isOn);
+        db.setTriangulationEnabled(toggleTriangulation.isOn);
         db.setTriangulationType(triangulation.value);
-        db.setEdgeTrianglesRemovalEnabled(edgeTriangleRemoval.isOn);
+        db.setEdgeTrianglesRemovalEnabled(toggleEdgeTriangleRemoval.isOn);
 
         // Setting values in the database to the values in written in the textfields
         // if the values written is not valid, the values is set to the default ones.
@@ -99,16 +99,16 @@ public class OptionsButtons : MonoBehaviour
     */
     {
         // Setting values for sliders
-        DepthSlider.SetValues(db.getSliderLimitShallowDepth(), db.getSliderValueDeepDepth());
+        DepthSlider.SetValues(db.getSliderLimitShallowDepth(), db.getSliderLimitDeepDepth());
         LengthSlider.SetValues(db.getSliderLimitMinLength(), db.getSliderLimitMaxLength());
         WidthSlider.SetValues(db.getSliderLimitMinWidth(), db.getSliderLimitMaxWidth());
 
         // Setting toggles to unchecked
-        nnFilter.isOn = false;
-        odFilter.isOn = false;
-        tgFilter.isOn = false;
+        toggleNearestNeighbour.isOn = false;
+        toggleHeightOutlier.isOn = false;
+        toggleTriangulation.isOn = false;
         triangulation.value = 1;
-        edgeTriangleRemoval.isOn = false;
+        toggleEdgeTriangleRemoval.isOn = false;
 
         // Setting values for textfields
         noOfNeighbourInputField.text = db.getDefaultNumberOfNeighbours().ToString();

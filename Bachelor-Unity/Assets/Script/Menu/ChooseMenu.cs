@@ -49,13 +49,13 @@ public class ChooseMenu : MonoBehaviour
                 Process p = new Process();
                 p.StartInfo = new ProcessStartInfo();
                 p.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
-                p.StartInfo.FileName = Application.streamingAssetsPath + @"/CreateJSON.exe";
+                p.StartInfo.FileName = Application.streamingAssetsPath + @"/DataExtractor.exe";
                 p.StartInfo.WorkingDirectory = Application.streamingAssetsPath;
                 p.StartInfo.Arguments = @"""" + path + @"""";
                 p.Start();
                 p.WaitForExit();
 
-                controller.setPath(Application.streamingAssetsPath + @"/7k_data_extracted_rotated.json");
+                controller.setPath(Application.streamingAssetsPath + @"/point_cloud_data.json");
 
                 controller.LoadController();
                 chooseMenu.SetActive(false);

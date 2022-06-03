@@ -12,20 +12,17 @@ public class BoatPathRenderer : MonoBehaviour
     uint resolution = 100;
     public Gradient gradient;
 
-    public float particleSize = 0.1f;
+    float particleSize = 0.1f;
     bool toUpdate = false;
     uint particleCount = 0;
 
     List<Vector3> positions;
     List<Vector3> renderPoints;
     Color[] colors;
-    Color[] colorsGradient;
 
     private void Start()
     {
         this.gameObject.GetComponent<Renderer>().enabled = false;
-        int finalShallowDepth = db.getNewShallowDepth();
-        int finalDeepDepth = db.getNewDeepDepth();
 
         vfx = GetComponent<VisualEffect>();
 
@@ -58,12 +55,6 @@ public class BoatPathRenderer : MonoBehaviour
 
             float alpha = theta - beta;
             float alpha2 = theta + beta;
-
-          /*  Debug.Log("theta = " + theta);
-            Debug.Log("alpha = " + alpha);
-            Debug.Log("beta = " + beta);
-            Debug.Log("desired length = " + vecDesiredLength);
-            Debug.Log("point length = " + vecPointLength);*/
 
             float rightDesiredZComp = pCurr[2] + Mathf.Cos(alpha) * vecDesiredLength;
             float rightDesiredXComp = pCurr[0] + Mathf.Sin(alpha) * vecDesiredLength;
@@ -117,8 +108,6 @@ public class BoatPathRenderer : MonoBehaviour
 
     public void SetParticles(Vector3[] positions, Color[] colors)
     {
-
-        particleSize = db.getParticleSize();
         texColor = new Texture2D(positions.Length > (int)resolution ? (int)resolution : positions.Length,
                        Mathf.Clamp(positions.Length / (int)resolution,
                        1,
