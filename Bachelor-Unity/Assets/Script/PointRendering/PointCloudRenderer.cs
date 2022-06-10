@@ -22,6 +22,9 @@ public class PointCloudRenderer : MonoBehaviour
 
     private void Start()
     {
+        /*
+         * Initialize the points relevant data such as position and colors
+         */
         int finalShallowDepth = db.getNewShallowDepth();
         int finalDeepDepth = db.getNewDeepDepth();
 
@@ -43,18 +46,21 @@ public class PointCloudRenderer : MonoBehaviour
 
     private void Update()
     {
+        // Re-render the point cloud once the particle size changes
         if(db.getUpdatePointSize())
         {
             SetParticles(positions, db.getPointCloudGradient() ? colorsGradient : colors);
             db.setUpdatePointSize(false);
         }
 
+        // Re-render the point cloud once the colors changes
         if(db.getUpdatePointColor())
         {
             SetParticles(positions, db.getPointCloudGradient() ? colorsGradient : colors);
             db.setUpdatePointColor(false);
         }
 
+        // Update the VFX graph once relevant changes has been made
         if (toUpdate)
         {
             toUpdate = false;
@@ -66,6 +72,7 @@ public class PointCloudRenderer : MonoBehaviour
             vfx.SetUInt(Shader.PropertyToID("Resolution"), resolution);
         }
 
+        // Display/hide the point cloud depending on the toggle value for this
         if (db.getUpdatePointCloud() && db.getShowPointCloud())
         {
             this.gameObject.GetComponent<Renderer>().enabled = true;
@@ -80,6 +87,10 @@ public class PointCloudRenderer : MonoBehaviour
 
     public void SetParticles(Vector3[] positions, Color[] colors)
     {
+        /*
+         * Method for feeding the VFX graph the points position as well as colors
+         */
+
         particleSize = db.getParticleSize();
         texColor = new Texture2D(positions.Length > (int)resolution ? (int)resolution : positions.Length, 
                        Mathf.Clamp(positions.Length / (int)resolution, 

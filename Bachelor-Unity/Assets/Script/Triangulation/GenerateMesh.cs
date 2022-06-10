@@ -16,19 +16,24 @@ public class GenerateMesh : MonoBehaviour
 
     private void Start()
     {
-
+        /*
+         * Initialize the triangulation algorithm and mesh
+         */ 
         if (db.getTriangulationEnabled() && db.getPoints().Count > 2)
         {
-            Mesh mesh = new Mesh();
-
-            controller.mesh = mesh;
+            
 
             if (t == null)
             {
                 t = new Triangulate(db.getPoints(), db.getPointsDelauney());
             }
 
+            // Create the mesh object and set the vertices, triangles and set the game object in Unity to this mesh
+            Mesh mesh = new Mesh();
+            controller.mesh = mesh;
             mesh.Clear();
+
+            // Changeing the default index format to 32 bit to allow more vertices and triangles
             mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
 
             mesh.vertices = db.getPoints().ToArray();
@@ -44,6 +49,7 @@ public class GenerateMesh : MonoBehaviour
 
     private void Update()
     {
+        // Display either ocean floor material or heightmap material
         if (db.getUpdateOceanFloor() && db.getShowMesh()) {
             this.gameObject.GetComponent<Renderer>().enabled = true;
             db.setUpdateOceanFloor(false);

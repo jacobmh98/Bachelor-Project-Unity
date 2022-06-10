@@ -36,12 +36,14 @@ public class BoatPathRenderer : MonoBehaviour
             Vector3 pCurr = positions[i];
             Vector3 pNext = positions[i + 1];
 
+            // Check for first point
             if (i == N - 2)
             {
                 pCurr = positions[1];
                 pNext = positions[0];
             }
 
+            // Define vector and perform relevant calculations to compute the boat path
             Vector3 vecPoint = pCurr - pNext;
             float vecPointLength = Vector3.Magnitude(vecPoint);
 
@@ -83,6 +85,7 @@ public class BoatPathRenderer : MonoBehaviour
 
     private void Update()
     {
+        // Update the VFX graph if relevant changes are made
         if (toUpdate)
         {
             toUpdate = false;
@@ -93,6 +96,8 @@ public class BoatPathRenderer : MonoBehaviour
             vfx.SetTexture(Shader.PropertyToID("TexPosScale"), texPosScale);
             vfx.SetUInt(Shader.PropertyToID("Resolution"), resolution);
         }
+
+        // Display/hide the boat path depending on the toggle
         if (db.getUpdateBoatPath() && db.getShowBoatPathPoints())
         {
             this.gameObject.GetComponent<Renderer>().enabled = true;
@@ -108,6 +113,9 @@ public class BoatPathRenderer : MonoBehaviour
 
     public void SetParticles(Vector3[] positions, Color[] colors)
     {
+        /*
+         * Method for feeding the VFX graph the points position as well as colors
+         */ 
         texColor = new Texture2D(positions.Length > (int)resolution ? (int)resolution : positions.Length,
                        Mathf.Clamp(positions.Length / (int)resolution,
                        1,

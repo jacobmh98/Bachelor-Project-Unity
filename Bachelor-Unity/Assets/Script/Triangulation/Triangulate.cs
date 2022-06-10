@@ -45,28 +45,12 @@ public class Triangulate
         var delaunay = new Delaunator(delaunayPoints.ToArray());
         triangles = new List<int>(delaunay.Triangles);
 
-        // Generating median length
-        // GenerateMedianLength();
-
         // Remove edge borders with edge length greater than median length
         if (db.getEdgeTrianglesRemovalEnabled())
         {
             while (removedTriangles != 0 || removedTriIterations < 20)
                 RemoveEdgeTriangles();
         }
-
-        // Generate uvs for mesh
-        /*Vector2[] uvs = new Vector2[vertices.Count];
-
-        for (int i = 0; i < vertices.Count; i++) {
-            uvs[i] = vertices[i];
-        }*/
-
-        // Code for measuring time consumption of block
-        /*var watch = System.Diagnostics.Stopwatch.StartNew();
-        watch.Stop();
-        var elapsedTime = watch.ElapsedMilliseconds;
-        print("time = " + elapsedTime);*/
         db.setTriangles(triangles);
     }
 
@@ -89,12 +73,10 @@ public class Triangulate
         }
 
         sideLengths.Sort();
-
-
+        
         int n = sideLengths.Count;
 
         int m = n % 2 == 0 ? (sideLengths[n / 2 - 1] + sideLengths[n / 2]) / 2 : sideLengths[n - 1];
-
     }
 
     public float Norm(Vector3 v1, Vector3 v2)
