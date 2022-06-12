@@ -11,17 +11,25 @@ public class UnitTestsFile2
 
     public UnitTestsFile2()
     {
-        controller.setPath("C:/Users/jacob/Documents/point_cloud_data.json");
+        controller.setPath("C:/Users/jacob/Documents/point_cloud_data_2.json");
         controller.LoadController();
+    }
+
+    [Test]
+    public void LoadingPointsTestPasses()
+    {
         controller.PointLoader();
+        // Test if all pings and points are loaded
+        Assert.AreEqual(7, db.getPoints().Count);
+        Assert.AreEqual(3, db.getNumberOfPings());
     }
 
     [Test]
     public void ReadingJsonLimitsTestPasses()
     {
         // Testing if limits are set to correct values
-        Assert.AreEqual(0, db.getShallowDepth());
-        Assert.AreEqual(-2, db.getDeepDepth());
+        Assert.AreEqual(-3, db.getShallowDepth());
+        Assert.AreEqual(-22, db.getDeepDepth());
         Assert.AreEqual(0, db.getMinLength());
         Assert.AreEqual(10, db.getMaxLength());
         Assert.AreEqual(-2, db.getMinWidth());
@@ -29,79 +37,22 @@ public class UnitTestsFile2
     }
 
     [Test]
-    public void LoadingPointsTestPasses()
+    public void RemovingPointByChangingDepthFilteringTestPasses()
     {
-        // Test if all pings and points are loaded
+        // Simulate setting a slider value shallow depth of -10
+        db.setSliderValueShallowDepth(10);
+        // Reload the points
+        controller.PointLoader();
+        // Test if a single point has been removed
         Assert.AreEqual(6, db.getPoints().Count);
-        Assert.AreEqual(3, db.getNumberOfPings());
     }
 
-    [UnityTest]
-    public IEnumerator NormalTriangulateAmountTrianglesTestPasses()
+    [Test]
+    public void TestPointByChangingDepthFilteringTestPasses()
     {
-        db.setTriangulationEnabled(true);
-        var gameObject = new GameObject();
-        var mesh = gameObject.AddComponent<GenerateMesh>();
-
-        yield return new WaitForSeconds(1f);
-
-        // Test if number of triangles is correct
-        Assert.AreEqual(15, db.getTriangles().Count);
-
- 
-    }
-
-    [UnityTest]
-    public IEnumerator NormalTriangulateTrianglesTestPasses()
-    {
-        db.setTriangulationEnabled(true);
-        var gameObject = new GameObject();
-        var mesh = gameObject.AddComponent<GenerateMesh>();
-
-        yield return new WaitForSeconds(1f);
-
-        // Test if triangulation is correct by comparing sorted triangles with the known sorted triangulation
-        List<int> triangles = db.getTriangles();
-        triangles.Sort();
-        List<int> desiredTriangles = new List<int>() {
-            0, 0, 1, 1, 2, 2, 2, 2, 2, 3, 3, 4, 4, 5, 5
-        };
-        Assert.AreEqual(triangles, desiredTriangles);
-    }
-
-    [UnityTest]
-    public IEnumerator RemovingBorderEdgeNumberTrianglesTestPasses()
-    {
-        db.setTriangulationEnabled(true);
-        db.setEdgeTrianglesRemovalEnabled(true);
-        var gameObject = new GameObject();
-        var mesh = gameObject.AddComponent<GenerateMesh>();
-
-        yield return new WaitForSeconds(1f);
-
-        // Test if the correct number of triangles exists after removal
-        Assert.AreEqual(12, db.getTriangles().Count);
-    }
-
-    [UnityTest]
-    public IEnumerator RemovingBorderEdgeTrianglesTestPasses()
-    {
-        db.setTriangulationEnabled(true);
-        db.setEdgeTrianglesRemovalEnabled(true);
-        var gameObject = new GameObject();
-        var mesh = gameObject.AddComponent<GenerateMesh>();
-
-        yield return new WaitForSeconds(1f);
-
-        // Test if the border edge still exists
-        for (int i = 0; i < db.getTriangles().Count; i += 3)
-        {
-            Assert.AreNotEqual(new int[] { db.getTriangles()[i], db.getTriangles()[i + 1]}, new int[] { 1, 0 });
-            Assert.AreNotEqual(new int[] { db.getTriangles()[i + 1], db.getTriangles()[i + 2] }, new int[] { 1, 0 });
-            Assert.AreNotEqual(new int[] { db.getTriangles()[i + 2], db.getTriangles()[i] }, new int[] { 1, 0 });
+        // Test if G was the point that was point removed
+        foreach (Vector3 p in db.getPoints()) {
+            Assert.AreNotEqual(new float[] { p.x, p.y, p.z }, new float[] { 5, -3, 3 });
         }
     }
-
-
-
 }

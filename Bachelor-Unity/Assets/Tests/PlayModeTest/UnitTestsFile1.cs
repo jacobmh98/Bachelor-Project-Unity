@@ -47,8 +47,6 @@ public class UnitTestsFile1
 
         // Test if number of triangles is correct
         Assert.AreEqual(15, db.getTriangles().Count);
-
-
     }
 
     [UnityTest]
