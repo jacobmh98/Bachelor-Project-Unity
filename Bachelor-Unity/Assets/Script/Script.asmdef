@@ -1,0 +1,36 @@
+{
+    "name": "Script",
+    "rootNamespace": "",
+    "references": [
+        "Unity.TextMeshPro",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "DelaunatorSharp.Runtime",
+        "MinMaxSlider"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll",
+        "Newtonsoft.Json.dll",
+        "Accord.dll",
+        "Accord.Math.dll",
+        "Accord.MachineLearning.dll",
+        "Accord.Math.Core.dll",
+        "Accord.Statistics.dll",
+        "DelaunatorSharp.dll",
+        "ICSharpCode.NRefactory.dll",
+        "log4netPlastic.dll",
+        "Unity.Plastic.Antlr3.Runtime.dll",
+        "Unity.Plastic.Newtonsoft.Json.dll",
+        "unityplastic.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

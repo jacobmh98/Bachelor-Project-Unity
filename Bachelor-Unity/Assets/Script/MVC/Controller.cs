@@ -125,10 +125,12 @@ public class Controller
 
         for (int i = 0; i < numberOfPings; i++)
         {
-
+           
             boatPathPoints.Add(new Vector3((float)sonarData.pings[i].ping_boat_coord[0],
                                             (float)sonarData.pings[i].ping_boat_coord[2],
                                             (float)sonarData.pings[i].ping_boat_coord[1]));
+
+           
 
             for (int j = 0; j < sonarData.pings[i].no_points; j++)
             {
@@ -136,11 +138,14 @@ public class Controller
                 point = new Vector3((float)sonarData.pings[i].coords_x[j], (float)sonarData.pings[i].coords_z[j], (float)sonarData.pings[i].coords_y[j]);
                 centerPoint += point;
 
+                
+
                 // Filtering away values not included in the sliders
-                if ((point[1] < finalShallowDepth && point[1] > finalDeepDepth)
-                    && (point[0] > finalMinLengthAxis && point[0] < finalMaxLengthAxis)
-                    && (point[2] > finalMinWidthAxis && point[2] < finalMaxWidthAxis))
+                if ((point[1] <= finalShallowDepth && point[1] >= finalDeepDepth)
+                    && (point[0] >= finalMinLengthAxis && point[0] <= finalMaxLengthAxis)
+                    && (point[2] >= finalMinWidthAxis && point[2] <= finalMaxWidthAxis))
                 {
+                 
                     // Adding point to pointcloud
                     points.Add(point);
                     

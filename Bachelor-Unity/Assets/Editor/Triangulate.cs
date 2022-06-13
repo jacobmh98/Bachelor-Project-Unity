@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class Triangulate
 {
-    DataBase db = DataBase.getInstance();
+    //DataBase db = DataBase.getInstance();
     Hashtable map;
     List<Vector3> vertices;
     List<IPoint> delaunayPoints;
     List<int> triangles;
     List<int> sideLengths;
-    int medianLength = 7;
+    public static int medianLength = 4;
     int removedTriangles = -1;
     int removedTriIterations = 0;
 
@@ -27,10 +27,10 @@ public class Triangulate
         delaunayPoints = delauneyPoints;
 
         // If there is less than 3 points in the point cloud, there cant be triangulated
-        if (db.getPoints().Count > 3)
+       /* if (db.getPoints().Count > 3)
         {
             CreateShape();
-        }
+        }*/
 
     }
 
@@ -46,12 +46,12 @@ public class Triangulate
         triangles = new List<int>(delaunay.Triangles);
 
         // Remove edge borders with edge length greater than median length
-        if (db.getEdgeTrianglesRemovalEnabled())
+        /*if (db.getEdgeTrianglesRemovalEnabled())
         {
             while (removedTriangles != 0 || removedTriIterations < 20)
                 RemoveEdgeTriangles();
         }
-        db.setTriangles(triangles);
+        db.setTriangles(triangles);*/
     }
 
     public void GenerateMedianLength()
