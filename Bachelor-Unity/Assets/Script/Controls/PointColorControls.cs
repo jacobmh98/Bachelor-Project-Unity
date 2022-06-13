@@ -10,6 +10,8 @@ public class PointColorControls : MonoBehaviour
     public Toggle toggleHeightMap;
 
     void Start()
+        /* Finding specific point height map toggle, and setting scale to toggle's state
+         */
     {
         togglePointHeightmap = GetComponent<Toggle>();
         togglePointHeightmap.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
@@ -17,6 +19,8 @@ public class PointColorControls : MonoBehaviour
     }
 
     private void ValueChangeCheck()
+        /* Setting corresponding values in database
+         */
     {
         db.setPointCloudGradient(togglePointHeightmap.isOn);
         db.setUpdatePointColor(true);

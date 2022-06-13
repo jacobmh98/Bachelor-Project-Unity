@@ -35,8 +35,9 @@ public class Triangulate
     }
 
     void CreateShape()
-    /* Computes Delauney triangulation triangles and generates mesh from these
-    */
+    /*
+     * Computes Delauney triangulation triangles and generates mesh from these
+     */
     {
         removedTriangles = -1;
         removedTriIterations = 0;
@@ -55,8 +56,10 @@ public class Triangulate
     }
 
     public void GenerateMedianLength()
-    /* Computes median length of all triangle sides
-    */
+    /* 
+     * Computes median length of all triangle sides
+     * NOT FINISH YET, NEEDS FURTHER WORK
+     */
     {
         for (int i = 0; i < triangles.Count; i += 3)
         {
@@ -152,8 +155,9 @@ public class Triangulate
     }
 
     void CreateMap()
-    /* Creates a new map of the edges from the current triangles
-    */
+    /* 
+     * Creates a new hash table of the edges from the current triangles
+     */
     {
         map = new Hashtable();
 

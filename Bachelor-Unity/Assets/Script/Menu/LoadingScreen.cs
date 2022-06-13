@@ -14,12 +14,16 @@ public class LoadingScreen : MonoBehaviour
     public Sprite sprite;
 
     public void loadingScene(int sceneIndex)
+        /* Changes background image and starts coroutine
+         */
     {
         panel.sprite = sprite;
         StartCoroutine(LoadAsynchronously(sceneIndex));
     }
 
     IEnumerator LoadAsynchronously (int sceneIndex)
+        /* Sets loadingbar value
+         */
     {
         yield return new WaitForSeconds(1);
         controller.PointLoader();

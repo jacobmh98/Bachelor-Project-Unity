@@ -21,8 +21,7 @@ public class GenerateMesh : MonoBehaviour
          */ 
         if (db.getTriangulationEnabled() && db.getPoints().Count > 2)
         {
-            
-
+            // Instantiate triangulate object if it hasn't been yet
             if (t == null)
             {
                 t = new Triangulate(db.getPoints(), db.getPointsDelauney());

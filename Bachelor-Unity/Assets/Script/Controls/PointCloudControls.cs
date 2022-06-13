@@ -12,12 +12,16 @@ public class PointCloudControls : MonoBehaviour
 
 
     void Start()
+        /* Finding specific display toggle
+         */
     {
         displayToggle = GetComponent<Toggle>();
         displayToggle.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
     }
 
     private void ValueChangeCheck()
+        /* Sets corresponding values in database
+         */
     {
         db.setShowPointCloud(displayToggle.isOn);
         db.setUpdatePointCloud(true);

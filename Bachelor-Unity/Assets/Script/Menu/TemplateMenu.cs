@@ -80,6 +80,8 @@ public class TemplateMenu : MonoBehaviour
     }
 
     public void ChangeBackground()
+        /* Changes background image
+         */
     {
         panel.sprite = sprite;
     }

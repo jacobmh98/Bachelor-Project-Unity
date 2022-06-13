@@ -11,7 +11,10 @@ public class UnitTestsFile1
 
     public UnitTestsFile1()
     {
-        controller.setPath("C:/Users/jacob/Documents/point_cloud_data.json");
+        /*
+         * Initialize the first test file and the controller
+         */ 
+        controller.setPath("./point_cloud_data.json");
         controller.LoadController();
         controller.PointLoader();
     }
@@ -99,7 +102,4 @@ public class UnitTestsFile1
             Assert.AreNotEqual(new int[] { db.getTriangles()[i + 2], db.getTriangles()[i] }, new int[] { 1, 0 });
         }
     }
-
-
-
 }

@@ -11,7 +11,10 @@ public class UnitTestsFile2
 
     public UnitTestsFile2()
     {
-        controller.setPath("C:/Users/jacob/Documents/point_cloud_data_2.json");
+        /*
+         * Initialize the test file 2 and the controller
+         */ 
+        controller.setPath("./point_cloud_data_2.json");
         controller.LoadController();
     }
 
