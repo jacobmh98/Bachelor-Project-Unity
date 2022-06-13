@@ -45,7 +45,7 @@ public class BoatPathRenderer : MonoBehaviour
             Vector3 vecPoint = pCurr - pNext;
             float vecPointLength = Vector3.Magnitude(vecPoint);
 
-            Vector3 vecHor = pCurr - new Vector3(pCurr[0], 0, pCurr[2] + 1.0f);
+            Vector3 vecHor = pCurr - new Vector3(pCurr[0], pCurr[1], pCurr[2] + 1.0f);
 
             float theta = Vector3.Angle(vecPoint, vecHor) * Mathf.PI / 180.0f;
 

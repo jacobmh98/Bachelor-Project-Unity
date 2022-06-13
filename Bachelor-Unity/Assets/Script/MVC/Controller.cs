@@ -127,7 +127,7 @@ public class Controller
         {
 
             boatPathPoints.Add(new Vector3((float)sonarData.pings[i].ping_boat_coord[0],
-                                            0,
+                                            (float)sonarData.pings[i].ping_boat_coord[2],
                                             (float)sonarData.pings[i].ping_boat_coord[1]));
 
             for (int j = 0; j < sonarData.pings[i].no_points; j++)
