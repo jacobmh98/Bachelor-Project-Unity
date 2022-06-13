@@ -88,7 +88,11 @@ public class PointCloudRenderer : MonoBehaviour
     public void SetParticles(Vector3[] positions, Color[] colors)
     {
         /*
-         * Method for feeding the VFX graph the points position as well as colors
+         * Method for setting the points in the VFX graph
+         * 
+         * Args: 
+         *      positions: list of points as Vector3 objects
+         *      colors: list of colors for the points
          */
 
         particleSize = db.getParticleSize();

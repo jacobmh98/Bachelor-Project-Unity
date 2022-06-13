@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 
+/*
+ * Class to represent pings read from the JSON file
+ */
 public class Ping
 {
     public int pingID { get; set; }
