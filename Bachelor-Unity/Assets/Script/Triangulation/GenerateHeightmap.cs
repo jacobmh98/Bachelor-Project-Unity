@@ -38,7 +38,8 @@ public class GenerateHeightmap : MonoBehaviour
                 }
 
             }
-             // Create the mesh and set it to component
+
+            // Create the mesh and set it to component
             Mesh mesh = controller.mesh;
             mesh.colors = colors.ToArray();
             GetComponent<MeshFilter>().mesh = controller.mesh;

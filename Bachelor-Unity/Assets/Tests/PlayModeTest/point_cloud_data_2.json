@@ -1,0 +1,36 @@
+{
+	"no_pings": 3, 
+	"no_counts": 7,
+	"minimum_depth": -3,
+	"maximum_depth": -22,
+	"min_length_axis": 0,
+	"max_length_axis": 10,
+	"min_width_axis": -2,
+	"max_width_axis": 5,
+	"pings": [
+		{
+		"pingID": 0,
+		"no_points": 2,
+		"ping_boat_coord": [0.0, 0.0, 0.0],
+		"coords_x": [0.0, 10.0],
+		"coords_y": [0.0, -2.0], 
+		"coords_z": [-20.0, -20.0]
+		},
+		{
+		"pingID": 1,
+		"no_points": 2,
+		"ping_boat_coord": [3.0, 0.0, 0.0],
+		"coords_x": [5.0, 9.0],
+		"coords_y": [2.0, 4.0], 
+		"coords_z": [-22.0, -21.0]
+		},
+		{
+		"pingID": 2,
+		"no_points": 3,
+		"ping_boat_coord": [6.0, 0.0, 0.0],
+		"coords_x": [0.0, 3.0, 5.0],
+		"coords_y": [2.0, 5.0, 3.0], 
+		"coords_z": [-20.0, -20.0, -3.0]
+		}
+	]
+}

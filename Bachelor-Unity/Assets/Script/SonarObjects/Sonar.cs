@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+/*
+ * Class to represent general info about the JSON file
+ */ 
 public class Sonar
 {
     public int no_pings { get; set; }

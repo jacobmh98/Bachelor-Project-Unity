@@ -22,6 +22,9 @@ public class BoatPathRenderer : MonoBehaviour
 
     private void Start()
     {
+        /*
+         * Instantiating the point cloud for the boat path
+         */ 
         this.gameObject.GetComponent<Renderer>().enabled = false;
 
         vfx = GetComponent<VisualEffect>();
@@ -43,7 +46,7 @@ public class BoatPathRenderer : MonoBehaviour
                 pNext = positions[0];
             }
 
-            // Define vector and perform relevant calculations to compute the boat path
+            // Define vectors and perform relevant calculations to compute the boat path
             Vector3 vecPoint = pCurr - pNext;
             float vecPointLength = Vector3.Magnitude(vecPoint);
 
@@ -73,8 +76,8 @@ public class BoatPathRenderer : MonoBehaviour
 
         }
 
+        // Defining the colors for the points
         colors = new Color[2 * N];
-
         for (int x = 0; x < 2 * N; x++)
         {
             colors[x] = new Color(0.8f, 0.8f, 0.8f);
@@ -114,7 +117,11 @@ public class BoatPathRenderer : MonoBehaviour
     public void SetParticles(Vector3[] positions, Color[] colors)
     {
         /*
-         * Method for feeding the VFX graph the points position as well as colors
+         * Method for setting the points in the VFX graph
+         * 
+         * Args: 
+         *      positions: list of points as Vector3 objects
+         *      colors: list of colors for the points
          */ 
         texColor = new Texture2D(positions.Length > (int)resolution ? (int)resolution : positions.Length,
                        Mathf.Clamp(positions.Length / (int)resolution,
