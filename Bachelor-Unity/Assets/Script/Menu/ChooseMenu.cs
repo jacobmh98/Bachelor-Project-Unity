@@ -49,17 +49,24 @@ public class ChooseMenu : MonoBehaviour
                 Process p = new Process();
                 p.StartInfo = new ProcessStartInfo();
                 p.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
-                p.StartInfo.FileName = Application.streamingAssetsPath + @"/DataExtractor.exe";
+                p.StartInfo.FileName = Application.streamingAssetsPath + @"/Data_Extractor.exe";
                 p.StartInfo.WorkingDirectory = Application.streamingAssetsPath;
                 p.StartInfo.Arguments = @"""" + path + @"""";
                 p.Start();
                 p.WaitForExit();
+                //Checks if executable exits with an error
+                if(p.ExitCode == 1)
+                { 
+                    errorText.text = "Error in 7k file.";
+                    text.SetActive(true);
+                } else
+                {
+                    controller.setPath(Application.streamingAssetsPath + @"/point_cloud_data.json");
 
-                controller.setPath(Application.streamingAssetsPath + @"/point_cloud_data.json");
-
-                controller.LoadController();
-                chooseMenu.SetActive(false);
-                optionsMenu.SetActive(true);
+                    controller.LoadController();
+                    chooseMenu.SetActive(false);
+                    optionsMenu.SetActive(true);
+                }
             }
             else
             {
