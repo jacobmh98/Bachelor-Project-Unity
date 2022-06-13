@@ -22,17 +22,23 @@ public class OptionsButtons : MonoBehaviour
     public Sprite sprite;
 
     public void ChangeBackground()
+    /* Method used for changing the background picture of the screen when changing scenes
+    */
     {
         panel.sprite = sprite;
         RunButton();
     }
     public void RunButton()
+    /* Method called when run button is pressed, used for calling the needed methods
+    */
     {
         ResetPointCloudControllerVariables();
         setOptionsVariables();
     }
 
     public void BackButton()
+    /* Method called when back button is called
+    */
     {
         db.setFromPoints(false);
     }
@@ -132,8 +138,7 @@ public class OptionsButtons : MonoBehaviour
         db.setUpdatePointCloud(false);
         db.setUpdatePointSize(false);
         db.setPointCloudGradient(false);
-        db.setUpdatePointColor(false);
-        
+        db.setUpdatePointColor(false);  
     }
 
 }

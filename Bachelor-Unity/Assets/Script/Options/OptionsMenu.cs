@@ -7,6 +7,7 @@ public class OptionsMenu : MonoBehaviour
     DataBase db = DataBase.getInstance();
 
     public Toggle toggle;
+
     // Only for toggleTriangle method, if changing in toggleEdgeTriangleRemoval,
     // use "toggle" as EdgeTriangleRemovalToggle
     public Toggle edgeTrianglesToggle;

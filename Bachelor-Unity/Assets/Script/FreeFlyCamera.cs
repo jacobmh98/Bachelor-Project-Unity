@@ -148,6 +148,7 @@ public class FreeFlyCamera : MonoBehaviour
             // _wantedMode = CursorLockMode.Locked;
         }
 
+        // Added check for space key press
         if(Input.GetKeyDown(KeyCode.Space))
         {
             lightLock = !lightLock;
@@ -241,6 +242,7 @@ public class FreeFlyCamera : MonoBehaviour
             );
         }
 
+        // Checking if light is locked or not
         if(!lightLock)
             directionalLight.GetComponent<Transform>().SetPositionAndRotation(transform.position, transform.rotation);
 

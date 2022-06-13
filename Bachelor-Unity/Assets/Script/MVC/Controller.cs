@@ -9,14 +9,13 @@ using Accord.Collections;
 public class Controller
 {
     public static Controller controller = new Controller();
-
     DataBase db = DataBase.getInstance();
+
     Sonar sonarData;
+    string fileName;
 
     public Mesh mesh = null;
     public GameObject toggleGroup;
-
-    string fileName;
 
     public int newShallowDepth;
     public int newDeepDepth;
@@ -26,9 +25,11 @@ public class Controller
        from the JSON file.
     */
     {
+        // Setup sonar class to read the JSON file
         string jsonString = File.ReadAllText(fileName);
         sonarData = JsonConvert.DeserializeObject<Sonar>(jsonString);
 
+        // Setting the number of pings in the database
         db.setNumberOfPings(sonarData.no_pings);
 
         // Setting min and max values from pointcloud in database
@@ -70,7 +71,6 @@ public class Controller
         db.setSliderValueMaxWidth(db.getMaxWidth());
         db.setSliderLimitMinWidth(db.getMinWidth());
         db.setSliderLimitMaxWidth(db.getMaxWidth());
-
     }
 
     //Method to load all the points from the JSON file, and filter away points from the chosen option filters
@@ -121,26 +121,28 @@ public class Controller
         newShallowDepth = int.MinValue + 1;
         newDeepDepth = int.MaxValue - 1;
 
+        // Total number of points in JSON file, used for calculating center point
         int noOfPoints = sonarData.no_counts;
 
+        // Iterating through every ping i
         for (int i = 0; i < numberOfPings; i++)
         {
            
+            // Adding the extracted boat path point for ping i to a list of boat path points
             boatPathPoints.Add(new Vector3((float)sonarData.pings[i].ping_boat_coord[0],
-                                            0,
+                                            (float)sonarData.pings[i].ping_boat_coord[2],
                                             (float)sonarData.pings[i].ping_boat_coord[1]));
 
-           
-
+            // Iterating through every point j in ping i
             for (int j = 0; j < sonarData.pings[i].no_points; j++)
             {
                 // Setting coordinates for the single current point
                 point = new Vector3((float)sonarData.pings[i].coords_x[j], (float)sonarData.pings[i].coords_z[j], (float)sonarData.pings[i].coords_y[j]);
+                
+                // Adding all points together to find the average position of all points
                 centerPoint += point;
 
-                
-
-                // Filtering away values not included in the sliders
+                // Filtering out values not included in the sliders
                 if ((point[1] <= finalShallowDepth && point[1] >= finalDeepDepth)
                     && (point[0] >= finalMinLengthAxis && point[0] <= finalMaxLengthAxis)
                     && (point[2] >= finalMinWidthAxis && point[2] <= finalMaxWidthAxis))
@@ -149,6 +151,8 @@ public class Controller
                     // Adding point to pointcloud
                     points.Add(point);
                     
+                    // If no outlier detection is enabled, the point is added to the delauney
+                    // point list, and the new deep and shallow value for the point cloud is found
                     if (!outlierHeightEnabled && !nearestNeighbourEnabled)
                     {
                         pointsDelaunay.Add(new DelaunatorSharp.Point(point[0], point[2]));
@@ -165,6 +169,7 @@ public class Controller
                         }
                     }
                     // Adding point to other lists for nearest neighbour detection algorithm
+                    // to create the K-D Tree if it is enabled
                     if (!outlierHeightEnabled && nearestNeighbourEnabled)
                     {
                         double[] toKDTreePoint = new double[] { point[0], point[1], point[2] };
@@ -176,7 +181,6 @@ public class Controller
             }
 
         }
-
         // Checking if more than 0 points in sonar file, to avoid division with 0
         if(noOfPoints > 0)
         {
@@ -188,7 +192,7 @@ public class Controller
         db.setBoatPathPoints(boatPathPoints);
 
         // Checking if either outlier height or nearest neighbour is enabled in options
-        if (outlierHeightEnabled) 
+        if (outlierHeightEnabled && points.Count > 0) 
         {
             OutlierHeightDetection(points);
 
@@ -215,12 +219,18 @@ public class Controller
             points: A Vector3 list
     */
     {
+        // Instantiating lists used for storing the new points and for nearest neighbour
+        // method
         List<Vector3> newPoints = new List<Vector3>();
         List<IPoint> delauneyPoints = new List<IPoint>();
         List<double[]> kDTreePoints = new List<double[]>();
-        int n = points.Count;
+
+        // Fetching values from database
         bool nearestNeighbourEnabled = db.getNearestNeighbourEnabled();
         double outlierHeightThreshold = db.getOutlierHeightThreshold();
+
+        // Variables for Z score calculations
+        int n = points.Count;
         double mean = 0;
         double standardDeviation = 0;
         double sumMean = 0;
@@ -248,10 +258,11 @@ public class Controller
         // Checking all points in the height list
         for (int i = 0; i < n; i++)
         {
-
-            // Points with a Z score higher than the defined threshold will not be added to the new point list
+            // Points with a Z score higher than the defined threshold will not be added
+            // to the new point list
             if (Math.Abs((points[i][1] - mean) / standardDeviation) < outlierHeightThreshold)
             {
+                // Adding the point to a list of new points
                 newPoints.Add(points[i]);
 
                 if (!nearestNeighbourEnabled)
@@ -282,7 +293,6 @@ public class Controller
             }
 
         }
-
         // Storing values in database, unless they will be changed in nearest neighbour method
         if (!nearestNeighbourEnabled)
         {
@@ -307,18 +317,25 @@ public class Controller
             initial_kDTree: A 2 dimensional double array
     */
     {
+        // Instantiating lists used for storing the new points
         List<Vector3> newPoints = new List<Vector3>();
         List<IPoint> pointsDelaunay = new List<IPoint>();
+
+        // Creating the K-D tree datastructure from the input list
         KDTree<int> kDTree = KDTree.FromData<int>(initialKDTree);
  
+        // Fetching values from the database
         int numberOfNeighbours = db.getNumberOfNeighbours();
         double neighbourDistance = db.getNeighbourDistance();
 
+        // Iterating through every point in the point cloud
         for (int i = 0; i < points.Count; i++)
         {
             double[] currPoint = new double[] { points[i].x, points[i].y, points[i].z };
             List<NodeDistance<KDTreeNode<int>>> neighbours = kDTree.Nearest(currPoint, radius: neighbourDistance);
 
+            // Checking if point has enough neighbours to not be classified as
+            // an outlier, if true then point is added to the new list of points
             if (neighbours.Count > numberOfNeighbours)
             {
                 newPoints.Add(points[i]);

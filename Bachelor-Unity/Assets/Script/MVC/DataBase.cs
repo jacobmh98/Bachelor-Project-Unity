@@ -90,6 +90,7 @@ public class DataBase
     {
         return db;
     }
+
     //Set variables methods
     public void setNumberOfPings(int newNumberOfPings)
     {
@@ -295,7 +296,6 @@ public class DataBase
     {
         fromPoints = newFromPoints;
     }
-
     public void setInitialPos(Vector3 newPos)
     {
         initialPos = newPos;
