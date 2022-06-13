@@ -10,6 +10,7 @@ public class ControlsButtons : MonoBehaviour
     */
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+        //fromPoints boolean, so we can check if we came from the point cloud
         db.setFromPoints(true);
     }
 

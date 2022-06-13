@@ -10,6 +10,8 @@ public class MeshTypeControls : MonoBehaviour
     public GameObject scale;
 
     private void Start()
+    /* Finding specific mesh toggle group
+     */
     {
         toggleGroup = GetComponent<ToggleGroup>();
         
@@ -22,7 +24,8 @@ public class MeshTypeControls : MonoBehaviour
 
         if (!db.getTriangulationEnabled())
             gameObject.SetActive(false);
-
+        
+        //Check which toggle is selected, and sets corresponding values in database.
         if(Equals(toggle.name, "OceanFloorToggle"))
         {
             db.setShowHeightMap(false);

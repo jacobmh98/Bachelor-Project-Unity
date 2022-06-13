@@ -140,7 +140,7 @@ public class Controller
 
                 
 
-                // Filtering away values not included in the sliders
+                // Filtering out values not included in the sliders
                 if ((point[1] <= finalShallowDepth && point[1] >= finalDeepDepth)
                     && (point[0] >= finalMinLengthAxis && point[0] <= finalMaxLengthAxis)
                     && (point[2] >= finalMinWidthAxis && point[2] <= finalMaxWidthAxis))

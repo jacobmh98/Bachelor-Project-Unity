@@ -11,6 +11,8 @@ public class PointSizeControls : MonoBehaviour, IPointerUpHandler
     float prevVal = 0;
 
     void Start()
+        /* Finding specific point size slider 
+         */
     {
         slider = GetComponent<Slider>();
         pointSizeText = GameObject.Find("pointSize").GetComponent<Text>();
@@ -20,11 +22,15 @@ public class PointSizeControls : MonoBehaviour, IPointerUpHandler
     }
 
     void ValueChangeCheck()
+        /* Changes text to slider value
+         */
     {
         pointSizeText.text = "Point Size: " + Math.Round((Decimal)slider.value, 2);
     }
 
     public void OnPointerUp(PointerEventData eventData)
+        /* Only updates the point sizes when user lets go of handle
+         */
     {
         if (slider.value != prevVal)
         {

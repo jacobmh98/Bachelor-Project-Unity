@@ -13,7 +13,7 @@ public class GeneralControls : MonoBehaviour
     bool display = true;
 
     void Start()
-    /* Setting number of points, and number of triangles if enabled.
+    /* Setting text for number of points, and number of triangles if enabled.
     */
     {
         canvas = GetComponent<Canvas>();

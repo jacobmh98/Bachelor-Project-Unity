@@ -16,6 +16,8 @@ public class SetScale : MonoBehaviour
     public Toggle toggleGradient;
 
     void Start()
+        /* Sets text according to point cloud's depths, as well as changing values to be more user-friendly
+         */
     {
         // Checking if there is 0 or 1 points in point cloud after filtering, else null pointer errors
         if (db.getNewShallowDepth() == int.MinValue + 1 && db.getNewDeepDepth() == int.MaxValue - 1)
